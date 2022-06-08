@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "513721022733",
+    "project_id": "moneypro-51b65",
+    "storage_bucket": "moneypro-51b65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513721022733:android:2e43b9861293d340525844",
+        "android_client_info": {
+          "package_name": "com.moneyproapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513721022733-bbc1dbbk69bu3i9kvlade5fhnpb1v831.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneyproapp",
+            "certificate_hash": "43a0ed9cc34a4c7a661997eb9e3ba6809351642c"
+          }
+        },
+        {
+          "client_id": "513721022733-dn61278q7ssq50q2fikl9q06so92p4b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx6pLaKpM49VDwL5tPJrhLlb1rugLjA6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513721022733-dn61278q7ssq50q2fikl9q06so92p4b0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

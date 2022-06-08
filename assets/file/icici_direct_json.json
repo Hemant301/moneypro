@@ -1,0 +1,30 @@
+{
+  "name": "ICICI Direct Demat Account",
+  "title": "Earn 500 on every referral",
+  "earn": "Earn 500",
+  "logo": "icic_direct.jpg",
+  "benefits": {
+    "about": "Sharekhan has launched a new platform called 'Espresso' through a separate company, hence venturing into discount brokerage business. The customers will have to pay brokerage only when there is profit from intraday trade.",
+    "howWork": [
+      "Watch the training video",
+      "Share the link with your friends and family",
+      "Ask them to click the link and apply for ICICI Direct Demat Link.",
+      "Earn existing Deals when they open the account."
+    ],
+    "tnc": [
+      "Age should be minimum 23+ and a resident of INDIA.",
+      "Your referral should open the account using your links only.",
+      "Mobile should be linked with Aadhar number and having a PAN card.",
+      "User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card."
+    ],
+    "keys": [
+      "Zero Account Opening Fee",
+      "Brokerage Applicable only when you profit",
+      "Paperless Account within 5 minutes",
+      "AMC Charges Waived Off",
+      "1yr Free access to Training videos"
+    ],
+    "offer": "Open an Espresso Demat account today & Get Money FLIX subscription (1yr) worth Rs.1999 for FREE! Money FLIX is an OTT platform that helps traders & investors learn new investing strategies.",
+    "location": "Target Cities: Pan India"
+  }
+}

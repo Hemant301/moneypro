@@ -1,0 +1,114 @@
+{
+  "saving_acc": [
+    {
+      "bankName": "AU Bank Savings Account",
+      "bankTag": "Zero Balance Digital Savings Account| Earn 7% Interest on Savings",
+      "bankEarn": "Earn 150",
+      "bankLogo": "au_logo.png",
+      "bankJson": "au_json",
+      "action": "1"
+    },
+    {
+      "bankName": "Equitas Savings Account",
+      "bankTag": "Zero Balance Digital Savings Account| Earn 7% Interest on Savings",
+      "bankEarn": "Earn 150",
+      "bankLogo": "equitas_logo.png",
+      "bankJson": "equitas",
+      "action": "1"
+    },
+    {
+      "bankName": "Kotak 811 Savings Account",
+      "bankTag": "Zero Balance Digital Savings Account| 3.50% interest p.a. | Free Digital Payment | Credit Card for all basis Fixed Deposit",
+      "bankEarn": "Earn 150",
+      "bankLogo": "kotak_logo.png",
+      "bankJson": "kotak_json",
+      "action": "1"
+    },
+    {
+      "bankName": "Niyox Savings Account",
+      "bankTag": "Open Digital Savings Account | Earn 7% Interest on Savings",
+      "bankEarn": "Earn 100",
+      "bankLogo": "niyox_logo.png",
+      "bankJson": "niyox_json",
+      "action": "1"
+    },
+    {
+      "bankName": "IndusInd Saving Account",
+      "bankTag": "Zero Balance Digital Savings Account| 3.50% interest p.a. | Free Digital Payment | Credit Card for all basis Fixed Deposit",
+      "bankEarn": "Earn 150",
+      "bankLogo": "indusind_logo.png",
+      "bankJson": "indusind_json",
+      "action": "1"
+    },
+    {
+      "bankName": "Fi-Money",
+      "bankTag": "Open Digital Savings Account | Withdraw from any ATM",
+      "bankEarn": "Earn 150",
+      "bankLogo": "fimoney_logo.png",
+      "bankJson": "fimoney_json",
+      "action": "1"
+    }
+  ],
+  "demat_acc": [
+    {
+      "bankName": "Espresso Demat Account",
+      "bankTag": "0 ACCOUNT OPENING FEES + ZERO DELIVERY BROKERAGE",
+      "bankEarn": "Earn 500",
+      "bankLogo": "espresso_logo.png",
+      "bankJson": "espresso_json",
+      "action": "2"
+    },
+    {
+      "bankName": "ICICI Direct Demat Account",
+      "bankTag": "0 ACCOUNT OPENING FEES + ZERO DELIVERY BROKERAGE",
+      "bankEarn": "Earn 500",
+      "bankLogo": "icic_direct.jpg",
+      "bankJson": "icici_direct_json",
+      "action": "2"
+    }
+  ],
+  "credit_card": [
+    {
+      "bankName": "SBI Credit Card",
+      "bankTag": "Exciting Cashbacks | Joining Vouchers | Reward Points",
+      "bankEarn": "Earn 2000",
+      "bankLogo": "sbi_card.png",
+      "bankJson": "sbi_card",
+      "action": "3"
+    },
+    {
+      "bankName": "Indusind Bank Credit Card",
+      "bankTag": "Exciting Cashbacks | Joining Vouchers | Reward Points",
+      "bankEarn": "Earn 400",
+      "bankLogo": "indusind_logo.png",
+      "bankJson": "indusind_card",
+      "action": "3"
+    },
+    {
+      "bankName": "ICICI Bank Credit Card",
+      "bankTag": "Exciting Cashbacks | Joining Vouchers | Reward Points",
+      "bankEarn": "Earn 300",
+      "bankLogo": "icici_logo.png",
+      "bankJson": "icici_card",
+      "action": "3"
+    },
+    {
+      "bankName": "Citibank Credit Card",
+      "bankTag": "Exciting Cashbacks | Joining Vouchers | Reward Points",
+      "bankEarn": "Earn 2000",
+      "bankLogo": "citi_logo.jpg",
+      "bankJson": "citi_card",
+      "action": "3"
+    },
+    {
+      "bankName": "Bajaj Finserv Insta EMI",
+      "bankTag": "Instant EMI of Bajaj Cards",
+      "bankEarn": "Earn 100",
+      "bankLogo": "bajaj_logo.jpg",
+      "bankJson": "bajaj_card",
+      "action": "3"
+    }
+  ],
+  "loan_service": {
+  }
+}

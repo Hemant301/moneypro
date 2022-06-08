@@ -1,0 +1,145 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion 31
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    configurations {
+        all*.exclude module: 'bcprov-jdk15on'
+    }
+
+    // for aeps -pay sprint
+    packagingOptions{
+        pickFirst "androidsupportmultidexversion.txt"
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.moneyproapp"
+        minSdkVersion 21
+        targetSdkVersion 30
+        multiDexEnabled true
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics { mappingFileUploadEnabled false }
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    //Enable multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.56'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
+    /*implementation files('libs/rbpmicroatm-release.aar')
+    implementation files('libs/bank-release.aar')*/
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+    // BELOW AEPS DEP
+    implementation files('libs/cyrus_aeps_lib-release.aar')
+    implementation 'com.jaredrummler:material-spinner:1.1.0'
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+
+    // BELOW PaySprint
+    //implementation files('libs/onboard_v1.0.9.aar')
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0" // dual
+    implementation "com.squareup.retrofit2:retrofit:2.9.0 "//dual
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "com.karumi:dexter:5.0.0"
+    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+
+    //fingerprint
+    implementation 'androidx.biometric:biometric:1.0.0-alpha04'
+
+    //AEPS 3
+    implementation 'commons-codec:commons-codec:20041127.091804'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.22'
+    implementation files('libs/aepsrbpfinivis-release.aar')
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    // new project - pay sprint aeps
+    //finalonboardinglib-release_v1_0_9.aar
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation files('libs/finalonboardinglib-release_v1_0_9.aar')
+    implementation files('libs/simple-xml-2.7.1.jar')
+    implementation group: 'xml-security', name: 'xmlsec', version: '1.3.0'
+}

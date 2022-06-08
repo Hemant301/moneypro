@@ -1,0 +1,68 @@
+{
+  "bank":{
+  	"tag":"Zero Balance Digital Savings Account| Earn 7% Interest on Savings",
+  	"earn_tag":"Earn 150",
+  	"Benefits":{
+  	"ben_tag":"Earn 150 on every Account Opening",
+  	"how_works":[
+  	"Watch the training video",
+  	"Share the link with your friends and family",
+  	"Ask them to click the link and open the AU Bank Digital Account on the go.",
+  	"Earn existing Deals when they open the account."
+  	],
+  	"tnc":[
+  	"Applicable only for new users not for existing AU customers.",
+  	"Age should be minimum 18+ and a resident of INDIA.",
+  	"Your referral should open the account using your links only.",
+  	"Mobile should be linked with Aadhar number and having a PAN card.",
+  	"User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card."
+  	]
+  	},
+  	"about":{
+  		"description":"AU Bank Limited is an Indian scheduled commercial bank that was founded as vehicle finance company AU Financiers Ltd in 1996 and converted to a small finance bank on 19 April 2017. AU Bank specifically curated multiple variants of Savings Accounts to address your needs & deliver value across all your financial transactions.",
+  		"features":[
+  		"100% digital and paperless account opening process",
+  		"7% Interest on Savings Account with Monthly Payout",
+  		"Feature-rich Debit Card",
+  		"Wide range of products & services",
+  		"Enjoy 24x7 access to your funds through AU 0101 App and AU 0101 NetBanking."
+  		]
+  	},
+  	"acc_open":{
+  		"steps":[
+  		"Suggest AU Bank Saving account among friends and family members.",
+  		"Share Link with them.",
+  		"The user opens the link and confirms the OTP.",
+  		"User Open saving Account with Aadhar and Pan Card.",
+		"User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card.",
+		"Customer enters financial and occupation details.",
+		"After that Video kyc will be perform and within 2-3 hours account will get opened.",
+		"User can start Netbanking, Set Pin on the go."
+  		],
+  		"doc_req":[
+		"Pan Card",
+		"Aadhar Card having registered Mobile No"
+  		],
+  		"location":"Mumbai, New Delhi, Bengaluru, Kolkata, Chennai, Pune, Hyderabad, Ahmadabad",
+		"blocked": "NIL"
+  	},
+  	"faqs":[
+  		{
+  		"q":"What is AU Digital Savings Account?",
+  		"a":"Digital Savings Bank Account is an Instant Account that you can open online in minutes from any place of your convenience. The process is entirely paperless and is done using our Video Banking facility."
+  		},
+  		{
+  		"q":"What are the interest rates on opening a Digital Savings Account?",
+  		"a":"We offer 7% interest rates to its Savings Account customers."
+  		},
+  		{
+  		"q":"What are the different steps involved in opening a Digital Savings Account?",
+  		"a":"For opening a Digital Savings Account, you need to complete the entire process on our Video Banking platform. In this process, you will need to:•Start by filling up your details online.•After you have filled all the required details, our bank agent will carry out basic checks through a video interaction.•The agent will guide you through the process. Just keep your original PAN card, a blank paper and a blue/black pen handy."
+  		},
+  		{
+  		"q":"Is Aadhaar required for video KYC?",
+  		"a":"Aadhaar number is required for video KYC. Your Aadhaar number will be verified through an OTP received on your registered mobile number. You don’t need to carry your physical Aadhaar Card during the Video KYC process."
+  		}
+  	]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "bank":{
+  	"tag":"Zero Balance Digital Savings Account| Earn 7% Interest on Savings",
+  	"earn_tag":"Earn 150",
+  	"Benefits":{
+  	"ben_tag":"Earn 150 on every Account Opening",
+  	"how_works":[
+  	"Watch the training video",
+    "Share the link with your friends and family",
+    "Ask them to click the link and open the Equitas Bank Digital Account on the go.",
+    "Earn existing Deals when they open the account."
+  	],
+  	"tnc":[
+  	"Applicable only for new users not for existing Equitas Bank customers.",
+    "Age should be minimum 18+ and a resident of INDIA.",
+    "Your referral should open the account using your links only.",
+    "Mobile should be linked with Aadhar number and having a PAN card.",
+    "User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card."
+  	]
+  	},
+  	"about":{
+  		"description":"Equitas Small Finance Bank is a New Age Bank that gives children, youth, families and business people across India a new way to bank. In our time as a micro finance company, we silently went about enabling livelihoods and elevating lives. Today, as a small finance bank, we are also going about changing the very way banking is imagined, delivered and experienced - with TRUST being the key driver. Come along on this fun ride.",
+  		"features":[
+  		"100% digital and paperless account opening process",
+      "7% Interest on Savings Account with Monthly Payout",
+      "Feature-rich Debit Card",
+      "Wide range of products & services",
+      "Enjoy 24x7 access to your funds through NetBanking."
+  		]
+  	},
+  	"acc_open":{
+  		"steps":[
+  		"Suggest Equitas  Bank Saving account among friends and family members.",
+      "Share Link with them.",
+      "The user opens the link and confirms the OTP.",
+      "User Open saving Account with Aadhar and Pan Card.",
+      "User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card.",
+      "Customer enters financial and occupation details.",
+      "After that Video kyc will be perform and within 2-3 hours account will get opened.",
+      "User can start Netbanking, Set Pin on the go."
+  		],
+  		"doc_req":[
+		"Pan Card",
+		"Aadhar Card having registered Mobile No"
+  		],
+  		"location":"",
+		"blocked": "NIL"
+  	},
+  	"faqs":[
+  		{
+  		"q":"I hold only a fixed deposit with your Bank. Can I open a Selfe Half KYC account?",
+  		"a":"No - since you already have an existing relationship with Equitas you cannot open a new digital half KYC account."
+  		},
+  		{
+  		"q":"I have an existing digital account with another Bank. Can I open one with Equitas?",
+  		"a":"No. As per RBI each customer is allowed only one half KYC account based on Aadhaar OTP verification."
+  		},
+  		{
+  		"q":"I want to open a Selfe Half KYC account in the name of my Son who is 15 years old? What should I do? ",
+  		"a":"Selfe account can be opened ONLY by resident individuals aged 18 years & above."
+  		},
+  		{
+  		"q":"What are the documents to be uploaded for opening a Selfe Half KYC account? ",
+  		"a":"You don’t require any physical document. All you need is a PAN, Aadhaar/Virtual Id no., along with Aadhaar linked mobile number to open a Half KYC Selfe account."
+  		},
+      {
+      "q":"I don’t stay in my Aadhaar address anymore. How to open my account in my new address? You have the option of changing your current communication address by clicking “Change Mailing",
+      "a":"Address” while opening a Selfe Half KYC account. If you had missed to update, you may change it using DIY services available in our Internet & Mobile Banking post full KYC completion."
+      },
+      {
+      "q":"Can I open a joint Selfe Half KYC account?",
+      "a":"Currently this facility is not available."
+      }
+  	]
+  }
+}

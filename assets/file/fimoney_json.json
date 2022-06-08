@@ -1,0 +1,65 @@
+{
+  "bank": {
+    "tag": "Open Digital Savings Account | Withdraw from any ATM",
+    "earn_tag": "Earn 150",
+    "Benefits": {
+      "ben_tag": "Earn 150 on every Account Opening",
+      "how_works": [
+        "Watch the training video",
+        "Share the link with your friends and family",
+        "Ask them to click the link and open the Fi Money Bank Savings Account on the go.",
+        "Earn existing Deals when they open the account."
+      ],
+      "tnc": [
+        "Applicable for new users or for existing Federal Bank customers.",
+        "Age should be minimum 18+ and a resident of INDIA.",
+        "Your referral should open the account using your links only.",
+        "Mobile should be linked with Aadhar number and having a PAN card.",
+        "User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card."
+      ]
+    },
+    "about": {
+      "description": "Open a Fi Savings Account online in under 3 mins! Use Fi's cool features to get better with your money — track your expenses, organise your funds, maximise your savings & automate payments. You also get rewarded for saving.",
+      "features": [
+        "100% digital and paperless account opening process",
+        "Zero forex markup",
+        "Feature-rich Debit Card",
+        "Wide range of products & services",
+        "Enjoy 24x7 access to your funds through NetBanking.",
+        "Upto 5% discount on ecommerce platform."
+      ]
+    },
+    "acc_open": {
+      "steps": [
+        "Suggest Fi Money Saving account among friends and family members.",
+        "Share Link with them.",
+        "The user opens the link and confirms the OTP.",
+        "User Open saving Account with Aadhar and Pan Card.",
+        "User Confirms OTP will be sent on the mobile number linked/registered with Aadhar Card.",
+        "Customer enters financial and occupation details",
+        "After that Video KYC will be perform and within 2-3 hours account will get opened.",
+        "User can start Netbanking, Set Pin on the go."
+      ],
+      "doc_req": [
+        "Pan Card",
+        "Aadhar Card having registered Mobile No"
+      ],
+      "location": "All India",
+      "blocked": "NIL"
+    },
+    "faqs": [
+      {
+        "q": "Why you should choose to open a zero balance bank account online?",
+        "a": "No minimum average balance: Make the most of the no monthly average balance maintenance requirement.\nPaperless account opening process: Choose the convenience of opening a zero balance account online within a few minutes - anytime, anywhere.\nAdditional benefits: A free virtual debit card, plus cash and cheque deposits at the bank’s branch.\nDigital payments: Make digital payments easily using NEFT, UPI and Scan & Pay."
+      },
+      {
+        "q": "What is a zero balance savings account?",
+        "a": "A zero balance savings account is a type of savings account where the Monthly Average Balance (MAB) is waived off. There is no hidden charges associated with a zero balance savings account. In a normal savings account, customers have to maintain a monthly average balance in the account at all times and if by any chance the required criteria is not met, additional fee or penalty is charged. When customers open a zero balance account, they are entitled to earn interest on the entire amount deposited in the account.Open Digital Savings Account or Download Kotak811 Instant Savings Account Opening App\n"
+      },
+      {
+        "q": "Who can open zero balance account?",
+        "a": "Every individual who is a resident of India is eligible to open a zero balance account. To open a zero balance account online, one needs to have a valid Aadhaar and PAN card. As per RBI’s regulation, banks can open savings account online through Aadhaar OTP verification."
+      }
+    ]
+  }
+}
