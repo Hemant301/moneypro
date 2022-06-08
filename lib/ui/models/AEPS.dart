@@ -45,7 +45,8 @@ class AEPSTransaction {
       required this.mobile,
       required this.adhar,
       required this.merchantCommission,
-      required this.txnid});
+      required this.txnid,
+      required this.bank_msg});
 
   var date;
   var transctionId;
@@ -57,6 +58,7 @@ class AEPSTransaction {
   var adhar;
   var merchantCommission;
   var txnid;
+  var bank_msg;
 
   factory AEPSTransaction.fromJson(Map<String, dynamic> json) =>
       AEPSTransaction(
@@ -70,6 +72,7 @@ class AEPSTransaction {
         adhar: json["adhar"],
         merchantCommission: json["merchant_commission"],
         txnid: json['txnid'],
+        bank_msg: json['bank_msg'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,6 +85,7 @@ class AEPSTransaction {
         "mobile": mobile,
         "adhar": adhar,
         "merchant_commission": merchantCommission,
-        "txnid": txnid
+        "txnid": txnid,
+        "bank_msg": bank_msg
       };
 }

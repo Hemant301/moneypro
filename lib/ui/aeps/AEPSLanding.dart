@@ -685,7 +685,6 @@ class _AEPSLandingState extends State<AEPSLanding> {
         "customer_charge":
             (txnCode.toString().toLowerCase() == "ap") ? "$custCharge" : "0",
       };
-
       printMessage(screen, "Body : $body");
 
       final response = await http.post(Uri.parse(aeps2ResponseAPI),
@@ -739,7 +738,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
                 "customerCharge": "$custCharge",
                 "stan": "$stan",
                 "rrn": "$rrn",
-                "bankResponseMsg": "$bankResponseMsg",
+                "bankmsg": "$bankResponseMsg",
                 "npciCode": "$npciCode",
                 "bankName": "$bankName"
               };
@@ -753,7 +752,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
         setState(() {
           Navigator.pop(context);
         });
-        showToastMessage(status500);
+        showToastMessage('${status500}');
       }
     } catch (e) {
       e.toString();

@@ -2006,55 +2006,95 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                       //     ),
                       //   ),
                       // ),
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: () {
+                            openSellEarnLanding(context);
+                          },
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                  height: 60.h,
+                                  width: 60.w,
+                                  decoration: BoxDecoration(
+                                    color: boxBg, // border color
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Image.asset(
+                                      'assets/referral.png',
+                                      color: lightBlue,
+                                    ),
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Refer & Earn",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   )
                 : Container(),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      openSellEarnLanding(context);
-                    },
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Container(
-                            height: 60.h,
-                            width: 60.w,
-                            decoration: BoxDecoration(
-                              color: boxBg, // border color
-                              shape: BoxShape.circle,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Image.asset(
-                                'assets/referral.png',
-                                color: lightBlue,
-                              ),
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Refer & Earn",
-                            style: TextStyle(color: black, fontSize: font11.sp),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(child: Container(), flex: 1),
-                Expanded(child: Container(), flex: 1),
-                Expanded(child: Container(), flex: 1),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       flex: 1,
+            //       child: InkWell(
+            //         onTap: () {
+            //           openSellEarnLanding(context);
+            //         },
+            //         child: Column(
+            //           children: [
+            //             SizedBox(
+            //               height: 5.h,
+            //             ),
+            //             Container(
+            //                 height: 60.h,
+            //                 width: 60.w,
+            //                 decoration: BoxDecoration(
+            //                   color: boxBg, // border color
+            //                   shape: BoxShape.circle,
+            //                 ),
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.all(15.0),
+            //                   child: Image.asset(
+            //                     'assets/referral.png',
+            //                     color: lightBlue,
+            //                   ),
+            //                 )),
+            //             Padding(
+            //               padding: const EdgeInsets.all(8.0),
+            //               child: Text(
+            //                 "Refer & Earn",
+            //                 style: TextStyle(color: black, fontSize: font11.sp),
+            //                 textAlign: TextAlign.center,
+            //                 maxLines: 2,
+            //                 overflow: TextOverflow.ellipsis,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //     Expanded(child: Container(), flex: 1),
+            //     Expanded(child: Container(), flex: 1),
+            //     Expanded(child: Container(), flex: 1),
+            //   ],
+            // ),
             SizedBox(
               height: 10.h,
             ),

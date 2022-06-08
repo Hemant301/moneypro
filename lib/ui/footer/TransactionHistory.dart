@@ -1386,6 +1386,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                               "mobile": "${aepsTransaction[index].mobile}",
                               "merComm":
                                   "${aepsTransaction[index].merchantCommission}",
+                              'bankmsg': "${aepsTransaction[index].bank_msg}",
                             };
                             openAEPSReceipt(context, map, false);
                           }
@@ -1460,6 +1461,22 @@ class _TransactionHistoryState extends State<TransactionHistory>
                                                         "null")
                                                     ? "Mobile :"
                                                     : "Mobile : ${aepsTransaction[index].mobile}",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font13.sp),
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0),
+                                              child: Text(
+                                                (aepsTransaction[index]
+                                                            .mode
+                                                            .toString() ==
+                                                        "null")
+                                                    ? "Trans Type :"
+                                                    : "Trans Type : ${aepsTransaction[index].mode}",
                                                 style: TextStyle(
                                                     color: black,
                                                     fontSize: font13.sp),
@@ -3054,6 +3071,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     };
 
     printMessage(screen, "body : $body");
+    print(authHeader);
 
     final response = await http.post(Uri.parse(walletBalanceHistroyAPI),
         body: jsonEncode(body), headers: headers);
@@ -3560,7 +3578,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
       "saltKey": "$atmSaltKey",
       "encryptdecryptKey": "$atmEncDecKey"
     };
-
+    print(atmSecrettKey);
+    print(atmSaltKey);
+    print(atmEncDecKey);
     final response = await http.post(Uri.parse(authUrl), headers: header);
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -3568,6 +3588,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     printMessage(screen, "AEPS Response : $data");
 
     setState(() {
+      print('inside sets');
       Navigator.pop(context);
       if (data['isSuccess'].toString() == "true") {
         var authToken = data['data']['token'].toString();
