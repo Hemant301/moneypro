@@ -14,24 +14,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import '../../../utils/SharedPrefs.dart';
 
 class EmpMerchantPANDetails extends StatefulWidget {
   final Map itemResponse;
   final File storeImage;
-  final File docImage;
-  final File adhFront;
-  final File adhBack;
+  // final File docImage;
+  // final File adhFront;
+  // final File adhBack;
 
-  const EmpMerchantPANDetails(
-      {Key? key,
-      required this.itemResponse,
-      required this.storeImage,
-      required this.docImage,
-      required this.adhFront,
-      required this.adhBack})
-      : super(key: key);
+  const EmpMerchantPANDetails({
+    Key? key,
+    required this.itemResponse,
+    required this.storeImage,
+    // required this.docImage,
+    // required this.adhFront,
+    // required this.adhBack
+  }) : super(key: key);
 
   @override
   _EmpMerchantPANDetailsState createState() => _EmpMerchantPANDetailsState();
@@ -86,166 +85,171 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-        onWillPop: () async {
-          printMessage(screen, "Mobile back pressed");
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return exitProcess();
-              });
-          return false;
-        },
-        child: SafeArea(
-            child: Scaffold(
-          backgroundColor: white,
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            backgroundColor: white,
-            brightness: Brightness.light,
-            leading: InkWell(
-              onTap: () {
-                closeKeyBoard(context);
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return exitProcess();
-                    });
-              },
-              child: Container(
-                height: 60.h,
-                width: 60.w,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/back_arrow_bg.png',
-                      height: 60.h,
+        builder: () => WillPopScope(
+            onWillPop: () async {
+              printMessage(screen, "Mobile back pressed");
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return exitProcess();
+                  });
+              return false;
+            },
+            child: SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return exitProcess();
+                        });
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
+                        ),
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
                     ),
-                    Positioned(
-                      top: 16,
-                      left: 12,
-                      child: Image.asset(
-                        'assets/back_arrow.png',
-                        height: 16.h,
-                      ),
-                    )
-                  ],
+                  ),
                 ),
+                titleSpacing: 0,
+                title: appLogo(),
+                actions: [
+                  Image.asset(
+                    'assets/faq.png',
+                    width: 24.w,
+                    color: orange,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  )
+                ],
               ),
-            ),
-            titleSpacing: 0,
-            title: appLogo(),
-            actions: [
-              Image.asset(
-                'assets/faq.png',
-                width: 24.w,
-                color: orange,
-              ),
-              SizedBox(
-                width: 10.w,
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 35, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 10, bottom: 10),
-                          child: TextFormField(
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.characters,
-                            textInputAction: TextInputAction.next,
-                            controller: panController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 10),
-                              counterText: "",
-                              label: Text("Enter your PAN number to verify *"),
-                            ),
-                            maxLength: 10,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val.length == 10) {
-                                  closeKeyBoard(context);
-                                  getPanCardDetails(val.toUpperCase());
-                                }
-                              });
-                            },
-                          ),
-                        ),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 35, left: padding, right: padding),
+                      decoration: BoxDecoration(
+                        color: editBg,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                      (loadPan)
-                          ? Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: circularProgressLoading(20.0),
-                            )
-                          : Container()
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 25.0, top: 5, bottom: 10),
-                  child: Text(
-                    panWillVerify,
-                    style: TextStyle(
-                        color: lightBlue,
-                        fontSize: font10.sp,
-                        fontWeight: FontWeight.normal),
-                  ),
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 15, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 10, bottom: 10),
-                          child: TextFormField(
-                            enabled: false,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.characters,
-                            textInputAction: TextInputAction.next,
-                            controller: panNameController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 10),
-                              counterText: "",
-                              label: Text("Enter your PAN name"),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15, top: 10, bottom: 10),
+                              child: TextFormField(
+                                style: TextStyle(
+                                    color: black, fontSize: inputFont.sp),
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textInputAction: TextInputAction.next,
+                                controller: panController,
+                                decoration: new InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  counterText: "",
+                                  label:
+                                      Text("Enter your PAN number to verify *"),
+                                ),
+                                maxLength: 10,
+                                onChanged: (val) {
+                                  setState(() {
+                                    if (val.length == 10) {
+                                      closeKeyBoard(context);
+                                      getPanCardDetails(val.toUpperCase());
+                                    }
+                                  });
+                                },
+                              ),
                             ),
-                            maxLength: 20,
                           ),
-                        ),
+                          (loadPan)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: circularProgressLoading(20.0),
+                                )
+                              : Container()
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 25.0, top: 5, bottom: 10),
+                      child: Text(
+                        panWillVerify,
+                        style: TextStyle(
+                            color: lightBlue,
+                            fontSize: font10.sp,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 15, left: padding, right: padding),
+                      decoration: BoxDecoration(
+                        color: editBg,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15, top: 10, bottom: 10),
+                              child: TextFormField(
+                                enabled: false,
+                                style: TextStyle(
+                                    color: black, fontSize: inputFont.sp),
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textInputAction: TextInputAction.next,
+                                controller: panNameController,
+                                decoration: new InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  counterText: "",
+                                  label: Text("Enter your PAN name"),
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(left: 25.0, top: 5),
                       child: Text(
                         nameAppear,
@@ -255,222 +259,230 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
                             fontWeight: FontWeight.normal),
                       ),
                     ),
-                InkWell(
-                  onTap: () {
-                    _selectFromDate(context);
-                  },
-                  child: Container(
-
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: editBg,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    margin: EdgeInsets.only(
-                        top: 20, left: 20, right: 20, bottom: 5),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
-                          child: Text(
-                            (cDate.toString() ==
-                                    f.format(currentDate).toString())
-                                ? "$dob"
-                                : f.format(currentDate),
-                            style: TextStyle(color: black, fontSize: font14.sp),
-                          ),
-                        ),
-                        Spacer(),
-                        Image.asset(
-                          'assets/calendar.png',
-                          height: 24.h,
-                        ),
-                        SizedBox(
-                          width: 15.w,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.only(top: 15, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 10, bottom: 10),
-                          child: TextFormField(
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
-                            keyboardType: TextInputType.number,
-                            textCapitalization: TextCapitalization.characters,
-                            textInputAction: TextInputAction.next,
-                            controller: adharController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 10),
-                              counterText: "",
-                              label: Text("Enter your Aadhar Card number"),
-                            ),
-                            maxLength: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
-                  child: DottedBorder(
-                    borderType: BorderType.RRect,
-                    color: lightBlue,
-                    padding:
-                        EdgeInsets.only(left: 5, right: 5, top: 15, bottom: 15),
-                    radius: Radius.circular(20),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(top: 0, left: 0, right: 0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    // InkWell(
+                    //   onTap: () {
+                    //     _selectFromDate(context);
+                    //   },
+                    //   child: Container(
+                    //     width: MediaQuery.of(context).size.width,
+                    //     decoration: BoxDecoration(
+                    //       color: editBg,
+                    //       borderRadius: BorderRadius.all(Radius.circular(20)),
+                    //     ),
+                    //     margin: EdgeInsets.only(
+                    //         top: 20, left: 20, right: 20, bottom: 5),
+                    //     child: Row(
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.only(
+                    //               left: 20.0, top: 10, bottom: 10),
+                    //           child: Text(
+                    //             (cDate.toString() ==
+                    //                     f.format(currentDate).toString())
+                    //                 ? "$dob"
+                    //                 : f.format(currentDate),
+                    //             style: TextStyle(
+                    //                 color: black, fontSize: font14.sp),
+                    //           ),
+                    //         ),
+                    //         Spacer(),
+                    //         Image.asset(
+                    //           'assets/calendar.png',
+                    //           height: 24.h,
+                    //         ),
+                    //         SizedBox(
+                    //           width: 15.w,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // Container(
+                    //   margin: EdgeInsets.only(
+                    //       top: 15, left: padding, right: padding),
+                    //   decoration: BoxDecoration(
+                    //     color: editBg,
+                    //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                    //   ),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         flex: 1,
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.only(
+                    //               left: 15.0, right: 15, top: 10, bottom: 10),
+                    //           child: TextFormField(
+                    //             style: TextStyle(
+                    //                 color: black, fontSize: inputFont.sp),
+                    //             keyboardType: TextInputType.number,
+                    //             textCapitalization:
+                    //                 TextCapitalization.characters,
+                    //             textInputAction: TextInputAction.next,
+                    //             controller: adharController,
+                    //             decoration: new InputDecoration(
+                    //               isDense: true,
+                    //               border: InputBorder.none,
+                    //               contentPadding: EdgeInsets.only(left: 10),
+                    //               counterText: "",
+                    //               label: Text("Enter your Aadhar Card number"),
+                    //             ),
+                    //             maxLength: 12,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20, top: 20, bottom: 20),
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        color: lightBlue,
+                        padding: EdgeInsets.only(
+                            left: 5, right: 5, top: 15, bottom: 15),
+                        radius: Radius.circular(20),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(top: 0, left: 0, right: 0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Row(
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 25.0, top: 0),
-                                  child: Text(
-                                    "Selfi of the Merchant",
-                                    style: TextStyle(
-                                        color: black,
-                                        fontSize: font13.sp,
-                                        fontWeight: FontWeight.w400),
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 25.0, top: 0),
+                                      child: Text(
+                                        "Selfi of the Merchant",
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: font13.sp,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 25.0, top: 5),
+                                      child: Text(
+                                        mandatory,
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: font10.sp,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                Container(
+                                  height: 50.h,
+                                  width: 50.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      border:
+                                          Border.all(color: Colors.blueAccent)),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _showCameraGalleryOption();
+                                    },
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.camera_alt_rounded,
+                                        color: lightBlue,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 25.0, top: 5),
-                                  child: Text(
-                                    mandatory,
-                                    style: TextStyle(
-                                        color: black,
-                                        fontSize: font10.sp,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
+                                (docUploading)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: circularProgressLoading(20.0),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  width: 20.w,
+                                )
                               ],
-                            )),
-                            Container(
-                              height: 50.h,
-                              width: 50.w,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  border: Border.all(color: Colors.blueAccent)),
-                              child: InkWell(
-                                onTap: () {
-                                  _showCameraGalleryOption();
-                                },
-                                child: Center(
-                                  child: Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: lightBlue,
-                                  ),
-                                ),
-                              ),
                             ),
-                            (docUploading)
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: circularProgressLoading(20.0),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            )
-                          ],
+                          ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              bottomNavigationBar: InkWell(
+                onTap: () {
+                  setState(() {
+                    closeKeyBoard(context);
+
+                    var pan = panController.text.toString();
+                    var panName = panNameController.text.toString();
+                    // var aadhar = adharController.text.toString();
+
+                    if (pan.length == 0) {
+                      showToastMessage("Enter your PAN number");
+                      return;
+                    } else if (!panCardPattern.hasMatch(pan.toString())) {
+                      showToastMessage("Enter vaild PAN card number");
+                      return;
+                    } else if (panName.length == 0) {
+                      showToastMessage("Enter PAN card name");
+                      return;
+                    } else if (regExpName.hasMatch(panName)) {
+                      showToastMessage(
+                          "Special characters or numbers are not allowed in PAN card name");
+                      return;
+                    } else if (!isSelfUploaded) {
+                      showToastMessage("Selfi is mandatory");
+                      return;
+                    }
+                    // else if (aadhar.length > 1) {
+                    //   if (aadhar.length != 12) {
+                    //     showToastMessage("Enter 12-digit aadhar number");
+                    //     return;
+                    //   }
+                    // }
+
+                    newItem['pan'] = pan.toString();
+                    newItem['client_nam'] = panName.toString();
+                    // newItem['dob'] = f.format(currentDate).toString();
+                    // newItem['adhar'] = aadhar.toString();
+                    printMessage(screen, "Updated Response : $newItem");
+                    openEmpMerBankDetails(
+                      context,
+                      newItem,
+                      widget.storeImage,
+                      // widget.docImage,
+                      selfiImage,
+                      // widget.adhFront,
+                      // widget.adhBack
+                    );
+                  });
+                },
+                child: Container(
+                  height: 45.h,
+                  width: MediaQuery.of(context).size.width,
+                  margin:
+                      EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
+                  decoration: BoxDecoration(
+                    color: lightBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      continue_.toUpperCase(),
+                      style: TextStyle(fontSize: font13.sp, color: white),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: InkWell(
-            onTap: () {
-              setState(() {
-                closeKeyBoard(context);
-
-                var pan = panController.text.toString();
-                var panName = panNameController.text.toString();
-                var aadhar = adharController.text.toString();
-
-                if (pan.length == 0) {
-                  showToastMessage("Enter your PAN number");
-                  return;
-                } else if (!panCardPattern.hasMatch(pan.toString())) {
-                  showToastMessage("Enter vaild PAN card number");
-                  return;
-                } else if (panName.length == 0) {
-                  showToastMessage("Enter PAN card name");
-                  return;
-                } else if (regExpName.hasMatch(panName)) {
-                  showToastMessage(
-                      "Special characters or numbers are not allowed in PAN card name");
-                  return;
-                } else if (!isSelfUploaded) {
-                  showToastMessage("Selfi is mandatory");
-                  return;
-                } else if (aadhar.length > 1) {
-                  if (aadhar.length != 12) {
-                    showToastMessage("Enter 12-digit aadhar number");
-                    return;
-                  }
-                }
-
-                newItem['pan'] = pan.toString();
-                newItem['client_nam'] = panName.toString();
-                newItem['dob'] = f.format(currentDate).toString();
-                newItem['adhar'] = aadhar.toString();
-                printMessage(screen, "Updated Response : $newItem");
-                openEmpMerBankDetails(
-                    context,
-                    newItem,
-                    widget.storeImage,
-                    widget.docImage,
-                    selfiImage,
-                    widget.adhFront,
-                    widget.adhBack);
-              });
-            },
-            child: Container(
-              height: 45.h,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
-              decoration: BoxDecoration(
-                color: lightBlue,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
-              child: Center(
-                child: Text(
-                  continue_.toUpperCase(),
-                  style: TextStyle(fontSize: font13.sp, color: white),
-                ),
-              ),
-            ),
-          ),
-        ))));
+            ))));
   }
 
   Future getPanCardDetails(pan) async {
@@ -483,8 +495,8 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
     var userToken = await getToken();
 
     var body = {
-      "user_token":"$userToken",
-      "pan_number":"$pan",
+      "user_token": "$userToken",
+      "pan_number": "$pan",
     };
 
     var header = {
@@ -493,8 +505,7 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
     };
 
     final response = await http.post(Uri.parse(panVerify),
-        body: jsonEncode(body),
-        headers: header);
+        body: jsonEncode(body), headers: header);
 
     var dataa = json.decode(response.body);
 
@@ -517,9 +528,9 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
           isValidPan = false;
           panNameController = TextEditingController(text: name.toString());
         });
-        if(dataa.toString().contains("error")){
+        if (dataa.toString().contains("error")) {
           showToastMessage(dataa['data']['error']['message'].toString());
-        }else{
+        } else {
           showToastMessage(dataa['data']['message'].toString());
         }
       }

@@ -1107,32 +1107,44 @@ openEmpMerBusinessVerify(BuildContext context, itemResponse, File storeImage) {
       ));
 }
 
-openEmpMerPanVerify(BuildContext context, itemResponse, File storeImage,
-    File docImage, File adhFront, File adhBack) {
+openEmpMerPanVerify(
+  BuildContext context,
+  itemResponse,
+  File storeImage,
+  // File docImage, File adhFront, File adhBack
+) {
   Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EmpMerchantPANDetails(
-            itemResponse: itemResponse,
-            storeImage: storeImage,
-            docImage: docImage,
-            adhFront: adhFront,
-            adhBack: adhBack),
+          itemResponse: itemResponse,
+          storeImage: storeImage,
+          // docImage: docImage,
+          // adhFront: adhFront,
+          // adhBack: adhBack
+        ),
       ));
 }
 
-openEmpMerBankDetails(BuildContext context, itemResponse, File storeImage,
-    File docImage, File selfiImage, File adhFront, File adhBack) {
+openEmpMerBankDetails(
+  BuildContext context,
+  itemResponse,
+  File storeImage,
+  // File docImage,
+  File selfiImage,
+  //  File adhFront, File adhBack
+) {
   Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EmpMerchantBankDetails(
-            itemResponse: itemResponse,
-            storeImage: storeImage,
-            docImage: docImage,
-            selfiImage: selfiImage,
-            adhFront: adhFront,
-            adhBack: adhBack),
+          itemResponse: itemResponse,
+          storeImage: storeImage,
+          // docImage: docImage,
+          selfiImage: selfiImage,
+          // adhFront: adhFront,
+          // adhBack: adhBack
+        ),
       ));
 }
 
@@ -1672,15 +1684,14 @@ openAePSFinoMiniStatement(BuildContext context, Map response) {
           builder: (context) => AePSFinoMiniStatement(response: response)));
 }
 
-openWithdrwal(BuildContext context, isMWalletShow, isInvestShow,maxAmt) {
+openWithdrwal(BuildContext context, isMWalletShow, isInvestShow, maxAmt) {
   Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => Withdrwal(
-                isMWalletShow: isMWalletShow,
-                isInvestShow: isInvestShow,
-              maxAmt:maxAmt
-              )));
+              isMWalletShow: isMWalletShow,
+              isInvestShow: isInvestShow,
+              maxAmt: maxAmt)));
 }
 
 openStoreApp(BuildContext context) {

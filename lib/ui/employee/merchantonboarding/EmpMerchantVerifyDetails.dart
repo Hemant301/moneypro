@@ -76,169 +76,173 @@ class _EmpMerchantVerifyDetailsState extends State<EmpMerchantVerifyDetails> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-        onWillPop: () async {
-          printMessage(screen, "Mobile back pressed");
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return NoExitDialog();
-              });
-          return false;
-        },
-        child: SafeArea(
-            child: Scaffold(
-          backgroundColor: white,
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            backgroundColor: white,
-            brightness: Brightness.light,
-            leading: InkWell(
-              onTap: () {
-                closeKeyBoard(context);
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return NoExitDialog();
-                    });
-              },
-              child: Container(
-                height: 60.h,
-                width: 60.w,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/back_arrow_bg.png',
-                      height: 60.h,
-                    ),
-                    Positioned(
-                      top: 16,
-                      left: 12,
-                      child: Image.asset(
-                        'assets/back_arrow.png',
-                        height: 16.h,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            titleSpacing: 0,
-            title: appLogo(),
-            actions: [
-              Image.asset(
-                'assets/faq.png',
-                width: 24.w,
-                color: orange,
-              ),
-              SizedBox(
-                width: 10.w,
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-              child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 25.0, top: 30, right: 25),
-              child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text: verifyBusiness1,
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font14.sp,
-                          fontWeight: FontWeight.bold),
+        builder: () => WillPopScope(
+            onWillPop: () async {
+              printMessage(screen, "Mobile back pressed");
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return NoExitDialog();
+                  });
+              return false;
+            },
+            child: SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return NoExitDialog();
+                        });
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
                       children: [
-                        TextSpan(
-                          text: widget.itemResponse['businessName'].toString(),
-                          style: TextStyle(
-                              color: green,
-                              fontSize: font14.sp,
-                              fontWeight: FontWeight.bold),
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
                         ),
-                        TextSpan(text: " "),
-                        TextSpan(
-                          text: verifyBusiness2,
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                titleSpacing: 0,
+                title: appLogo(),
+                actions: [
+                  Image.asset(
+                    'assets/faq.png',
+                    width: 24.w,
+                    color: orange,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  )
+                ],
+              ),
+              body: SingleChildScrollView(
+                  child: Column(children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 25.0, top: 30, right: 25),
+                  child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text: verifyBusiness1,
                           style: TextStyle(
                               color: black,
                               fontSize: font14.sp,
                               fontWeight: FontWeight.bold),
-                        ),
-                      ])),
-            ),
-            _buildAddressSection(),
-            SizedBox(
-              height: 20.h,
-            ),
-            _buildShowNotes(),
-          ])),
-          bottomNavigationBar: InkWell(
-            onTap: () {
-              closeKeyBoard(context);
-              var gst = "";
-              var docName = "";
+                          children: [
+                            TextSpan(
+                              text: widget.itemResponse['businessName']
+                                  .toString(),
+                              style: TextStyle(
+                                  color: green,
+                                  fontSize: font14.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: " "),
+                            TextSpan(
+                              text: verifyBusiness2,
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font14.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ])),
+                ),
+                _buildAddressSection(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildShowNotes(),
+              ])),
+              bottomNavigationBar: InkWell(
+                onTap: () {
+                  closeKeyBoard(context);
+                  var gst = "";
+                  var docName = "";
 
-              if (selectDocType.toString() == "GST Certificate") {
-                gst = gstController.text.toString();
-                if (gst.length != 15) {
-                  showToastMessage("Enter valid 15-digit GSTIN number");
-                  return;
-                } else {
-                  newItem['gstValue'] = gst.toString();
-                  newItem['docName'] = "";
-                }
-              }
+                  if (selectDocType.toString() == "GST Certificate") {
+                    gst = gstController.text.toString();
+                    if (gst.length != 15) {
+                      showToastMessage("Enter valid 15-digit GSTIN number");
+                      return;
+                    } else {
+                      newItem['gstValue'] = gst.toString();
+                      newItem['docName'] = "";
+                    }
+                  }
 
-              if (selectDocType.toString() == "Aadhar Card") {
-                if (!isAadharFrontFileUploaded || !isAadharBackFileUploaded) {
-                  showToastMessage(
-                      "Upload both aadhar front and back side to server");
-                  return;
-                } else {
-                  newItem['docName'] = selectDocType.toString();
-                  newItem['gstValue'] = "";
-                }
-              }
+                  if (selectDocType.toString() == "Aadhar Card") {
+                    if (!isAadharFrontFileUploaded ||
+                        !isAadharBackFileUploaded) {
+                      showToastMessage(
+                          "Upload both aadhar front and back side to server");
+                      return;
+                    } else {
+                      newItem['docName'] = selectDocType.toString();
+                      newItem['gstValue'] = "";
+                    }
+                  }
 
-              if (selectDocType.toString() != "GST Certificate" &&
-                  selectDocType.toString() != "Aadhar Card") {
-                if (!isOtherFileUploaded) {
-                  showToastMessage("Upload $selectDocType to server");
-                  return;
-                } else {
-                  newItem['docName'] = selectDocType.toString();
-                  newItem['gstValue'] = "";
-                }
-              }
+                  if (selectDocType.toString() != "GST Certificate" &&
+                      selectDocType.toString() != "Aadhar Card") {
+                    if (!isOtherFileUploaded) {
+                      showToastMessage("Upload $selectDocType to server");
+                      return;
+                    } else {
+                      newItem['docName'] = selectDocType.toString();
+                      newItem['gstValue'] = "";
+                    }
+                  }
 
-              printMessage(screen, "Map value : $newItem");
+                  printMessage(screen, "Map value : $newItem");
 
-              openEmpMerPanVerify(
-                  context,
-                  newItem,
-                  widget.storeImage,
-                  selectedOtherFile,
-                  selectedAadharFrontFile,
-                  selectedAadharBackFile);
-            },
-            child: Container(
-              height: 48.h,
-              width: 120.w,
-              margin: EdgeInsets.only(top: 0, left: 25, right: 25, bottom: 10),
-              decoration: BoxDecoration(
-                color: lightBlue,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              child: Center(
-                child: Text(
-                  continue_.toUpperCase(),
-                  style: TextStyle(fontSize: font13.sp, color: white),
+                  // openEmpMerPanVerify(
+                  //     context,
+                  //     newItem,
+                  //     widget.storeImage,
+                  //     selectedOtherFile,
+                  //     selectedAadharFrontFile,
+                  //     selectedAadharBackFile);
+                },
+                child: Container(
+                  height: 48.h,
+                  width: 120.w,
+                  margin:
+                      EdgeInsets.only(top: 0, left: 25, right: 25, bottom: 10),
+                  decoration: BoxDecoration(
+                    color: lightBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      continue_.toUpperCase(),
+                      style: TextStyle(fontSize: font13.sp, color: white),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ))));
+            ))));
   }
 
   _buildAddressSection() {
@@ -256,7 +260,9 @@ class _EmpMerchantVerifyDetailsState extends State<EmpMerchantVerifyDetails> {
             child: Text(
               "Choose document",
               style: TextStyle(
-                  color: black, fontSize: font14.sp, fontWeight: FontWeight.bold),
+                  color: black,
+                  fontSize: font14.sp,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(

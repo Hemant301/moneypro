@@ -14,24 +14,23 @@ import 'package:http/http.dart' as http;
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 class EmpMerchantBankDetails extends StatefulWidget {
   final Map itemResponse;
   final File storeImage;
-  final File docImage;
+  // final File docImage;
   final File selfiImage;
-  final File adhFront;
-  final File adhBack;
+  // final File adhFront;
+  // final File adhBack;
 
-  const EmpMerchantBankDetails(
-      {Key? key,
-      required this.itemResponse,
-      required this.storeImage,
-      required this.docImage,
-      required this.selfiImage,
-        required this.adhFront,
-        required this.adhBack})
-      : super(key: key);
+  const EmpMerchantBankDetails({
+    Key? key,
+    required this.itemResponse,
+    required this.storeImage,
+    // required this.docImage,
+    required this.selfiImage,
+    // required this.adhFront,
+    // required this.adhBack
+  }) : super(key: key);
 
   @override
   _EmpMerchantBankDetailsState createState() => _EmpMerchantBankDetailsState();
@@ -102,372 +101,394 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-        onWillPop: () async {
-          printMessage(screen, "Mobile back pressed");
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return exitProcess();
-              });
-          return false;
-        },
-        child: SafeArea(
-            child: Scaffold(
-          backgroundColor: white,
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            backgroundColor: white,
-            brightness: Brightness.light,
-            leading: InkWell(
-              onTap: () {
-                closeKeyBoard(context);
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return exitProcess();
-                    });
-              },
-              child: Container(
-                height: 60.h,
-                width: 60.w,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/back_arrow_bg.png',
-                      height: 60.h,
-                    ),
-                    Positioned(
-                      top: 16,
-                      left: 12,
-                      child: Image.asset(
-                        'assets/back_arrow.png',
-                        height: 16.h,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Image.asset(
-                'assets/faq.png',
-                width: 24.w,
-                color: orange,
-              ),
-              SizedBox(
-                width: 10.w,
-              )
-            ],
-          ),
-          body: (loading)
-              ? Center(
-                  child: circularProgressLoading(40.0),
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        builder: () => WillPopScope(
+            onWillPop: () async {
+              printMessage(screen, "Mobile back pressed");
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return exitProcess();
+                  });
+              return false;
+            },
+            child: SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return exitProcess();
+                        });
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
                       children: [
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          "$accDetails",
-                          style: TextStyle(
-                              color: black,
-                              fontSize: font14.sp,
-                              fontWeight: FontWeight.bold),
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                            color: editBg,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: editBg)),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: selectedAccName,
-                            style: TextStyle(color: black, fontSize: font16.sp),
-                            items: accNames
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(color: black),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            hint: Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: Text(
-                                "Select account name",
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                actions: [
+                  Image.asset(
+                    'assets/faq.png',
+                    width: 24.w,
+                    color: orange,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  )
+                ],
+              ),
+              body: (loading)
+                  ? Center(
+                      child: circularProgressLoading(40.0),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25.0),
+                            child: Text(
+                              "$accDetails",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font14.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 20, left: 20, right: 20),
+                            decoration: BoxDecoration(
+                                color: editBg,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                border: Border.all(color: editBg)),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedAccName,
                                 style: TextStyle(
-                                    color: lightBlack, fontSize: font16.sp),
-                              ),
-                            ),
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: Icon(
-                                // Add this
-                                Icons.keyboard_arrow_down, // Add this
-                                color: lightBlue, // Add this
-                              ),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedAccName = value!;
-                                FocusScope.of(context)
-                                    .requestFocus(new FocusNode());
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 45.h,
-                        margin: EdgeInsets.only(
-                            top: 15, left: padding, right: padding),
-                        decoration: BoxDecoration(
-                          color: editBg,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Center(
-                          child: TextFormField(
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
-                            keyboardType: TextInputType.number,
-                            textCapitalization: TextCapitalization.characters,
-                            textInputAction: TextInputAction.next,
-                            controller: accountNoController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 20),
-                              counterText: "",
-                              label: Text("Account number"),
-                            ),
-                            maxLength: 16,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                            color: editBg,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: editBg)),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<BankList>(
-                            isExpanded: true,
-                            value: distL,
-                            style: TextStyle(color: black, fontSize: font16.sp),
-                            items: bankList.map<DropdownMenuItem<BankList>>(
-                                (BankList value) {
-                              return DropdownMenuItem<BankList>(
-                                value: value,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    (value.logo == "")
-                                        ? Container(
-                                            height: 24.h,
-                                            width: 24.w,
-                                            child:
-                                                Image.asset('assets/bank.png'),
-                                          )
-                                        : Image.network(
-                                            "$bankIconUrl${value.logo}",
-                                            width: 30.w,
-                                            height: 30.h,
-                                          ),
-                                    Padding(
+                                    color: black, fontSize: font16.sp),
+                                items: accNames.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Padding(
                                       padding:
-                                          const EdgeInsets.only(left: 15.0),
+                                          const EdgeInsets.only(left: 20.0),
                                       child: Text(
-                                        value.bankName,
-                                        style: TextStyle(
-                                            color: black,
-                                            fontSize: font14.sp,
-                                            fontWeight: FontWeight.normal),
+                                        value,
+                                        style: TextStyle(color: black),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                closeKeyBoard(context);
-                                distL = value!;
-                                bankName = distL.bankName!;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 45.h,
-                        margin: EdgeInsets.only(
-                            top: 15, left: padding, right: padding),
-                        decoration: BoxDecoration(
-                          color: editBg,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Center(
-                                child: TextFormField(
-                                  style: TextStyle(
-                                      color: black, fontSize: inputFont.sp),
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  textInputAction: TextInputAction.next,
-                                  controller: ifscController,
-                                  decoration: new InputDecoration(
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(left: 20),
-                                    counterText: "",
-                                    label: Text("IFSC code"),
-                                  ),
-                                  maxLength: 11,
-                                  onChanged: (val) {
-                                    if (val.length == 11) {
-                                      closeKeyBoard(context);
-                                      generatePayoutToken(
-                                          ifscController.text.toString());
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            (loadIfsc)
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: circularProgressLoading(20.0),
-                                  )
-                                : Container()
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 45.h,
-                        margin: EdgeInsets.only(
-                            top: 15, left: padding, right: padding),
-                        decoration: BoxDecoration(
-                          color: editBg,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Center(
-                          child: TextFormField(
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.characters,
-                            textInputAction: TextInputAction.next,
-                            controller: branchNameController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 20),
-                              counterText: "",
-                              label: Text("Branch name"),
-                            ),
-                            maxLength: 80,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                        decoration: BoxDecoration(
-                            color: editBg,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: editBg)),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: selectAccountType,
-                            style: TextStyle(color: black, fontSize: font16.sp),
-                            items: accountTypes
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Padding(
+                                  );
+                                }).toList(),
+                                hint: Padding(
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: Text(
-                                    value,
-                                    style: TextStyle(color: black),
+                                    "Select account name",
+                                    style: TextStyle(
+                                        color: lightBlack, fontSize: font16.sp),
                                   ),
                                 ),
-                              );
-                            }).toList(),
-                            hint: Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: Text(
-                                "Account type",
-                                style: TextStyle(
-                                    color: lightBlack, fontSize: font16.sp),
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: Icon(
+                                    // Add this
+                                    Icons.keyboard_arrow_down, // Add this
+                                    color: lightBlue, // Add this
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedAccName = value!;
+                                    FocusScope.of(context)
+                                        .requestFocus(new FocusNode());
+                                  });
+                                },
                               ),
                             ),
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
-                              child: Icon(
-                                // Add this
-                                Icons.keyboard_arrow_down, // Add this
-                                color: lightBlue, // Add this
-                              ),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                selectAccountType = value!;
-                                FocusScope.of(context)
-                                    .requestFocus(new FocusNode());
-                              });
-                            },
                           ),
-                        ),
-                      ),
-                    ])),
-          bottomNavigationBar: InkWell(
-            onTap: () {
-              getDetail();
-            },
-            child: Container(
-              height: 45.h,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
-              decoration: BoxDecoration(
-                color: lightBlue,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              child: Center(
-                child: Text(
-                  continue_.toUpperCase(),
-                  style: TextStyle(fontSize: font13.sp, color: white),
+                          Container(
+                            height: 45.h,
+                            margin: EdgeInsets.only(
+                                top: 15, left: padding, right: padding),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                              child: TextFormField(
+                                style: TextStyle(
+                                    color: black, fontSize: inputFont.sp),
+                                keyboardType: TextInputType.number,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textInputAction: TextInputAction.next,
+                                controller: accountNoController,
+                                decoration: new InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 20),
+                                  counterText: "",
+                                  label: Text("Account number"),
+                                ),
+                                maxLength: 16,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 15, left: 20, right: 20),
+                            decoration: BoxDecoration(
+                                color: editBg,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                border: Border.all(color: editBg)),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<BankList>(
+                                isExpanded: true,
+                                value: distL,
+                                style: TextStyle(
+                                    color: black, fontSize: font16.sp),
+                                items: bankList.map<DropdownMenuItem<BankList>>(
+                                    (BankList value) {
+                                  return DropdownMenuItem<BankList>(
+                                    value: value,
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        (value.logo == "")
+                                            ? Container(
+                                                height: 24.h,
+                                                width: 24.w,
+                                                child: Image.asset(
+                                                    'assets/bank.png'),
+                                              )
+                                            : Image.network(
+                                                "$bankIconUrl${value.logo}",
+                                                width: 30.w,
+                                                height: 30.h,
+                                              ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: Text(
+                                            value.bankName,
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: font14.sp,
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    closeKeyBoard(context);
+                                    distL = value!;
+                                    bankName = distL.bankName!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 45.h,
+                            margin: EdgeInsets.only(
+                                top: 15, left: padding, right: padding),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: TextFormField(
+                                      style: TextStyle(
+                                          color: black, fontSize: inputFont.sp),
+                                      keyboardType: TextInputType.text,
+                                      textCapitalization:
+                                          TextCapitalization.characters,
+                                      textInputAction: TextInputAction.next,
+                                      controller: ifscController,
+                                      decoration: new InputDecoration(
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        contentPadding:
+                                            EdgeInsets.only(left: 20),
+                                        counterText: "",
+                                        label: Text("IFSC code"),
+                                      ),
+                                      maxLength: 11,
+                                      onChanged: (val) {
+                                        if (val.length == 11) {
+                                          closeKeyBoard(context);
+                                          generatePayoutToken(
+                                              ifscController.text.toString());
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                (loadIfsc)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: circularProgressLoading(20.0),
+                                      )
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 45.h,
+                            margin: EdgeInsets.only(
+                                top: 15, left: padding, right: padding),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Center(
+                              child: TextFormField(
+                                style: TextStyle(
+                                    color: black, fontSize: inputFont.sp),
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                textInputAction: TextInputAction.next,
+                                controller: branchNameController,
+                                decoration: new InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 20),
+                                  counterText: "",
+                                  label: Text("Branch name"),
+                                ),
+                                maxLength: 80,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 20, left: 20, right: 20),
+                            decoration: BoxDecoration(
+                                color: editBg,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                border: Border.all(color: editBg)),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectAccountType,
+                                style: TextStyle(
+                                    color: black, fontSize: font16.sp),
+                                items: accountTypes
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(color: black),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                hint: Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: Text(
+                                    "Account type",
+                                    style: TextStyle(
+                                        color: lightBlack, fontSize: font16.sp),
+                                  ),
+                                ),
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: Icon(
+                                    // Add this
+                                    Icons.keyboard_arrow_down, // Add this
+                                    color: lightBlue, // Add this
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectAccountType = value!;
+                                    FocusScope.of(context)
+                                        .requestFocus(new FocusNode());
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ])),
+              bottomNavigationBar: InkWell(
+                onTap: () {
+                  getDetail();
+                },
+                child: Container(
+                  height: 45.h,
+                  width: MediaQuery.of(context).size.width,
+                  margin:
+                      EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
+                  decoration: BoxDecoration(
+                    color: lightBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      continue_.toUpperCase(),
+                      style: TextStyle(fontSize: font13.sp, color: white),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ))));
+            ))));
   }
 
   Future getBankList() async {
@@ -688,7 +709,7 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Bank Save Response : ${data}");
@@ -704,14 +725,12 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
           showToastMessage(data['message'].toString());
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   _showFileUploadPopup(token) {
@@ -723,7 +742,7 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
               padding: MediaQuery.of(context).viewInsets,
               child: FileUploading(
                 storeImage: widget.storeImage,
-                docImage: widget.docImage,
+                // docImage: widget.docImage,
                 token: token,
                 qrPrefs: "${widget.itemResponse["qr_prefs"].toString()}",
                 customQRReq: "${widget.itemResponse['customQRReq'].toString()}",
@@ -732,8 +751,8 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
                 mobile: "${newItem['mobile'].toString()}",
                 companyName: "${newItem['businessName'].toString()}",
                 qrDisplayName: "${newItem['qrDisplayName'].toString()}",
-                  adhFront: widget.adhFront,
-                  adhBack: widget.adhBack,
+                // adhFront: widget.adhFront,
+                // adhBack: widget.adhBack,
               ),
             ));
   }
@@ -741,7 +760,7 @@ class _EmpMerchantBankDetailsState extends State<EmpMerchantBankDetails> {
 
 class FileUploading extends StatefulWidget {
   final File storeImage;
-  final File docImage;
+  // final File docImage;
   final String token;
   final String qrPrefs;
   final String customQRReq;
@@ -750,24 +769,24 @@ class FileUploading extends StatefulWidget {
   final String mobile;
   final String companyName;
   final String qrDisplayName;
-  final File adhFront;
-  final File adhBack;
+  // final File adhFront;
+  // final File adhBack;
 
-  const FileUploading(
-      {Key? key,
-      required this.storeImage,
-      required this.docImage,
-      required this.token,
-      required this.qrPrefs,
-      required this.customQRReq,
-      required this.selfiImage,
-      required this.name,
-      required this.mobile,
-      required this.companyName,
-      required this.qrDisplayName,
-      required this.adhFront,
-        required this.adhBack})
-      : super(key: key);
+  const FileUploading({
+    Key? key,
+    required this.storeImage,
+    // required this.docImage,
+    required this.token,
+    required this.qrPrefs,
+    required this.customQRReq,
+    required this.selfiImage,
+    required this.name,
+    required this.mobile,
+    required this.companyName,
+    required this.qrDisplayName,
+    // required this.adhFront,
+    //   required this.adhBack
+  }) : super(key: key);
 
   @override
   _FileUploadingState createState() => _FileUploadingState();
@@ -811,341 +830,358 @@ class _FileUploadingState extends State<FileUploading> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-      onWillPop: () async {
-        printMessage(screen, "Mobile back pressed");
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return exitProcess();
-            });
-        return false;
-      },
-      child: Wrap(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(40.0),
-                    topRight: const Radius.circular(40.0))),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 30.0, bottom: 15, left: 20, right: 20),
-                  child: Text(
-                    "Please wait, while we are uploading your document(s)",
-                    style: TextStyle(fontSize: font16.sp),
-                  ),
-                ),
-                Divider(),
-                (widget.customQRReq == "false")
-                    ? Container()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 25.0, bottom: 5),
-                            child: Text(
-                              "Enter your custom QR number",
-                              style: TextStyle(color: black, fontSize: font16.sp),
-                            ),
+        builder: () => WillPopScope(
+              onWillPop: () async {
+                printMessage(screen, "Mobile back pressed");
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return exitProcess();
+                    });
+                return false;
+              },
+              child: Wrap(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(40.0),
+                            topRight: const Radius.circular(40.0))),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 30.0, bottom: 15, left: 20, right: 20),
+                          child: Text(
+                            "Please wait, while we are uploading your document(s)",
+                            style: TextStyle(fontSize: font16.sp),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 5,
-                                left: padding,
-                                right: padding,
-                                bottom: 0),
-                            decoration: BoxDecoration(
-                              color: editBg,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 15.0, right: 15, top: 15, bottom: 15),
-                              child: TextFormField(
-                                style: TextStyle(
-                                    color: black, fontSize: inputFont.sp),
-                                keyboardType: TextInputType.number,
-                                textCapitalization:
-                                    TextCapitalization.characters,
-                                textInputAction: TextInputAction.next,
-                                controller: qrNoController,
-                                decoration: new InputDecoration(
-                                  isDense: true,
-                                  border: InputBorder.none,
-                                  contentPadding:
-                                      EdgeInsets.only(left: 10, right: 10),
-                                  counterText: "",
-                                  prefix: Text(
-                                    "MPQR ",
-                                    style: TextStyle(
-                                        color: black, fontSize: inputFont.sp),
+                        ),
+                        Divider(),
+                        (widget.customQRReq == "false")
+                            ? Container()
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 25.0, bottom: 5),
+                                    child: Text(
+                                      "Enter your custom QR number",
+                                      style: TextStyle(
+                                          color: black, fontSize: font16.sp),
+                                    ),
                                   ),
-                                  suffix: Text(
-                                    "@indus ",
-                                    style: TextStyle(
-                                        color: black, fontSize: inputFont.sp),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: 5,
+                                        left: padding,
+                                        right: padding,
+                                        bottom: 0),
+                                    decoration: BoxDecoration(
+                                      color: editBg,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0,
+                                          right: 15,
+                                          top: 15,
+                                          bottom: 15),
+                                      child: TextFormField(
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: inputFont.sp),
+                                        keyboardType: TextInputType.number,
+                                        textCapitalization:
+                                            TextCapitalization.characters,
+                                        textInputAction: TextInputAction.next,
+                                        controller: qrNoController,
+                                        decoration: new InputDecoration(
+                                          isDense: true,
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          counterText: "",
+                                          prefix: Text(
+                                            "MPQR ",
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: inputFont.sp),
+                                          ),
+                                          suffix: Text(
+                                            "@indus ",
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: inputFont.sp),
+                                          ),
+                                        ),
+                                        maxLength: 8,
+                                        onChanged: (val) {
+                                          if (val.length == 8) {
+                                            closeKeyBoard(context);
+                                          }
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                maxLength: 8,
-                                onChanged: (val) {
-                                  if (val.length == 8) {
-                                    closeKeyBoard(context);
-                                  }
-                                },
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 25.0, top: 2, bottom: 10),
+                                    child: Text(
+                                      "You may enter any desired 8-digit number",
+                                      style: TextStyle(
+                                          color: lightBlack,
+                                          fontSize: font12.sp),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, top: 2, bottom: 10),
-                            child: Text(
-                              "You may enter any desired 8-digit number",
-                              style: TextStyle(
-                                  color: lightBlack, fontSize: font12.sp),
-                            ),
-                          ),
-                        ],
-                      ),
-                (widget.storeImage.path == "")
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20.0,),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Store Image/Logo",
-                              style: TextStyle(color: black, fontSize: font15.sp),
-                            ),
-                            Spacer(),
-                            (storeLoading)
-                                ? circularProgressLoading(20.0)
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            (isStoreUploaded)
-                                ? Container(
-                                    height: 24.h,
-                                    width: 24.w,
-                                    decoration: BoxDecoration(
-                                        color: green, shape: BoxShape.circle),
-                                    child: Center(
-                                      child: Image.asset(
-                                        'assets/tick.png',
-                                        height: 16.h,
-                                        color: white,
-                                      ),
+                        (widget.storeImage.path == "")
+                            ? Container()
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Store Image/Logo",
+                                      style: TextStyle(
+                                          color: black, fontSize: font15.sp),
                                     ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
-                        ),
-                      ),
-                (widget.docImage.path == "")
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20.0, top: 15),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Document",
-                              style: TextStyle(color: black, fontSize: font15.sp),
-                            ),
-                            Spacer(),
-                            (docLoading)
-                                ? circularProgressLoading(20.0)
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            (isDocuUploaded)
-                                ? Container(
-                                    height: 24.h,
-                                    width: 24.w,
-                                    decoration: BoxDecoration(
-                                        color: green, shape: BoxShape.circle),
-                                    child: Center(
-                                      child: Image.asset(
-                                        'assets/tick.png',
-                                        height: 16.h,
-                                        color: white,
-                                      ),
+                                    Spacer(),
+                                    (storeLoading)
+                                        ? circularProgressLoading(20.0)
+                                        : Container(),
+                                    SizedBox(
+                                      width: 20.w,
                                     ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
-                        ),
-                      ),
-                (widget.selfiImage.path == "")
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 20.0,top: 15),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Selfi",
-                              style: TextStyle(color: black, fontSize: font15.sp),
-                            ),
-                            Spacer(),
-                            (selfiLoading)
-                                ? circularProgressLoading(20.0)
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            (isSelfiUploaded)
-                                ? Container(
-                                    height: 24.h,
-                                    width: 24.w,
-                                    decoration: BoxDecoration(
-                                        color: green, shape: BoxShape.circle),
-                                    child: Center(
-                                      child: Image.asset(
-                                        'assets/tick.png',
-                                        height: 16.h,
-                                        color: white,
-                                      ),
+                                    (isStoreUploaded)
+                                        ? Container(
+                                            height: 24.h,
+                                            width: 24.w,
+                                            decoration: BoxDecoration(
+                                                color: green,
+                                                shape: BoxShape.circle),
+                                            child: Center(
+                                              child: Image.asset(
+                                                'assets/tick.png',
+                                                height: 16.h,
+                                                color: white,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    SizedBox(
+                                      width: 20.w,
                                     ),
-                                  )
-                                : Container(),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
-                        ),
-                      ),
-                (widget.adhFront.path == "")
-                    ? Container()
-                    : Padding(
-                  padding: const EdgeInsets.only(left: 20.0,top:15),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Adhar Front",
-                        style: TextStyle(color: black, fontSize: font15.sp),
-                      ),
-                      Spacer(),
-                      (adhFrontLoading)
-                          ? circularProgressLoading(20.0)
-                          : Container(),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      (isAdhFrontUploaded)
-                          ? Container(
-                        height: 24.h,
-                        width: 24.w,
-                        decoration: BoxDecoration(
-                            color: green, shape: BoxShape.circle),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/tick.png',
-                            height: 16.h,
-                            color: white,
-                          ),
-                        ),
-                      )
-                          : Container(),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                    ],
-                  ),
-                ),
-                (widget.adhFront.path == "")
-                    ? Container()
-                    : Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 15),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Adhar Back",
-                        style: TextStyle(color: black, fontSize: font15.sp),
-                      ),
-                      Spacer(),
-                      (adhBackLoading)
-                          ? circularProgressLoading(20.0)
-                          : Container(),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      (isAdhBackUploaded)
-                          ? Container(
-                        height: 24.h,
-                        width: 24.w,
-                        decoration: BoxDecoration(
-                            color: green, shape: BoxShape.circle),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/tick.png',
-                            height: 16.h,
-                            color: white,
-                          ),
-                        ),
-                      )
-                          : Container(),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      /*Navigator.pop(context);
+                                  ],
+                                ),
+                              ),
+                        // (widget.docImage.path == "")
+                        //     ? Container()
+                        //     : Padding(
+                        //         padding: const EdgeInsets.only(left: 20.0, top: 15),
+                        //         child: Row(
+                        //           children: [
+                        //             Text(
+                        //               "Document",
+                        //               style: TextStyle(color: black, fontSize: font15.sp),
+                        //             ),
+                        //             Spacer(),
+                        //             (docLoading)
+                        //                 ? circularProgressLoading(20.0)
+                        //                 : Container(),
+                        //             SizedBox(
+                        //               width: 20.w,
+                        //             ),
+                        //             (isDocuUploaded)
+                        //                 ? Container(
+                        //                     height: 24.h,
+                        //                     width: 24.w,
+                        //                     decoration: BoxDecoration(
+                        //                         color: green, shape: BoxShape.circle),
+                        //                     child: Center(
+                        //                       child: Image.asset(
+                        //                         'assets/tick.png',
+                        //                         height: 16.h,
+                        //                         color: white,
+                        //                       ),
+                        //                     ),
+                        //                   )
+                        //                 : Container(),
+                        //             SizedBox(
+                        //               width: 20.w,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        (widget.selfiImage.path == "")
+                            ? Container()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20.0, top: 15),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Selfi",
+                                      style: TextStyle(
+                                          color: black, fontSize: font15.sp),
+                                    ),
+                                    Spacer(),
+                                    (selfiLoading)
+                                        ? circularProgressLoading(20.0)
+                                        : Container(),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    (isSelfiUploaded)
+                                        ? Container(
+                                            height: 24.h,
+                                            width: 24.w,
+                                            decoration: BoxDecoration(
+                                                color: green,
+                                                shape: BoxShape.circle),
+                                            child: Center(
+                                              child: Image.asset(
+                                                'assets/tick.png',
+                                                height: 16.h,
+                                                color: white,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                        // (widget.adhFront.path == "")
+                        //     ? Container()
+                        //     : Padding(
+                        //   padding: const EdgeInsets.only(left: 20.0,top:15),
+                        //   child: Row(
+                        //     children: [
+                        //       Text(
+                        //         "Adhar Front",
+                        //         style: TextStyle(color: black, fontSize: font15.sp),
+                        //       ),
+                        //       Spacer(),
+                        //       (adhFrontLoading)
+                        //           ? circularProgressLoading(20.0)
+                        //           : Container(),
+                        //       SizedBox(
+                        //         width: 20.w,
+                        //       ),
+                        //       (isAdhFrontUploaded)
+                        //           ? Container(
+                        //         height: 24.h,
+                        //         width: 24.w,
+                        //         decoration: BoxDecoration(
+                        //             color: green, shape: BoxShape.circle),
+                        //         child: Center(
+                        //           child: Image.asset(
+                        //             'assets/tick.png',
+                        //             height: 16.h,
+                        //             color: white,
+                        //           ),
+                        //         ),
+                        //       )
+                        //           : Container(),
+                        //       SizedBox(
+                        //         width: 20.w,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // (widget.adhFront.path == "")
+                        //     ? Container()
+                        //     : Padding(
+                        //   padding: const EdgeInsets.only(left: 20.0, top: 15),
+                        //   child: Row(
+                        //     children: [
+                        //       Text(
+                        //         "Adhar Back",
+                        //         style: TextStyle(color: black, fontSize: font15.sp),
+                        //       ),
+                        //       Spacer(),
+                        //       (adhBackLoading)
+                        //           ? circularProgressLoading(20.0)
+                        //           : Container(),
+                        //       SizedBox(
+                        //         width: 20.w,
+                        //       ),
+                        //       (isAdhBackUploaded)
+                        //           ? Container(
+                        //         height: 24.h,
+                        //         width: 24.w,
+                        //         decoration: BoxDecoration(
+                        //             color: green, shape: BoxShape.circle),
+                        //         child: Center(
+                        //           child: Image.asset(
+                        //             'assets/tick.png',
+                        //             height: 16.h,
+                        //             color: white,
+                        //           ),
+                        //         ),
+                        //       )
+                        //           : Container(),
+                        //       SizedBox(
+                        //         width: 20.w,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              /*Navigator.pop(context);
                         removeAllPages(context);
                         printMessage(screen, "All data saved");
                         openMerchantList(context);
                         */
-                      if (widget.customQRReq == "false") {
-                        assignQR("");
-                      } else {
-                        var qrNo = qrNoController.text.toString();
-                        if (qrNo.length != 8) {
-                          showToastMessage("Enter 8-digit number");
-                          return;
-                        }
-                        assignQR("MPQR$qrNo");
-                      }
-                    });
-                  },
-                  child: Container(
-                    height: 45.h,
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(
-                        top: 20, left: 20, right: 20, bottom: 10),
-                    decoration: BoxDecoration(
-                      color: lightBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                              if (widget.customQRReq == "false") {
+                                assignQR("");
+                              } else {
+                                var qrNo = qrNoController.text.toString();
+                                if (qrNo.length != 8) {
+                                  showToastMessage("Enter 8-digit number");
+                                  return;
+                                }
+                                assignQR("MPQR$qrNo");
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 45.h,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 20, left: 20, right: 20, bottom: 10),
+                            decoration: BoxDecoration(
+                              color: lightBlue,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Assign QR",
+                                style: TextStyle(
+                                    fontSize: font13.sp, color: white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Center(
-                      child: Text(
-                        "Assign QR",
-                        style: TextStyle(fontSize: font13.sp, color: white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    ));
+                  )
+                ],
+              ),
+            ));
   }
 
   void _uploadStoreLogo(File file) async {
@@ -1193,7 +1229,6 @@ class _FileUploadingState extends State<FileUploading> {
         if (widget.selfiImage.path != "") {
           _uploadSelfi(widget.selfiImage);
         }
-
       });
     }).catchError((error) => print(error));
   }
@@ -1334,15 +1369,14 @@ class _FileUploadingState extends State<FileUploading> {
       setState(() {
         selfiLoading = false;
 
-        if (widget.docImage.path != "") {
-          _uploadDocumentLogo(widget.docImage);
-        }else{
-          if (widget.adhFront.path != "") {
-            _uploadAdharFront(widget.adhFront);
-          }
+        // if (widget.docImage.path != "") {
+        //   _uploadDocumentLogo(widget.docImage);
+        // }else{
+        //   if (widget.adhFront.path != "") {
+        //     _uploadAdharFront(widget.adhFront);
+        //   }
 
-        }
-
+        // }
       });
     }).catchError((error) => print(error));
   }
@@ -1389,9 +1423,9 @@ class _FileUploadingState extends State<FileUploading> {
       }
       setState(() {
         adhFrontLoading = false;
-        if (widget.adhBack.path != "") {
-          _uploadAdharBack(widget.adhBack);
-        }
+        // if (widget.adhBack.path != "") {
+        //   _uploadAdharBack(widget.adhBack);
+        // }
       });
     }).catchError((error) => print(error));
   }

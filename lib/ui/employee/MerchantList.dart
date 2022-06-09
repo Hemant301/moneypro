@@ -38,37 +38,38 @@ class _MerchantListState extends State<MerchantList> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-            backgroundColor: white,
-            appBar: appBarHome(context, "", 24.0.w),
-            body: (loading)
-                ? Center(
-                    child: circularProgressLoading(40.0),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        Card(
-                          margin: EdgeInsets.only(left: 10, right: 10, top: 8),
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15.0),
-                              child: Image.asset(
-                                "assets/merchantlist_banner.jpg",
-                                fit: BoxFit.fill,
+        builder: () => SafeArea(
+            child: Scaffold(
+                backgroundColor: white,
+                appBar: appBarHome(context, "", 24.0.w),
+                body: (loading)
+                    ? Center(
+                        child: circularProgressLoading(40.0),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Card(
+                              margin:
+                                  EdgeInsets.only(left: 10, right: 10, top: 8),
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: Image.asset(
+                                    "assets/merchantlist_banner.jpg",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        _buildMerchant(),
-                      ])))));
+                            _buildMerchant(),
+                          ])))));
   }
 
   _buildMerchant() {
@@ -192,14 +193,14 @@ class _MerchantListState extends State<MerchantList> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       dataMerchant = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "data : ${dataMerchant}");
       setState(() {
         if (dataMerchant['status'].toString() == "1") {
           var result =
-          Merchants.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+              Merchants.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
 
           var totalLength = result.merchantData.length;
 
@@ -212,14 +213,12 @@ class _MerchantListState extends State<MerchantList> {
           showToastMessage(dataMerchant['message'].toString());
         }
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
       //showToastMessage(status500);
     }
-
-
   }
 
   Future getInvestorKycStatus(mobile, index, totalLength) async {
@@ -289,7 +288,7 @@ class _MerchantListState extends State<MerchantList> {
       setState(() {
         loading = false;
       });
-     // showToastMessage(status500);
+      // showToastMessage(status500);
     }
   }
 }

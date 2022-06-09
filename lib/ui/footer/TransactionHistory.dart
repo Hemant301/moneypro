@@ -1518,33 +1518,33 @@ class _TransactionHistoryState extends State<TransactionHistory>
                                     ),
                                   ],
                                 ),
-                                (aepsTransaction[
-                                                    index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "success" &&
-                                        aepsTransaction[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "fail" &&
-                                        aepsTransaction[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "failed" &&
-                                        aepsTransaction[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "failure")
-                                    ? Text(
-                                        "Check transaction Status",
-                                        style: TextStyle(
-                                            color: red, fontSize: font14.sp),
-                                      )
-                                    : Container(),
+                                // (aepsTransaction[
+                                //                     index]
+                                //                 .status
+                                //                 .toString()
+                                //                 .toLowerCase() !=
+                                //             "success" &&
+                                //         aepsTransaction[index]
+                                //                 .status
+                                //                 .toString()
+                                //                 .toLowerCase() !=
+                                //             "fail" &&
+                                //         aepsTransaction[index]
+                                //                 .status
+                                //                 .toString()
+                                //                 .toLowerCase() !=
+                                //             "failed" &&
+                                //         aepsTransaction[index]
+                                //                 .status
+                                //                 .toString()
+                                //                 .toLowerCase() !=
+                                //             "failure")
+                                //     ? Text(
+                                //         "Check transaction Status",
+                                //         style: TextStyle(
+                                //             color: red, fontSize: font14.sp),
+                                //       )
+                                //     : Container(),
                               ],
                             ),
                           ),

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -126,17 +125,17 @@ import 'package:moneypro_new/utils/Functions.dart';
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/StateContainer.dart';
 
-
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('onBackgroundMessage data: ${message.data.length}');
   var adVal = await getAudioSound();
   String? title = message.notification?.title.toString();
   String? msg = message.notification?.body.toString();
-  showNotification(title, msg,adVal);
+  showNotification(title, msg, adVal);
 }
+
 FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseAnalyticsObserver observer =
-FirebaseAnalyticsObserver(analytics: analytics);
+    FirebaseAnalyticsObserver(analytics: analytics);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -157,7 +156,6 @@ void main() async {
       title: appName,
       debugShowCheckedModeBanner: false,
       navigatorKey: StateContainer.navigatorKey,
-
       theme: ThemeData(
         primaryColor: blue,
       ),
@@ -165,31 +163,55 @@ void main() async {
       routes: <String, WidgetBuilder>{
         //account
         '/BankAccount': (BuildContext context) => new BankAccount(),
-        '/ComplaintManagement': (BuildContext context) => new ComplaintManagement(),
+        '/ComplaintManagement': (BuildContext context) =>
+            new ComplaintManagement(),
         '/MyAddress': (BuildContext context) => new MyAddress(),
         '/UpdatePin': (BuildContext context) => new UpdatePin(),
-        '/Profile': (BuildContext context) => new Profile(profilePic: '',profilePicId: '',),
+        '/Profile': (BuildContext context) => new Profile(
+              profilePic: '',
+              profilePicId: '',
+            ),
 
         //aeps
-        '/AEPS_BalanceEnq': (BuildContext context) => new AEPS_BalanceEnq(map:{} ),
-        '/AEPS_SBMOnboarding': (BuildContext context) => new AEPS_SBMOnboarding(pipe: '',),
-        '/AEPSDocument': (BuildContext context) => new AEPSDocument(pancard: '',),
+        '/AEPS_BalanceEnq': (BuildContext context) =>
+            new AEPS_BalanceEnq(map: {}),
+        '/AEPS_SBMOnboarding': (BuildContext context) => new AEPS_SBMOnboarding(
+              pipe: '',
+            ),
+        '/AEPSDocument': (BuildContext context) => new AEPSDocument(
+              pancard: '',
+            ),
         '/AEPSVerifyMobile': (BuildContext context) => new AEPSVerifyMobile(),
-        '/AEPSLanding': (BuildContext context) => new AEPSLanding(pipe: '',),
-        '/AEPSMiniStatement': (BuildContext context) => new AEPSMiniStatement(response: '',),
-        '/AEPSReceipt': (BuildContext context) => new AEPSReceipt(map: {},isShowDialog: false,),
+        '/AEPSLanding': (BuildContext context) => new AEPSLanding(
+              pipe: '',
+            ),
+        '/AEPSMiniStatement': (BuildContext context) => new AEPSMiniStatement(
+              response: '',
+            ),
+        '/AEPSReceipt': (BuildContext context) => new AEPSReceipt(
+              map: {},
+              isShowDialog: false,
+            ),
 
         //atm
-        '/ATMKycProcess': (BuildContext context) => new ATMKycProcess(authToken: '',mATMId: '',),
+        '/ATMKycProcess': (BuildContext context) => new ATMKycProcess(
+              authToken: '',
+              mATMId: '',
+            ),
         '/ATMOnBoarding': (BuildContext context) => new ATMOnBoarding(),
-        '/TransactionRecepit': (BuildContext context) => new TransactionRecepit(map: {},),
+        '/TransactionRecepit': (BuildContext context) => new TransactionRecepit(
+              map: {},
+            ),
 
         //auth
         '/SetPin': (BuildContext context) => new SetPin(),
         '/SetPinFinger': (BuildContext context) => new SetPinFinger(),
         '/SignIn': (BuildContext context) => new SignIn(),
         '/SignUp': (BuildContext context) => new SignUp(),
-        '/VerifyMobile': (BuildContext context) => new VerifyMobile(action: 0,mobile: '',),
+        '/VerifyMobile': (BuildContext context) => new VerifyMobile(
+              action: 0,
+              mobile: '',
+            ),
 
         //card
         '/MyCardCongrats': (BuildContext context) => new MyCardCongrats(),
@@ -199,106 +221,247 @@ void main() async {
         '/ContactList': (BuildContext context) => new ContactList(),
 
         //dmt
-        '/AddBeneficiary': (BuildContext context) => new AddBeneficiary(custId: '',),
-        '/AddSender': (BuildContext context) => new AddSender(mobile: '',),
-        '/BeneficiaryDetail': (BuildContext context) => new BeneficiaryDetail(custId: '',senderMobile: '',senderName: '',),
-        '/BeneficiaryTransaction': (BuildContext context) => new BeneficiaryTransaction(custId: '',mobile: '',),
-        '/ConfirmAuth': (BuildContext context) => new ConfirmAuth(itemResponse: {},),
-        '/ConfirmPayment': (BuildContext context) => new ConfirmPayment(itemResponse: {},),
-        '/DLTAllTransactions': (BuildContext context) => new DLTAllTransactions(),
+        '/AddBeneficiary': (BuildContext context) => new AddBeneficiary(
+              custId: '',
+            ),
+        '/AddSender': (BuildContext context) => new AddSender(
+              mobile: '',
+            ),
+        '/BeneficiaryDetail': (BuildContext context) => new BeneficiaryDetail(
+              custId: '',
+              senderMobile: '',
+              senderName: '',
+            ),
+        '/BeneficiaryTransaction': (BuildContext context) =>
+            new BeneficiaryTransaction(
+              custId: '',
+              mobile: '',
+            ),
+        '/ConfirmAuth': (BuildContext context) => new ConfirmAuth(
+              itemResponse: {},
+            ),
+        '/ConfirmPayment': (BuildContext context) => new ConfirmPayment(
+              itemResponse: {},
+            ),
+        '/DLTAllTransactions': (BuildContext context) =>
+            new DLTAllTransactions(),
         '/DMTLanding': (BuildContext context) => new DMTLanding(),
-        '/DMTRecipt': (BuildContext context) => new DMTRecipt(map: {},),
+        '/DMTRecipt': (BuildContext context) => new DMTRecipt(
+              map: {},
+            ),
         '/FavouriteSenders': (BuildContext context) => new FavouriteSenders(),
-        '/TransferMoney': (BuildContext context) => new TransferMoney(map: {},),
+        '/TransferMoney': (BuildContext context) => new TransferMoney(
+              map: {},
+            ),
 
         //employee//investoroboarding
-        '/MerchantInvestorBank': (BuildContext context) => new MerchantInvestorBank(map: {},),
-        '/MerchantInvestorDoc': (BuildContext context) => new MerchantInvestorDoc(pan: '',token: '',),
-        '/MerchantInvestorMobile': (BuildContext context) => new MerchantInvestorMobile(token: '',mobile: '',),
-        '/MerchantInvestorOnBoarding': (BuildContext context) => new MerchantInvestorOnBoarding(token: '',),
+        '/MerchantInvestorBank': (BuildContext context) =>
+            new MerchantInvestorBank(
+              map: {},
+            ),
+        '/MerchantInvestorDoc': (BuildContext context) =>
+            new MerchantInvestorDoc(
+              pan: '',
+              token: '',
+            ),
+        '/MerchantInvestorMobile': (BuildContext context) =>
+            new MerchantInvestorMobile(
+              token: '',
+              mobile: '',
+            ),
+        '/MerchantInvestorOnBoarding': (BuildContext context) =>
+            new MerchantInvestorOnBoarding(
+              token: '',
+            ),
 
         //employee/merchantonboarding
-        '/EmpMerchantBankDetails': (BuildContext context) => new EmpMerchantBankDetails(itemResponse: {},storeImage: new File(""), docImage: new File(""),selfiImage: new File(""),adhFront: new File(""),adhBack: new File("")),
-        '/EmpMerchantBusinessDetails': (BuildContext context) => new EmpMerchantBusinessDetails(),
-        '/EmpMerchantMapDetails': (BuildContext context) => new EmpMerchantMapDetails(itemResponse: {},storeImage: new File(""),),
-        '/EmpMerchantPANDetails': (BuildContext context) => new EmpMerchantPANDetails(itemResponse: {},storeImage:new File("") ,docImage:new File("") ,adhFront: new File(""), adhBack: new File("")),
-        '/EmpMerchantVerifyDetails': (BuildContext context) => new EmpMerchantVerifyDetails(itemResponse: {},storeImage:new File("") ,),
-        '/EmpViewMerchantQR': (BuildContext context) => new EmpViewMerchantQR(mToken: '',),
+        '/EmpMerchantBankDetails': (BuildContext context) =>
+            new EmpMerchantBankDetails(
+              itemResponse: {}, storeImage: new File(""),
+              //  docImage: new File(""),
+              selfiImage: new File(""),
+              //adhFront: new File(""),adhBack: new File("")
+            ),
+        '/EmpMerchantBusinessDetails': (BuildContext context) =>
+            new EmpMerchantBusinessDetails(),
+        '/EmpMerchantMapDetails': (BuildContext context) =>
+            new EmpMerchantMapDetails(
+              itemResponse: {},
+              storeImage: new File(""),
+            ),
+        '/EmpMerchantPANDetails': (BuildContext context) =>
+            new EmpMerchantPANDetails(itemResponse: {}, storeImage: new File("")
+                // ,docImage:new File("") ,adhFront: new File(""), adhBack: new File("")
+                ),
+        '/EmpMerchantVerifyDetails': (BuildContext context) =>
+            new EmpMerchantVerifyDetails(
+              itemResponse: {},
+              storeImage: new File(""),
+            ),
+        '/EmpViewMerchantQR': (BuildContext context) => new EmpViewMerchantQR(
+              mToken: '',
+            ),
 
         //employee
         '/EMICalculator': (BuildContext context) => new EMICalculator(),
-        '/EmpAssignQR': (BuildContext context) => new EmpAssignQR(token: '',mobile: '',),
+        '/EmpAssignQR': (BuildContext context) => new EmpAssignQR(
+              token: '',
+              mobile: '',
+            ),
         '/EmployeeLanding': (BuildContext context) => new EmployeeLanding(),
-        '/EmpSelfBankDetails': (BuildContext context) => new EmpSelfBankDetails(itemResponse: {},),
+        '/EmpSelfBankDetails': (BuildContext context) => new EmpSelfBankDetails(
+              itemResponse: {},
+            ),
         '/EmpSelfPanVerify': (BuildContext context) => new EmpSelfPanVerify(),
         '/LoanCollection': (BuildContext context) => new LoanCollection(),
         '/MerchantList': (BuildContext context) => new MerchantList(),
-        '/OverPaymentDue': (BuildContext context) => new OverPaymentDue(loanId: '',),
+        '/OverPaymentDue': (BuildContext context) => new OverPaymentDue(
+              loanId: '',
+            ),
 
         //footer
         '/AllOffers': (BuildContext context) => new AllOffers(),
-        '/BBSPRecipt': (BuildContext context) => new BBSPRecipt(map: {},),
-        '/MATMReceipt': (BuildContext context) => new MATMReceipt(map: {},),
-        '/RaisedTicket': (BuildContext context) => new RaisedTicket(amount: '',category: '',mode: '',opName: '',pgAmt: '',txnId: '',txnStatus: '',),
-        '/ShowCashback': (BuildContext context) => new ShowCashback(commission: '',id: '',),
-        '/TransactionHistory': (BuildContext context) => new TransactionHistory(fromDate:'', toDate:''),
-        '/TransactionHistoryEmpUser': (BuildContext context) => new TransactionHistoryEmpUser(),
-        '/WelcomeOfferPopup': (BuildContext context) => new WelcomeOfferPopup(action: 0,),
+        '/BBSPRecipt': (BuildContext context) => new BBSPRecipt(
+              map: {},
+            ),
+        '/MATMReceipt': (BuildContext context) => new MATMReceipt(
+              map: {},
+            ),
+        '/RaisedTicket': (BuildContext context) => new RaisedTicket(
+              amount: '',
+              category: '',
+              mode: '',
+              opName: '',
+              pgAmt: '',
+              txnId: '',
+              txnStatus: '',
+            ),
+        '/ShowCashback': (BuildContext context) => new ShowCashback(
+              commission: '',
+              id: '',
+            ),
+        '/TransactionHistory': (BuildContext context) =>
+            new TransactionHistory(fromDate: '', toDate: ''),
+        '/TransactionHistoryEmpUser': (BuildContext context) =>
+            new TransactionHistoryEmpUser(),
+        '/WelcomeOfferPopup': (BuildContext context) => new WelcomeOfferPopup(
+              action: 0,
+            ),
 
         //home
-        '/DummyClass': (BuildContext context) => new DummyClass(response: '',),
-        '/MoreCategories': (BuildContext context) => new MoreCategories(lat: 0.0,lng: 0.0,),
-        '/splash': (BuildContext context) => Splash(analytics: analytics, observer: observer),
-        '/perspective': (BuildContext context) => new Perspective(isShowWelcome: false,),
-        '/ShowWebViews': (BuildContext context) => new ShowWebViews(url: '',),
+        '/DummyClass': (BuildContext context) => new DummyClass(
+              response: '',
+            ),
+        '/MoreCategories': (BuildContext context) => new MoreCategories(
+              lat: 0.0,
+              lng: 0.0,
+            ),
+        '/splash': (BuildContext context) =>
+            Splash(analytics: analytics, observer: observer),
+        '/perspective': (BuildContext context) => new Perspective(
+              isShowWelcome: false,
+            ),
+        '/ShowWebViews': (BuildContext context) => new ShowWebViews(
+              url: '',
+            ),
 
         //investment/onboarding
-        '/InvestorBankDetail': (BuildContext context) => new InvestorBankDetail(pan: '',),
-        '/InvestorDocument': (BuildContext context) => new InvestorDocument(pan: '',),
-        '/InvestorMobileVerify': (BuildContext context) => new InvestorMobileVerify(),
-        '/InvestorOnboarding': (BuildContext context) => new InvestorOnboarding(),
-        '/InvestorPersonalDetail': (BuildContext context) => new InvestorPersonalDetail(),
+        '/InvestorBankDetail': (BuildContext context) => new InvestorBankDetail(
+              pan: '',
+            ),
+        '/InvestorDocument': (BuildContext context) => new InvestorDocument(
+              pan: '',
+            ),
+        '/InvestorMobileVerify': (BuildContext context) =>
+            new InvestorMobileVerify(),
+        '/InvestorOnboarding': (BuildContext context) =>
+            new InvestorOnboarding(),
+        '/InvestorPersonalDetail': (BuildContext context) =>
+            new InvestorPersonalDetail(),
 
         //investment
         '/InvestorLanding': (BuildContext context) => new InvestorLanding(),
-        '/InvestorPayment': (BuildContext context) => new InvestorPayment(amount: '',),
+        '/InvestorPayment': (BuildContext context) => new InvestorPayment(
+              amount: '',
+            ),
         '/InvestorStatement': (BuildContext context) => new InvestorStatement(),
-        '/InvestorWithdrawal': (BuildContext context) => new InvestorWithdrawal(maxAmt: 0.0,),
+        '/InvestorWithdrawal': (BuildContext context) => new InvestorWithdrawal(
+              maxAmt: 0.0,
+            ),
 
         //merchant
-        '/AddressByMap': (BuildContext context) => new AddressByMap(itemResponse: {},),
-        '/BankDetails': (BuildContext context) => new BankDetails(itemResponse: {},),
+        '/AddressByMap': (BuildContext context) => new AddressByMap(
+              itemResponse: {},
+            ),
+        '/BankDetails': (BuildContext context) => new BankDetails(
+              itemResponse: {},
+            ),
         '/BusinessDetails': (BuildContext context) => new BusinessDetails(),
-        '/BusinessVerify': (BuildContext context) => new BusinessVerify(itemResponse: {},),
-        '/MerchantDocument': (BuildContext context) => new MerchantDocument(itemResponse: {},),
-        '/MerchantGetStarted': (BuildContext context) => new MerchantGetStarted(),
+        '/BusinessVerify': (BuildContext context) => new BusinessVerify(
+              itemResponse: {},
+            ),
+        '/MerchantDocument': (BuildContext context) => new MerchantDocument(
+              itemResponse: {},
+            ),
+        '/MerchantGetStarted': (BuildContext context) =>
+            new MerchantGetStarted(),
         '/PaymentOptions': (BuildContext context) => new PaymentOptions(),
 
         //qr
         '/QRDownload': (BuildContext context) => new QRDownload(),
-        '/QRPayment': (BuildContext context) => new QRPayment(map:{} , file:new File("") ,),
+        '/QRPayment': (BuildContext context) => new QRPayment(
+              map: {},
+              file: new File(""),
+            ),
         '/RequestQR': (BuildContext context) => new RequestQR(),
-        '/ViewQRCode': (BuildContext context) => new ViewQRCode(action:0),
+        '/ViewQRCode': (BuildContext context) => new ViewQRCode(action: 0),
 
         //recharge/dth
-        '/DTHRecharge': (BuildContext context) => new DTHRechargeNew(map: {},),
-        '/DTHSelection': (BuildContext context) => new DTHSelectNew(category: '',searchBy: '',selectBy: '',),
+        '/DTHRecharge': (BuildContext context) => new DTHRechargeNew(
+              map: {},
+            ),
+        '/DTHSelection': (BuildContext context) => new DTHSelectNew(
+              category: '',
+              searchBy: '',
+              selectBy: '',
+            ),
 
         //recharge/lic
         '/LICDetails': (BuildContext context) => new LICDetails(),
 
         //recharge/mobile
-        '/MobilePayment': (BuildContext context) => new MobilePayment(map: {},),
-        '/PrepaidMobileRecharge': (BuildContext context) => new PrepaidMobileRecharge(mobileNo: '',),
+        '/MobilePayment': (BuildContext context) => new MobilePayment(
+              map: {},
+            ),
+        '/PrepaidMobileRecharge': (BuildContext context) =>
+            new PrepaidMobileRecharge(
+              mobileNo: '',
+            ),
 
         //recharge
-        '/FastagRecharge': (BuildContext context) => new FastagRecharge(map: {},),
-        '/MobileReceipt': (BuildContext context) => new MobileReceipt(map: {},isShowDialog: false,),
-        '/PaymentFailure': (BuildContext context) => new PaymentFailure(map: {},),
-        '/PaymentSuccess': (BuildContext context) => new PaymentSuccess(map: {},isShowDialog: false,),
-        '/RechargeFetchNo': (BuildContext context) => new RechargeFetchNo(map: {}),
-        '/RechargeFetchYes': (BuildContext context) => new RechargeFetchYes(map: {}),
-        '/RechargeSelection': (BuildContext context) => new RechargeSelection(selectBy: '',searchBy: '',category: '',),
+        '/FastagRecharge': (BuildContext context) => new FastagRecharge(
+              map: {},
+            ),
+        '/MobileReceipt': (BuildContext context) => new MobileReceipt(
+              map: {},
+              isShowDialog: false,
+            ),
+        '/PaymentFailure': (BuildContext context) => new PaymentFailure(
+              map: {},
+            ),
+        '/PaymentSuccess': (BuildContext context) => new PaymentSuccess(
+              map: {},
+              isShowDialog: false,
+            ),
+        '/RechargeFetchNo': (BuildContext context) =>
+            new RechargeFetchNo(map: {}),
+        '/RechargeFetchYes': (BuildContext context) =>
+            new RechargeFetchYes(map: {}),
+        '/RechargeSelection': (BuildContext context) => new RechargeSelection(
+              selectBy: '',
+              searchBy: '',
+              category: '',
+            ),
 
         //services
         '/AxisBankLanding': (BuildContext context) => new AxisBankLanding(),
@@ -312,17 +475,19 @@ void main() async {
         '/AddTeamIntro': (BuildContext context) => new AddTeamIntro(),
 
         //useronboarding
-        '/UserBankDetails': (BuildContext context) => new UserBankDetails(itemResponse: {},),
+        '/UserBankDetails': (BuildContext context) => new UserBankDetails(
+              itemResponse: {},
+            ),
         '/UserPanVerify': (BuildContext context) => new UserPanVerify(),
 
         //wallete
         '/AddMoneyToBank': (BuildContext context) => new AddMoneyToBank(),
         '/AddMoneyToWallet': (BuildContext context) => new AddMoneyToWallet(),
         '/AppWallet': (BuildContext context) => new AppWallet(),
-
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
-      ],),
+      ],
+    ),
   ));
 }

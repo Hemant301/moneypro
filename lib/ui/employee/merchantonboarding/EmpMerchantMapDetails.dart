@@ -24,7 +24,6 @@ class EmpMerchantMapDetails extends StatefulWidget {
 }
 
 class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
-
   final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
 
   late GoogleMapController _googleMapController;
@@ -60,7 +59,6 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
     });
 
     getLatLng();
-
   }
 
   @override
@@ -73,7 +71,6 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
     super.dispose();
   }
 
-
   getLatLng() async {
     var lati = await getLatitude();
     var long = await getLongitude();
@@ -83,12 +80,10 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
       lng = long;
     });
 
-
     printMessage(screen, "Latitude: $lat");
     printMessage(screen, "Longitude: $lng");
 
-
-    if(lat!=0){
+    if (lat != 0) {
       Timer(Duration(seconds: 2), () {
         _moveCamera(lat, lng);
         getAddress(lat, lng);
@@ -100,148 +95,159 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-      onWillPop: () async {
-        printMessage(screen, "Mobile back pressed");
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return exitProcess();
-            });
-        return false;
-      },
-      child: SafeArea(
-          child: Scaffold(
-            backgroundColor: white,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              backgroundColor: white,
-              leading: InkWell(
-                onTap: () {
-                  closeKeyBoard(context);
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return exitProcess();
-                      });
-                },
-                child: Container(
-                  height: 60.h,
-                  width: 60.w,
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/back_arrow_bg.png',
-                        height: 60.h,
-                      ),
-                      Positioned(
-                        top: 16,
-                        left: 12,
-                        child: Image.asset(
-                          'assets/back_arrow.png',
-                          height: 16.h,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              titleSpacing: 0,
-              title: appLogo(),
-              actions: [
-                Image.asset(
-                  'assets/faq.png',
-                  width: 24.w,
-                  color: orange,
-                ),
-                SizedBox(
-                  width: 10.w,
-                )
-              ],
-            ),
-            body:  Column(
-              children: [
-                _buildMap(),
-                SizedBox(height: 2.h,),
-                Text("Tap on map to load your selected location address", style: TextStyle(
-                  color: lightBlack, fontSize: font14.sp
-                ),),
-                Expanded(
-                  flex:1,
-                  child: _buildAddewssSection(),
-                )
-
-              ],
-            ),
-            bottomNavigationBar: InkWell(
-              onTap: () {
-                setState(() {
-                  closeKeyBoard(context);
-
-                  printMessage(screen, "State Name : $stateName");
-                  printMessage(screen, "Dist Name : $districtName");
-
-                  var address = addressController.text.toString();
-
-                  var city = cityController.text.toString();
-
-                  if (city.length > 15) {
-                    city = city
-                        .toString()
-                        .substring(0, city.toString().length - 15);
-                  }
-
-                  var pin = pinController.text.toString();
-
-                  stateName = stateController.text.toString();
-                  districtName = districtController.text.toString();
-
-                  if (address.length == 0) {
-                    showToastMessage("Enter your flat number");
-                    return;
-                  } else if (stateName == "") {
-                    showToastMessage("Select state");
-                    return;
-                  } else if (districtName == "") {
-                    showToastMessage("Select district");
-                    return;
-                  } else if (city.length == 0) {
-                    showToastMessage("Enter your city");
-                    return;
-                  } else if (pin.length != 6) {
-                    showToastMessage("Enter 6-digit pincode");
-                    return;
-                  } else {
-                    newItem['address'] = address.toString();
-                    newItem['state'] = stateName.toString();
-                    newItem['dist'] = districtName.toString();
-                    newItem['city'] = city.toString();
-                    newItem['pin'] = pin.toString();
-                    printMessage(screen, "Updated Response : $newItem");
-
-                    openEmpMerBusinessVerify(context, newItem, widget.storeImage);
-                  }
-                });
+        builder: () => WillPopScope(
+              onWillPop: () async {
+                printMessage(screen, "Mobile back pressed");
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return exitProcess();
+                    });
+                return false;
               },
-              child: Container(
-                height: 48.h,
-                width: 120.w,
-                margin: EdgeInsets.only(top: 0, left: 25, right: 25, bottom: 10),
-                decoration: BoxDecoration(
-                  color: lightBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(25)),
+              child: SafeArea(
+                  child: Scaffold(
+                backgroundColor: white,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  leading: InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return exitProcess();
+                          });
+                    },
+                    child: Container(
+                      height: 60.h,
+                      width: 60.w,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/back_arrow_bg.png',
+                            height: 60.h,
+                          ),
+                          Positioned(
+                            top: 16,
+                            left: 12,
+                            child: Image.asset(
+                              'assets/back_arrow.png',
+                              height: 16.h,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  titleSpacing: 0,
+                  title: appLogo(),
+                  actions: [
+                    Image.asset(
+                      'assets/faq.png',
+                      width: 24.w,
+                      color: orange,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    )
+                  ],
                 ),
-                child: Center(
-                  child: Text(
-                    continue_.toUpperCase(),
-                    style: TextStyle(fontSize: font13.sp, color: white),
+                body: Column(
+                  children: [
+                    _buildMap(),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      "Tap on map to load your selected location address",
+                      style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildAddewssSection(),
+                    )
+                  ],
+                ),
+                bottomNavigationBar: InkWell(
+                  onTap: () {
+                    setState(() {
+                      closeKeyBoard(context);
+
+                      printMessage(screen, "State Name : $stateName");
+                      printMessage(screen, "Dist Name : $districtName");
+
+                      var address = addressController.text.toString();
+
+                      var city = cityController.text.toString();
+
+                      if (city.length > 15) {
+                        city = city
+                            .toString()
+                            .substring(0, city.toString().length - 15);
+                      }
+
+                      var pin = pinController.text.toString();
+
+                      stateName = stateController.text.toString();
+                      districtName = districtController.text.toString();
+
+                      if (address.length == 0) {
+                        showToastMessage("Enter your flat number");
+                        return;
+                      } else if (stateName == "") {
+                        showToastMessage("Select state");
+                        return;
+                      } else if (districtName == "") {
+                        showToastMessage("Select district");
+                        return;
+                      } else if (city.length == 0) {
+                        showToastMessage("Enter your city");
+                        return;
+                      } else if (pin.length != 6) {
+                        showToastMessage("Enter 6-digit pincode");
+                        return;
+                      } else {
+                        newItem['address'] = address.toString();
+                        newItem['state'] = stateName.toString();
+                        newItem['dist'] = districtName.toString();
+                        newItem['city'] = city.toString();
+                        newItem['pin'] = pin.toString();
+                        printMessage(screen, "Updated Response : $newItem");
+
+                        // openEmpMerBusinessVerify(context, newItem, widget.storeImage);
+                        openEmpMerPanVerify(
+                          context,
+                          newItem,
+                          widget.storeImage,
+                          // selectedOtherFile,
+                          // selectedAadharFrontFile,
+                          // selectedAadharBackFile
+                        );
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: 48.h,
+                    width: 120.w,
+                    margin: EdgeInsets.only(
+                        top: 0, left: 25, right: 25, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: lightBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        continue_.toUpperCase(),
+                        style: TextStyle(fontSize: font13.sp, color: white),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          )),
-    ));
+              )),
+            ));
   }
 
   _buildMap() {
@@ -252,7 +258,7 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
           _googleMapController = controller;
         },
         initialCameraPosition:
-        CameraPosition(target: LatLng(lat, lng), zoom: 14.0),
+            CameraPosition(target: LatLng(lat, lng), zoom: 14.0),
         markers: Set.from(markers),
         myLocationEnabled: true,
         onTap: handleTap,
@@ -264,7 +270,6 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
     _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(target: LatLng(lat, lng), zoom: 14.0),
     ));
-
   }
 
   handleTap(LatLng tappedPoint) async {
@@ -278,18 +283,17 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
       );
 
       _moveCamera(tappedPoint.latitude, tappedPoint.longitude);
-      printMessage(screen, "Lat : ${tappedPoint.latitude} Lng : ${tappedPoint.longitude}");
+      printMessage(screen,
+          "Lat : ${tappedPoint.latitude} Lng : ${tappedPoint.longitude}");
       getAddress(tappedPoint.latitude, tappedPoint.longitude);
     });
   }
 
   _getCurrentLocation() {
-
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
-
         lat = position.latitude;
         lng = position.longitude;
         _moveCamera(lat, lng);
@@ -297,13 +301,9 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
     }).catchError((e) {
       print(e);
     });
-
-
   }
 
   getAddress(double lat, double lng) async {
-
-
     if (lat != 0) {
       printMessage(screen, "IN SIDE IF");
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
@@ -379,7 +379,9 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
                 child: Text(
                   "${widget.itemResponse['businessName']}",
                   style: TextStyle(
-                      fontSize: 18.sp, color: green, fontWeight: FontWeight.bold),
+                      fontSize: 18.sp,
+                      color: green,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
@@ -390,17 +392,17 @@ class _EmpMerchantMapDetailsState extends State<EmpMerchantMapDetails> {
                       flex: 1,
                       child: Center(
                           child: Text(
-                            "$step1",
-                            style: TextStyle(color: black, fontSize: font14.sp),
-                          )),
+                        "$step1",
+                        style: TextStyle(color: black, fontSize: font14.sp),
+                      )),
                     ),
                     Expanded(
                       flex: 1,
                       child: Center(
                           child: Text(
-                            "$step2",
-                            style: TextStyle(color: orange, fontSize: font14.sp),
-                          )),
+                        "$step2",
+                        style: TextStyle(color: orange, fontSize: font14.sp),
+                      )),
                     )
                   ],
                 ),
