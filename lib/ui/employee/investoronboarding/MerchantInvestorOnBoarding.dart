@@ -707,28 +707,28 @@ class _MerchantInvestorOnBoardingState
         var lname = "${data['user']['last_name'].toString()}";
         var email = "${data['user']['email'].toString()}";
         var mobile = "${data['user']['mobile'].toString()}";
-        // var pan = "${data['user']['pan_no'].toString()}";
-        var pan = "";
+        var pan = "${data['user']['pan_no'].toString()}";
+        // var pan = "";
         // var adhar = "${data['user']['adhar'].toString()}";
         var adhar = "";
         var dob = "${data['user']['dob'].toString()}";
-        var address = "";
-        var city = "";
-        var district = "";
-        var state = "";
-        var pin = "";
-        var accountNumber = "";
-        var ifsc = "";
-        var accountName = "";
-        // var address = "${data['user']['company_address'].toString()}";
-        // var city = "${data['user']['city'].toString()}";
-        // var district = "${data['user']['district'].toString()}";
-        // var state = "${data['user']['state'].toString()}";
-        // var pin = "${data['user']['pin'].toString()}";
+        // var address = "";
+        // var city = "";
+        // var district = "";
+        // var state = "";
+        // var pin = "";
+        // var accountNumber = "";
+        // var ifsc = "";
+        // var accountName = "";
+        var address = "${data['user']['company_address'].toString()}";
+        var city = "${data['user']['city'].toString()}";
+        var district = "${data['user']['district'].toString()}";
+        var state = "${data['user']['state'].toString()}";
+        var pin = "${data['user']['pin'].toString()}";
 
-        // var accountNumber = "${data['user']['account_no'].toString()}";
-        // var ifsc = "${data['user']['ifsc'].toString()}";
-        // var accountName = "${data['user']['contact_name'].toString()}";
+        var accountNumber = "${data['user']['account_no'].toString()}";
+        var ifsc = "${data['user']['ifsc'].toString()}";
+        var accountName = "${data['user']['contact_name'].toString()}";
 
         map = {
           "token": "${widget.token}",
