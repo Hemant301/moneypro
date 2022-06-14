@@ -14,6 +14,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -38,6 +39,7 @@ import 'package:moneypro_new/utils/AppKeys.dart';
 
 import '../../main.dart';
 import 'package:translator/translator.dart';
+import '../../utils/Apicall.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     new FlutterLocalNotificationsPlugin();
@@ -1870,6 +1872,23 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                                     }
                                   } else {
                                     openAEPSLanding(context, "ICICI");
+
+                                    // checkKyc() async {
+                                    //   HomeApi _api = HomeApi();
+                                    //   Map data = await _api.doCheckKyc();
+                                    //   print(data);
+                                    //   if (data['response']['statusCode'] ==
+                                    //       "000") {
+                                    //     openAEPSLanding(context, "ICICI");
+                                    //   } else {
+                                    //     Fluttertoast.showToast(
+                                    //         msg: data['response']['data']
+                                    //             ['statusDescription']);
+                                    //     return;
+                                    //   }
+                                    // }
+
+                                    // checkKyc();
                                   }
                                 }
                               } else if (aepsStatus == "2") {

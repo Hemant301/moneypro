@@ -16,17 +16,15 @@ import 'package:moneypro_new/utils/Functions.dart';
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 class AEPS_SBMOnboarding extends StatefulWidget {
   final String pipe;
-  const AEPS_SBMOnboarding({Key? key,required this.pipe}) : super(key: key);
+  const AEPS_SBMOnboarding({Key? key, required this.pipe}) : super(key: key);
 
   @override
   _AEPS_SBMOnboardingState createState() => _AEPS_SBMOnboardingState();
 }
 
 class _AEPS_SBMOnboardingState extends State<AEPS_SBMOnboarding> {
-
   var screen = "AEPS on Boarding";
 
   TextEditingController merchatController = new TextEditingController();
@@ -70,7 +68,7 @@ class _AEPS_SBMOnboardingState extends State<AEPS_SBMOnboarding> {
 
   var loadresend = false;
 
-var regType = "";
+  var regType = "";
 
   @override
   void initState() {
@@ -95,12 +93,12 @@ var regType = "";
     printMessage(
         screen,
         "Merchant Name : $mName\n"
-            "First Name : $cFName\n"
-            "Last Name : $cLName\n"
-            "Email : $cEmail\n"
-            "Address : $cAdd\n"
-            "Pin : $cPin\n"
-            "Adhar : $cAdhar");
+        "First Name : $cFName\n"
+        "Last Name : $cLName\n"
+        "Email : $cEmail\n"
+        "Address : $cAdd\n"
+        "Pin : $cPin\n"
+        "Adhar : $cAdhar");
 
     setState(() {
       if (mName.toString() == "") {
@@ -150,367 +148,373 @@ var regType = "";
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: white,
-          appBar: appBarHome(
-            context,
-            "",
-            24.0,
-          ),
-          body: (loading)
-              ? Center(
-            child: circularProgressLoading(40.0),
-          )
-              : SingleChildScrollView(
+      backgroundColor: white,
+      appBar: appBarHome(
+        context,
+        "",
+        24.0,
+      ),
+      body: (loading)
+          ? Center(
+              child: circularProgressLoading(40.0),
+            )
+          : SingleChildScrollView(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable1,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.name,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: merchatController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Merchant name"),
-                          ),
-                          maxLength: 100,
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable1,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: merchatController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Merchant name"),
                         ),
+                        maxLength: 100,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable2,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.name,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: customerController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Customer name"),
-                          ),
-                          maxLength: 100,
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable2,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: customerController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Customer name"),
                         ),
+                        maxLength: 100,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable3,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          controller: emailController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Email"),
-                          ),
-                          maxLength: 100,
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable3,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        controller: emailController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Email"),
                         ),
+                        maxLength: 100,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable4,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.streetAddress,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: addressController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Address"),
-                          ),
-                          maxLength: 100,
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable4,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.streetAddress,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: addressController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Address"),
                         ),
+                        maxLength: 100,
                       ),
                     ),
-
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<Datum>(
-                          isExpanded: true,
-                          value: dState,
-                          style: TextStyle(color: black, fontSize: font16),
-                          items: stateLists
-                              .map<DropdownMenuItem<Datum>>((Datum value) {
-                            return DropdownMenuItem<Datum>(
-                              value: value,
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15.0),
-                                    child: Text(
-                                      value.value,
-                                      style: TextStyle(
-                                          color: black,
-                                          fontSize: font16,
-                                          fontWeight: FontWeight.normal),
-                                    ),
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<Datum>(
+                        isExpanded: true,
+                        value: dState,
+                        style: TextStyle(color: black, fontSize: font16),
+                        items: stateLists
+                            .map<DropdownMenuItem<Datum>>((Datum value) {
+                          return DropdownMenuItem<Datum>(
+                            value: value,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    value.value,
+                                    style: TextStyle(
+                                        color: black,
+                                        fontSize: font16,
+                                        fontWeight: FontWeight.normal),
                                   ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                          icon: Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Icon(
-                              // Add this
-                              Icons.keyboard_arrow_down, // Add this
-                              color: Colors.blue, // Add this
+                                ),
+                              ],
                             ),
+                          );
+                        }).toList(),
+                        icon: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(
+                            // Add this
+                            Icons.keyboard_arrow_down, // Add this
+                            color: Colors.blue, // Add this
                           ),
-                          onChanged: (value) {
-                            setState(() {
-                              closeKeyBoard(context);
-                              dState = value!;
-                              stateName = dState.value;
-                              stateId = dState.key;
-                              _getCryptString(dState.key.toString());
-                            });
-                          },
                         ),
-                      ),
-                    ),
-                    (loadingDist)
-                        ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: circularProgressLoading(20.0),
-                      ),
-                    )
-                        : Container(),
-                    Container(
-                      height: 45,
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<DistrictList>(
-                          isExpanded: true,
-                          value: distL,
-                          style: TextStyle(color: black, fontSize: font16),
-                          items: districtList.map<DropdownMenuItem<DistrictList>>(
-                                  (DistrictList value) {
-                                return DropdownMenuItem<DistrictList>(
-                                  value: value,
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 15.0),
-                                        child: Text(
-                                          value.value,
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: font16,
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                          icon: Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Icon(
-                              // Add this
-                              Icons.keyboard_arrow_down, // Add this
-                              color: Colors.blue, // Add this
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              closeKeyBoard(context);
-                              distL = value!;
-                              districtId = distL.key;
-                              districtName = distL.value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.streetAddress,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: cityController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("City"),
-                          ),
-                          maxLength: 15,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable4,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.streetAddress,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: pinController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Pincode"),
-                          ),
-                          maxLength: 6,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: enable4,
-                          style: TextStyle(color: black, fontSize: inputFont),
-                          keyboardType: TextInputType.streetAddress,
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          controller: aadharController,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Adhaar number"),
-                          ),
-                          maxLength: 12,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: InkWell(
-                        onTap: () {
-                          _showCameraGalleryOption();
+                        onChanged: (value) {
+                          setState(() {
+                            closeKeyBoard(context);
+                            dState = value!;
+                            stateName = dState.value;
+                            stateId = dState.key;
+                            _getCryptString(dState.key.toString());
+                          });
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, top: 20, bottom: 20),
-                          child: Row(
-                            children: [
-                              Text(
-                                uploadFile_,
-                                style: TextStyle(
-                                    color: black, fontSize: font16),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Icon(
-                                Icons.file_upload,
-                                color: black,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                upto5,
-                                style: TextStyle(
-                                    color: black, fontSize: font16),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              (isImageAttached)
-                                  ? Text(
-                                "File Attached",
-                                style: TextStyle(
-                                    color: black, fontSize: font16),
-                              )
-                                  : Container()
-                            ],
+                      ),
+                    ),
+                  ),
+                  (loadingDist)
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: circularProgressLoading(20.0),
                           ),
+                        )
+                      : Container(),
+                  Container(
+                    height: 45,
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<DistrictList>(
+                        isExpanded: true,
+                        value: distL,
+                        style: TextStyle(color: black, fontSize: font16),
+                        items: districtList.map<DropdownMenuItem<DistrictList>>(
+                            (DistrictList value) {
+                          return DropdownMenuItem<DistrictList>(
+                            value: value,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    value.value,
+                                    style: TextStyle(
+                                        color: black,
+                                        fontSize: font16,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        icon: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(
+                            // Add this
+                            Icons.keyboard_arrow_down, // Add this
+                            color: Colors.blue, // Add this
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            closeKeyBoard(context);
+                            distL = value!;
+                            districtId = distL.key;
+                            districtName = distL.value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.streetAddress,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: cityController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("City"),
+                        ),
+                        maxLength: 15,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable4,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.streetAddress,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: pinController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Pincode"),
+                        ),
+                        maxLength: 6,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.only(top: 15, left: padding, right: padding),
+                    decoration: BoxDecoration(
+                      color: editBg,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 10, bottom: 10),
+                      child: TextFormField(
+                        enabled: enable4,
+                        style: TextStyle(color: black, fontSize: inputFont),
+                        keyboardType: TextInputType.streetAddress,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.next,
+                        controller: aadharController,
+                        decoration: new InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 10),
+                          counterText: "",
+                          label: Text("Adhaar number"),
+                        ),
+                        maxLength: 12,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: InkWell(
+                      onTap: () {
+                        _showCameraGalleryOption();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15.0, top: 20, bottom: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              uploadFile_,
+                              style: TextStyle(color: black, fontSize: font16),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              Icons.file_upload,
+                              color: black,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              upto5,
+                              style: TextStyle(color: black, fontSize: font16),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            (isImageAttached)
+                                ? Text(
+                                    "File Attached",
+                                    style: TextStyle(
+                                        color: black, fontSize: font16),
+                                  )
+                                : Container()
+                          ],
                         ),
                       ),
                     ),
-                  ])),
-          bottomNavigationBar: _buildBottomSection(),
-        ));
+                  ),
+                ])),
+      bottomNavigationBar: _buildBottomSection(),
+    ));
   }
 
   _buildBottomSection() {
@@ -572,9 +576,9 @@ var regType = "";
     setState(() {
       if (data['isSuccess'].toString() == "true") {
         authToken = data['data']['token'].toString();
-        printMessage(screen,"AUTH : $authToken");
+        printMessage(screen, "AUTH : $authToken");
         getStateList(authToken);
-      }else{
+      } else {
         loading = false;
       }
     });
@@ -623,9 +627,7 @@ var regType = "";
       printMessage(screen, "District Result : $result");
     }
 
-    setState(() {
-
-    });
+    setState(() {});
 
     var header = {
       "Authorization": "Bearer $authToken",
@@ -637,13 +639,12 @@ var regType = "";
     final response = await http.post(Uri.parse(districtUrl),
         headers: header, body: (result), encoding: Encoding.getByName("utf-8"));
 
-
     var d = jsonDecode(utf8.decode(response.bodyBytes));
 
     printMessage(screen, "District Response : $d");
 
     var dataRes =
-    District.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        District.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
 
     printMessage(screen, "District Result : $result");
 
@@ -651,7 +652,7 @@ var regType = "";
       if (dataRes.isSuccess) {
         districtList.clear();
         DistrictList dState1 =
-        new DistrictList(key: "0", value: "Select district");
+            new DistrictList(key: "0", value: "Select district");
         districtList = dataRes.data;
         districtList.insert(0, dState1);
         distL = districtList[0];
@@ -666,113 +667,113 @@ var regType = "";
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Wrap(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius:
-                BorderRadius.vertical(top: Radius.circular(50.0)),
-                color: white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 10,
-                    blurRadius: 10,
-                    offset: Offset(0, 1), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Container(
-                      color: gray,
-                      width: 50,
-                      height: 5,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      20,
-                    ),
-                    child: Text(
-                      "Get image from",
-                      style: TextStyle(color: black, fontSize: font16),
-                    ),
-                  ),
-                  Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                          getImage(ImageSource.gallery);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/images.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Gallery",
-                                  style: TextStyle(
-                                      color: black, fontSize: font15),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                          getImage(ImageSource.camera);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/photo.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                      color: black, fontSize: font15),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(50.0)),
+                    color: white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 10,
+                        blurRadius: 10,
+                        offset: Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 40,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: Container(
+                          color: gray,
+                          width: 50,
+                          height: 5,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(
+                          20,
+                        ),
+                        child: Text(
+                          "Get image from",
+                          style: TextStyle(color: black, fontSize: font16),
+                        ),
+                      ),
+                      Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              getImage(ImageSource.gallery);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/images.png',
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Gallery",
+                                      style: TextStyle(
+                                          color: black, fontSize: font15),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              getImage(ImageSource.camera);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/photo.png',
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Camera",
+                                      style: TextStyle(
+                                          color: black, fontSize: font15),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          ],
-        ));
+                )
+              ],
+            ));
   }
 
   Future getImage(ImageSource source) async {
@@ -790,7 +791,6 @@ var regType = "";
         } else {
           isImageAttached = false;
         }
-
       });
     }
   }
@@ -807,9 +807,7 @@ var regType = "";
     var aadharno = aadharController.text.toString();
 
     if (city.length > 15) {
-      city = city
-          .toString()
-          .substring(0, city.toString().length - 15);
+      city = city.toString().substring(0, city.toString().length - 15);
     }
 
     if (merchantName.length == 0) {
@@ -875,16 +873,16 @@ var regType = "";
       "state": stateName,
       "district": districtName,
       "city": city,
-      "type":"Aeps",
+      "type": "Aeps",
     });
 
     Dio dio = new Dio();
     dio
         .post(microatmCustomerOnboardingAPI,
-        data: data,
-        options: Options(
-          headers: {"Authorization": "$authHeader"},
-        ))
+            data: data,
+            options: Options(
+              headers: {"Authorization": "$authHeader"},
+            ))
         .then((response) {
       var msg = jsonDecode(response.toString());
 
@@ -947,6 +945,7 @@ var regType = "";
       };
       String result = await platform.invokeMethod("regCrypt", arr);
       printMessage(screen, "Reg Result : $result");
+      print('=========santosh from here');
 
       var header = {
         "Authorization": "Bearer $authToken",
@@ -961,16 +960,16 @@ var regType = "";
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Respi Dtaa : $data");
+      print('===marchant id here====');
 
       setState(() {
-
         Navigator.pop(context);
 
         if (data['isSuccess'].toString() == "true") {
           var id = data['data']['merchant_Id'].toString();
           saveAEPSMerchantId('id');
 
-          if (regType.toString().toLowerCase() == "app"){
+          if (regType.toString().toLowerCase() == "app") {
             rbpUserOnBoarding();
           }
           addMId(id);
@@ -995,14 +994,14 @@ var regType = "";
     });
     var mId = await getMerchantID();
 
-    var body = {"m_id": mId, "merchant_id": id,"type":"Aeps"};
+    var body = {"m_id": mId, "merchant_id": id, "type": "Aeps"};
 
     final response =
-    await http.post(Uri.parse(microatmMerchantIdAPI), body: body);
+        await http.post(Uri.parse(microatmMerchantIdAPI), body: body);
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Value of Add id : $data");
@@ -1013,21 +1012,16 @@ var regType = "";
         removeAllPages(context);
         openAEPSLanding(context, widget.pipe.toString());
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
-
   }
 
   Future rbpUserOnBoarding() async {
-    setState(() {
-
-    });
+    setState(() {});
 
     var userToken = await getToken();
     var mId = await getMerchantID();
@@ -1042,31 +1036,28 @@ var regType = "";
     var body = {
       "user_token": "$userToken",
       "stateId": "$stateId",
-      "districtId":"$districtId",
-      "merchant_id":"$mId"
+      "districtId": "$districtId",
+      "merchant_id": "$mId"
     };
 
     printMessage(screen, "Body On board: $body");
 
-    final response = await http.post(Uri.parse(aepsRbpOnboardingAPI), body: jsonEncode(body), headers: header);
+    final response = await http.post(Uri.parse(aepsRbpOnboardingAPI),
+        body: jsonEncode(body), headers: header);
 
     printMessage(screen, "URL: $aepsRbpOnboardingAPI");
 
     int statusCode = response.statusCode;
     printMessage(screen, "Status code On board : $statusCode");
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
       printMessage(screen, "Value of Add id : $data");
-
-    }else{
+    } else {
       showToastMessage(status500);
     }
-
-
-
   }
 
-  cropImageFunction(File file) async{
+  cropImageFunction(File file) async {
     File? croppedFile = await ImageCropper.cropImage(
         sourcePath: file.path,
         aspectRatioPresets: [
@@ -1084,11 +1075,10 @@ var regType = "";
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
-        )
-    );
+        ));
 
     setState(() {
-      _image=croppedFile!;
+      _image = croppedFile!;
     });
   }
 }

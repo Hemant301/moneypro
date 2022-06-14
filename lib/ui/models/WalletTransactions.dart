@@ -50,9 +50,11 @@ class WalletList {
     required this.comBal,
     required this.headingS,
     required this.descriptionS,
+    required this.txn_type,
   });
 
   var type;
+  var txn_type;
   var date;
   var time;
   var transctionId;
@@ -67,6 +69,7 @@ class WalletList {
 
   factory WalletList.fromJson(Map<String, dynamic> json) => WalletList(
         type: json["type"],
+        txn_type: json["txn_type"],
         date: json["date"],
         time: json["time"],
         transctionId: json["transction_id"],

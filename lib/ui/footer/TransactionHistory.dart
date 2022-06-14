@@ -824,14 +824,14 @@ class _TransactionHistoryState extends State<TransactionHistory>
                                                       children: [
                                                         Text(
                                                           (walletList[index]
-                                                                      .type ==
+                                                                      .txn_type ==
                                                                   "Cr")
                                                               ? "+"
                                                               : "-",
                                                           style: TextStyle(
                                                               color: (walletList[
                                                                               index]
-                                                                          .type ==
+                                                                          .txn_type ==
                                                                       "Cr")
                                                                   ? green
                                                                   : red,
@@ -3071,7 +3071,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     };
 
     printMessage(screen, "body : $body");
-    print(authHeader);
+    // print(authHeader);
 
     final response = await http.post(Uri.parse(walletBalanceHistroyAPI),
         body: jsonEncode(body), headers: headers);
@@ -3141,6 +3141,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
           if (data['wallet_list'].length != 0) {
             for (int i = 0; i < data['wallet_list'].length; i++) {
               var type = data['wallet_list'][i]['type'];
+              var txn_type = data['wallet_list'][i]['txn_type'];
               var date = data['wallet_list'][i]['date'];
               var time = data['wallet_list'][i]['time'];
               var transctionId = data['wallet_list'][i]['transction_id'];
@@ -3155,6 +3156,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
               WalletList listW = WalletList(
                   type: type,
+                  txn_type: txn_type,
                   date: date,
                   time: time,
                   transctionId: transctionId,

@@ -32,7 +32,7 @@ saveLoginId(value) async {
 
 getLoginId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return (prefs.getString("loginId")  ?? "");
+  return (prefs.getString("loginId") ?? "");
 }
 
 saveFirstName(value) async {
@@ -274,6 +274,7 @@ getAccountNumber() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return (prefs.getString("account_no") ?? "0");
 }
+
 saveBranchCity(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("branch", value);
@@ -283,6 +284,7 @@ getBranchCity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return (prefs.getString("branch") ?? "0");
 }
+
 saveIFSC(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("ifsc", value);
@@ -312,7 +314,6 @@ getMATMMerchantId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return (prefs.getString("mATMid") ?? "");
 }
-
 
 saveVirtualAccId(value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -678,4 +679,3 @@ getHolderName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return (prefs.getString("holder_name") ?? "");
 }
-
