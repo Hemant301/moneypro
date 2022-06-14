@@ -673,6 +673,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
         "bankResponseMsg": "$bankResponseMsg",
         "merchantMobileNo": "$merchantMobileNo",
         "aadhaarNo": "$aadhaarNo",
+        "bank_name": "$bankName",
         // "txnCode": "$txnCode",
         "txnCode": "$aepsStatusCode",
         "rrn": "$rrn",

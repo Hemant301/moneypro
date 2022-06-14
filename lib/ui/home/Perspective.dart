@@ -201,6 +201,14 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: openNotificationCase);
     getLang();
+    refreshPage();
+  }
+
+  refreshPage() {
+    print('refresh');
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {});
+    });
   }
 
   @override
@@ -4282,7 +4290,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             margin: EdgeInsets.only(left: 20, right: 10, bottom: 10, top: 0),
             child: InkWell(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 LogoutPopup();
               },
               child: Row(
@@ -4617,7 +4625,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             margin: EdgeInsets.only(left: 20, right: 10, bottom: 10, top: 0),
             child: InkWell(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 LogoutPopup();
               },
               child: Row(
@@ -5095,7 +5103,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
               margin: EdgeInsets.only(left: 20, right: 10, bottom: 10, top: 0),
               child: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   LogoutPopup();
                 },
                 child: Row(
@@ -5459,6 +5467,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
   }
 
   Future userLogout(context) async {
+    // print('inside function ');
     setState(() {
       centerLoading = true;
     });
