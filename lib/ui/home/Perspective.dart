@@ -1588,6 +1588,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                           // check for user and empolyee
                           if (role == "3") {
                             var dob = await getDOB();
+
                             if (isAdult(dob)) {
                               getInvestorKycStatus();
                             } else {

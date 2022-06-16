@@ -259,44 +259,44 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
                             fontWeight: FontWeight.normal),
                       ),
                     ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     _selectFromDate(context);
-                    //   },
-                    //   child: Container(
-                    //     width: MediaQuery.of(context).size.width,
-                    //     decoration: BoxDecoration(
-                    //       color: editBg,
-                    //       borderRadius: BorderRadius.all(Radius.circular(20)),
-                    //     ),
-                    //     margin: EdgeInsets.only(
-                    //         top: 20, left: 20, right: 20, bottom: 5),
-                    //     child: Row(
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.only(
-                    //               left: 20.0, top: 10, bottom: 10),
-                    //           child: Text(
-                    //             (cDate.toString() ==
-                    //                     f.format(currentDate).toString())
-                    //                 ? "$dob"
-                    //                 : f.format(currentDate),
-                    //             style: TextStyle(
-                    //                 color: black, fontSize: font14.sp),
-                    //           ),
-                    //         ),
-                    //         Spacer(),
-                    //         Image.asset(
-                    //           'assets/calendar.png',
-                    //           height: 24.h,
-                    //         ),
-                    //         SizedBox(
-                    //           width: 15.w,
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
+                    InkWell(
+                      onTap: () {
+                        _selectFromDate(context);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: editBg,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        margin: EdgeInsets.only(
+                            top: 20, left: 20, right: 20, bottom: 5),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20.0, top: 10, bottom: 10),
+                              child: Text(
+                                (cDate.toString() ==
+                                        f.format(currentDate).toString())
+                                    ? "$dob"
+                                    : f.format(currentDate),
+                                style: TextStyle(
+                                    color: black, fontSize: font14.sp),
+                              ),
+                            ),
+                            Spacer(),
+                            Image.asset(
+                              'assets/calendar.png',
+                              height: 24.h,
+                            ),
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     // Container(
                     //   margin: EdgeInsets.only(
                     //       top: 15, left: padding, right: padding),
@@ -451,7 +451,7 @@ class _EmpMerchantPANDetailsState extends State<EmpMerchantPANDetails> {
 
                     newItem['pan'] = pan.toString();
                     newItem['client_nam'] = panName.toString();
-                    // newItem['dob'] = f.format(currentDate).toString();
+                    newItem['dob'] = f.format(currentDate).toString();
                     // newItem['adhar'] = aadhar.toString();
                     printMessage(screen, "Updated Response : $newItem");
                     openEmpMerBankDetails(

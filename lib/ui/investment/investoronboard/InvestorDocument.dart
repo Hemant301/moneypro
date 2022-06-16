@@ -50,101 +50,103 @@ class _InvestorDocumentState extends State<InvestorDocument> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-      onWillPop: () async {
-        printMessage(screen, "Mobile back pressed");
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return exitProcess();
-            });
-        return false;
-      },
-      child: SafeArea(
-          child: Scaffold(
-              backgroundColor: white,
-              appBar:AppBar(
-                elevation: 0,
-                centerTitle: false,
+        builder: () => WillPopScope(
+              onWillPop: () async {
+                printMessage(screen, "Mobile back pressed");
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return exitProcess();
+                    });
+                return false;
+              },
+              child: SafeArea(
+                  child: Scaffold(
                 backgroundColor: white,
-                brightness: Brightness.light,
-                leading: InkWell(
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  brightness: Brightness.light,
+                  leading: InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return exitProcess();
+                          });
+                    },
+                    child: Container(
+                      height: 60.h,
+                      width: 60.w,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/back_arrow_bg.png',
+                            height: 60.h,
+                          ),
+                          Positioned(
+                            top: 16,
+                            left: 12,
+                            child: Image.asset(
+                              'assets/back_arrow.png',
+                              height: 16.h,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  titleSpacing: 0,
+                  title: appLogo(),
+                  actions: [
+                    Image.asset(
+                      'assets/lendbox_head.png',
+                      width: 60.w,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    )
+                  ],
+                ),
+                body: SingleChildScrollView(
+                    child: Column(children: [
+                  _buildPANSection(),
+                  _buildAddressSection(),
+                  _buildSelfiSection(),
+                ])),
+                bottomNavigationBar: InkWell(
                   onTap: () {
-                    closeKeyBoard(context);
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return exitProcess();
-                        });
+                    setState(() {
+                      closeKeyBoard(context);
+                      if (isPANUploaded && isOtherUploaded && isSelfUpload) {
+                        removeAllPages(context);
+                        openInvestorLanding(context);
+                      } else {
+                        showToastMessage("Upload require documents");
+                      }
+                    });
                   },
                   child: Container(
-                    height: 60.h,
-                    width: 60.w,
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/back_arrow_bg.png',
-                          height: 60.h,
-                        ),
-                        Positioned(
-                          top: 16,
-                          left: 12,
-                          child: Image.asset(
-                            'assets/back_arrow.png',
-                            height: 16.h,
-                          ),
-                        )
-                      ],
+                    height: 45.h,
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(
+                        top: 0, left: 30, right: 30, bottom: 15),
+                    decoration: BoxDecoration(
+                      color: lightBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        continue_.toUpperCase(),
+                        style: TextStyle(fontSize: font13.sp, color: white),
+                      ),
                     ),
                   ),
                 ),
-                titleSpacing: 0,
-                title: appLogo(),
-                actions: [
-                  Image.asset(
-                    'assets/lendbox_head.png',
-                    width: 60.w,
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  )
-                ],
-              ),
-              body: SingleChildScrollView(
-                  child: Column(children: [
-                _buildPANSection(),
-                _buildAddressSection(),
-                    _buildSelfiSection(),
-              ])),
-            bottomNavigationBar: InkWell(
-              onTap: () {
-                setState(() {
-                  closeKeyBoard(context);
-                  if (isPANUploaded && isOtherUploaded && isSelfUpload) {
-                    removeAllPages(context);
-                    openInvestorLanding(context);
-                  } else {
-                    showToastMessage("Upload require documents");
-                  }
-                });
-              },
-              child: Container(
-                height: 45.h,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 15),
-                decoration: BoxDecoration(
-                  color: lightBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(25)),
-                ),
-                child: Center(
-                  child: Text(
-                    continue_.toUpperCase(),
-                    style: TextStyle(fontSize: font13.sp, color: white),
-                  ),
-                ),
-              ),
-            ),)),
-    ));
+              )),
+            ));
   }
 
   _buildPANSection() {
@@ -164,7 +166,9 @@ class _InvestorDocumentState extends State<InvestorDocument> {
             child: Text(
               "PAN card",
               style: TextStyle(
-                  color: black, fontSize: font14.sp, fontWeight: FontWeight.bold),
+                  color: black,
+                  fontSize: font14.sp,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(
@@ -178,7 +182,9 @@ class _InvestorDocumentState extends State<InvestorDocument> {
               padding: const EdgeInsets.only(
                   left: 25.0, right: 15, top: 15, bottom: 15),
               child: Text(
-                (widget.pan.toString().toLowerCase()=="null")?"":"${widget.pan}",
+                (widget.pan.toString().toLowerCase() == "null")
+                    ? ""
+                    : "${widget.pan}",
                 style: TextStyle(color: black, fontSize: font13.sp),
               ),
             ),
@@ -282,7 +288,9 @@ class _InvestorDocumentState extends State<InvestorDocument> {
             child: Text(
               "Choose address proof document",
               style: TextStyle(
-                  color: black, fontSize: font14.sp, fontWeight: FontWeight.bold),
+                  color: black,
+                  fontSize: font14.sp,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(
@@ -408,29 +416,27 @@ class _InvestorDocumentState extends State<InvestorDocument> {
                 ),
           (isOtherUploaded)
               ? Padding(
-            padding: EdgeInsets.only(top: 5, left: 25, right: 15),
-            child: Text(
-              "File Uploaded.",
-              style: TextStyle(
-                  color: black, fontSize: font12.sp),
-            ),
-          )
+                  padding: EdgeInsets.only(top: 5, left: 25, right: 15),
+                  child: Text(
+                    "File Uploaded.",
+                    style: TextStyle(color: black, fontSize: font12.sp),
+                  ),
+                )
               : Container(),
-
           SizedBox(
             height: 30.h,
           ),
         ]));
   }
 
-  _buildSelfiSection(){
+  _buildSelfiSection() {
     return Container(
-        width: MediaQuery.of(context).size.width,
-    margin: EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 0),
-    decoration: BoxDecoration(
-    color: invBoxBg,
-    borderRadius: BorderRadius.all(Radius.circular(25)),
-    ),
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 0),
+      decoration: BoxDecoration(
+        color: invBoxBg,
+        borderRadius: BorderRadius.all(Radius.circular(25)),
+      ),
       child: Column(
         children: [
           Container(
@@ -446,37 +452,35 @@ class _InvestorDocumentState extends State<InvestorDocument> {
                 children: [
                   Expanded(
                       child: InkWell(
-                        onTap: () {
-                          _showCameraGalleryOption(3, "Selfi");
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                              const EdgeInsets.only(left: 25.0, top: 0),
-                              child: Text(
-                                "Upload Selfi Image",
-                                style: TextStyle(
-                                    color: black,
-                                    fontSize: font14.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.only(left: 25.0, top: 5),
-                              child: Text(
-                                mandatory,
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font11.sp,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                          ],
+                    onTap: () {
+                      _showCameraGalleryOption(3, "Selfi");
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25.0, top: 0),
+                          child: Text(
+                            "Upload Selfi Image",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: font14.sp,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      )),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25.0, top: 5),
+                          child: Text(
+                            mandatory,
+                            style: TextStyle(
+                                color: lightBlack,
+                                fontSize: font11.sp,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
                   Container(
                     height: 50.h,
                     width: 50.w,
@@ -494,10 +498,9 @@ class _InvestorDocumentState extends State<InvestorDocument> {
                   ),
                   (selfiUploading)
                       ? Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child:
-                    circularProgressLoading(20.0),
-                  )
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: circularProgressLoading(20.0),
+                        )
                       : Container(),
                   SizedBox(
                     width: 20.w,
@@ -508,29 +511,30 @@ class _InvestorDocumentState extends State<InvestorDocument> {
           ),
           (isSelfUpload)
               ? Padding(
-            padding: EdgeInsets.only(top: 5, left: 25, right: 15),
-            child: Text(
-              "File Uploaded.",
-              style: TextStyle(
-                  color: black, fontSize: font12.sp),
-            ),
-          )
+                  padding: EdgeInsets.only(top: 5, left: 25, right: 15),
+                  child: Text(
+                    "File Uploaded.",
+                    style: TextStyle(color: black, fontSize: font12.sp),
+                  ),
+                )
               : Container(),
-          (isSelfUpload)?
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 120.w,
-                height: 120.h,
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: FileImage(File(selfiFile.path)),
-                          fit: BoxFit.cover)),
-                ),),
-            ),
-          ): Container(),
+          (isSelfUpload)
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 120.w,
+                      height: 120.h,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: FileImage(File(selfiFile.path)),
+                                fit: BoxFit.cover)),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
           SizedBox(
             height: 30.h,
           ),
@@ -550,7 +554,7 @@ class _InvestorDocumentState extends State<InvestorDocument> {
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(50.0)),
+                        BorderRadius.vertical(top: Radius.circular(50.0)),
                     color: white,
                     boxShadow: [
                       BoxShadow(
@@ -674,7 +678,7 @@ class _InvestorDocumentState extends State<InvestorDocument> {
     }
   }
 
-  cropImageFunction(File file,action, docName) async{
+  cropImageFunction(File file, action, docName) async {
     File? croppedFile = await ImageCropper.cropImage(
         sourcePath: file.path,
         aspectRatioPresets: [
@@ -692,8 +696,7 @@ class _InvestorDocumentState extends State<InvestorDocument> {
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
-        )
-    );
+        ));
 
     setState(() {
       if (action == 1) _uploadPan(croppedFile!, docName);

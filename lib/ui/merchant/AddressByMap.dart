@@ -76,164 +76,165 @@ class _AddressByMapState extends State<AddressByMap> {
       lng = long;
     });
 
-
     printMessage(screen, "Latitude: $lat");
     printMessage(screen, "Longitude: $lng");
 
-
-    if(lat!=0){
+    if (lat != 0) {
       Timer(Duration(seconds: 2), () {
         _moveCamera(lat, lng);
         getAddress(lat, lng);
       });
-
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-      onWillPop: () async {
-        printMessage(screen, "Mobile back pressed");
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return NoExitDialog();
-            });
-        return false;
-      },
-      child: SafeArea(
-          child: Scaffold(
-        backgroundColor: white,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              backgroundColor: white,
-              brightness: Brightness.light,
-              leading: InkWell(
-                onTap: () {
-                  closeKeyBoard(context);
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return NoExitDialog();
-                      });
-                },
-                child: Container(
-                  height: 60.h,
-                  width: 60.w,
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/back_arrow_bg.png',
-                        height: 60.h,
+        builder: () => WillPopScope(
+              onWillPop: () async {
+                printMessage(screen, "Mobile back pressed");
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return NoExitDialog();
+                    });
+                return false;
+              },
+              child: SafeArea(
+                  child: Scaffold(
+                backgroundColor: white,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  brightness: Brightness.light,
+                  leading: InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return NoExitDialog();
+                          });
+                    },
+                    child: Container(
+                      height: 60.h,
+                      width: 60.w,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/back_arrow_bg.png',
+                            height: 60.h,
+                          ),
+                          Positioned(
+                            top: 16,
+                            left: 12,
+                            child: Image.asset(
+                              'assets/back_arrow.png',
+                              height: 16.h,
+                            ),
+                          )
+                        ],
                       ),
-                      Positioned(
-                        top: 16,
-                        left: 12,
-                        child: Image.asset(
-                          'assets/back_arrow.png',
-                          height: 16.h,
-                        ),
-                      )
-                    ],
+                    ),
+                  ),
+                  titleSpacing: 0,
+                  title: appLogo(),
+                  actions: [
+                    Image.asset(
+                      'assets/faq.png',
+                      width: 24.w,
+                      color: orange,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    )
+                  ],
+                ),
+                body: Column(
+                  children: [
+                    _buildMap(),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      "Tap on map to load your selected location address",
+                      style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildAddewssSection(),
+                    )
+                  ],
+                ),
+                bottomNavigationBar: InkWell(
+                  onTap: () {
+                    setState(() {
+                      closeKeyBoard(context);
+
+                      var address = addressController.text.toString();
+
+                      var city = cityController.text.toString();
+
+                      var pin = pinController.text.toString();
+
+                      stateName = stateController.text.toString();
+                      districtName = districtController.text.toString();
+
+                      if (city.length > 15) {
+                        city = city
+                            .toString()
+                            .substring(0, city.toString().length - 15);
+                      }
+
+                      if (address.length == 0) {
+                        showToastMessage("Enter your flat number");
+                        return;
+                      } else if (stateName == "") {
+                        showToastMessage("Enter your state");
+                        return;
+                      } else if (districtName == "") {
+                        showToastMessage("Enter your district");
+                        return;
+                      } else if (city.length == 0) {
+                        showToastMessage("Enter your city");
+                        return;
+                      } else if (pin.length != 6) {
+                        showToastMessage("Enter 6-digit pincode");
+                        return;
+                      } else {
+                        newItem['address'] = address.toString();
+                        newItem['state'] = stateName.toString();
+                        newItem['dist'] = districtName.toString();
+                        newItem['city'] = city.toString();
+                        newItem['pin'] = pin.toString();
+                        printMessage(screen, "Updated Response : $newItem");
+                        openMerchantDocument(context, newItem);
+
+                        // openBusinessVerify(context, newItem);//change
+                      }
+                    });
+                  },
+                  child: Container(
+                    height: 48.h,
+                    width: 120.w,
+                    margin: EdgeInsets.only(
+                        top: 0, left: 25, right: 25, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: lightBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        continue_.toUpperCase(),
+                        style: TextStyle(fontSize: font13.sp, color: white),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              titleSpacing: 0,
-              title: appLogo(),
-              actions: [
-                Image.asset(
-                  'assets/faq.png',
-                  width: 24.w,
-                  color: orange,
-                ),
-                SizedBox(
-                  width: 10.w,
-                )
-              ],
-            ),
-        body:  Column(
-            children: [
-              _buildMap(),
-              SizedBox(height: 2.h,),
-              Text("Tap on map to load your selected location address", style: TextStyle(
-                  color: lightBlack, fontSize: font14.sp
-              ),),
-              Expanded(
-                flex:1,
-                child: _buildAddewssSection(),
-              )
-
-            ],
-        ),
-        bottomNavigationBar: InkWell(
-          onTap: () {
-            setState(() {
-              closeKeyBoard(context);
-
-              var address = addressController.text.toString();
-
-              var city = cityController.text.toString();
-
-              var pin = pinController.text.toString();
-
-              stateName = stateController.text.toString();
-              districtName = districtController.text.toString();
-
-              if (city.length > 15) {
-                city = city
-                    .toString()
-                    .substring(0, city.toString().length - 15);
-              }
-
-              if (address.length == 0) {
-                showToastMessage("Enter your flat number");
-                return;
-              } else if (stateName == "") {
-                showToastMessage("Enter your state");
-                return;
-              } else if (districtName == "") {
-                showToastMessage("Enter your district");
-                return;
-              } else if (city.length == 0) {
-                showToastMessage("Enter your city");
-                return;
-              } else if (pin.length != 6) {
-                showToastMessage("Enter 6-digit pincode");
-                return;
-              } else {
-                newItem['address'] = address.toString();
-                newItem['state'] = stateName.toString();
-                newItem['dist'] = districtName.toString();
-                newItem['city'] = city.toString();
-                newItem['pin'] = pin.toString();
-                printMessage(screen, "Updated Response : $newItem");
-                openBusinessVerify(context, newItem);
-              }
-            });
-          },
-          child: Container(
-            height: 48.h,
-            width: 120.w,
-            margin: EdgeInsets.only(top: 0, left: 25, right: 25, bottom: 10),
-            decoration: BoxDecoration(
-              color: lightBlue,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            child: Center(
-              child: Text(
-                continue_.toUpperCase(),
-                style: TextStyle(fontSize: font13.sp, color: white),
-              ),
-            ),
-          ),
-        ),
-      )),
-    ));
+              )),
+            ));
   }
 
   _buildMap() {
@@ -370,7 +371,9 @@ class _AddressByMapState extends State<AddressByMap> {
                 child: Text(
                   "${widget.itemResponse['businessName']}",
                   style: TextStyle(
-                      fontSize: 18.sp, color: green, fontWeight: FontWeight.bold),
+                      fontSize: 18.sp,
+                      color: green,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
