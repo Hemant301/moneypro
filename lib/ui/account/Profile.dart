@@ -308,7 +308,7 @@ class _ProfileState extends State<Profile> {
         width: MediaQuery.of(context).size.width - 30,
         margin: EdgeInsets.only(top: 15, left: padding, right: padding),
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: editBg,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Padding(
@@ -344,7 +344,7 @@ class _ProfileState extends State<Profile> {
         width: MediaQuery.of(context).size.width - 30,
         margin: EdgeInsets.only(top: 15, left: padding, right: padding),
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: editBg,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Padding(
@@ -377,10 +377,10 @@ class _ProfileState extends State<Profile> {
       },
       child: Container(
         height: 50,
-        width: MediaQuery.of(context).size.width - 30,  
+        width: MediaQuery.of(context).size.width - 30,
         margin: EdgeInsets.only(top: 15, left: padding, right: padding),
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: editBg,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Padding(

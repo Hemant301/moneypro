@@ -33,6 +33,8 @@ String marchantQrAutoInvestAPI =
     "$baseUrl/moneypay/api/marchant_qr_auto_invest";
 
 String checkKycUrl = "$baseUrl/moneypay/api/aeps-kyc-status-check";
+String addAccountUrl = "$baseUrl/csp/api/add-account";
+String getBankList = "$baseUrl/csp/api/list-account";
 
 //String investmentWithdrawlRequestAPI = "$baseUrl/investor/api/investment-withdrawl-request";
 

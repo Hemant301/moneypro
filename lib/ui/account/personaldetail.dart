@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:moneypro_new/utils/SharedPrefs.dart';
 
-class PersonalDetails extends StatelessWidget {
+class PersonalDetails extends StatefulWidget {
   const PersonalDetails({Key? key}) : super(key: key);
+
+  @override
+  State<PersonalDetails> createState() => _PersonalDetailsState();
+}
+
+class _PersonalDetailsState extends State<PersonalDetails> {
+  var name = "";
+  var email;
+  var mobile;
+  var address;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
+  getdata() async {
+    name = await getFirstName();
+    email = await getEmail();
+    mobile = await getMobile();
+    address = await getCompanyAddress();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +47,7 @@ class PersonalDetails extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(children: [
               SizedBox(
-                height: 60,
+                height: 20,
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -59,7 +84,7 @@ class PersonalDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Hemant Kumar",
+                                "$name",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -110,7 +135,7 @@ class PersonalDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "gupta.hgk@gmail.com",
+                                "$email",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -161,7 +186,7 @@ class PersonalDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "8210925188",
+                                "$mobile",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -200,7 +225,7 @@ class PersonalDetails extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Address",
+                            "$address",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.grey[400],
