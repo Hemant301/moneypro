@@ -16,7 +16,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 class Profile extends StatefulWidget {
   final String profilePic;
   final String profilePicId;
@@ -128,17 +127,15 @@ class _ProfileState extends State<Profile> {
 
     var lTy = await getLngType();
 
-    if(lTy.toString().toLowerCase()=="en"){
+    if (lTy.toString().toLowerCase() == "en") {
       setState(() {
         selectCatPos = "English";
       });
-    }
-    else if(lTy.toString().toLowerCase()=="hi"){
+    } else if (lTy.toString().toLowerCase() == "hi") {
       setState(() {
         selectCatPos = "Hindi";
       });
-    }
-    else if(lTy.toString().toLowerCase()=="bn"){
+    } else if (lTy.toString().toLowerCase() == "bn") {
       setState(() {
         selectCatPos = "Bengali";
       });
@@ -162,137 +159,251 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>WillPopScope(
-      onWillPop: () async {
-        printMessage(screen, "Mobile back pressed");
-        removeAllPages(context);
-        return true;
-      },
-      child: SafeArea(
-          child: Scaffold(
-              backgroundColor: white,
-              appBar: AppBar(
-                elevation: 0,
-                centerTitle: false,
-                backgroundColor: white,
-                brightness: Brightness.light,
-                leading: InkWell(
-                  onTap: () {
-                    removeAllPages(context);
-                  },
-                  child: Container(
-                    height: 60.h,
-                    width: 60.w,
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/back_arrow_bg.png',
-                          height: 60.h,
-                        ),
-                        Positioned(
-                          top: 16,
-                          left: 12,
-                          child: Image.asset(
-                            'assets/back_arrow.png',
-                            height: 16.h,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                titleSpacing: 0,
-                title: appLogo(),
-              ),
-              body: (loading)
-                  ? Center(
-                      child: circularProgressLoading(40.0),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                          SizedBox(
-                            height: 20.h.h,
-                          ),
-                          (userProfilePic.toString() == "")
-                              ? InkWell(
-                                  onTap: () {
-                                    _showCameraGalleryOption();
-                                  },
-                                  child: Container(
-                                    width: 150.0.w,
-                                    height: 150.0.h,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/ic_dummy_user.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(80.0)),
-                                      border: Border.all(
-                                        color: blue,
-                                        width: 4.0.w,
-                                      ),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          bottom: 1,
-                                          right: 60,
-                                          child: Image.asset(
-                                            'assets/ic_user.png',
-                                            height: 24.h,
-                                            color: white,
-                                          ),
-                                        )
-                                      ],
-                                    ),
+        builder: () => WillPopScope(
+              onWillPop: () async {
+                printMessage(screen, "Mobile back pressed");
+                removeAllPages(context);
+                return true;
+              },
+              child: SafeArea(
+                  child: Scaffold(
+                      backgroundColor: white,
+                      appBar: AppBar(
+                        elevation: 0,
+                        centerTitle: false,
+                        backgroundColor: white,
+                        brightness: Brightness.light,
+                        leading: InkWell(
+                          onTap: () {
+                            removeAllPages(context);
+                          },
+                          child: Container(
+                            height: 60.h,
+                            width: 60.w,
+                            child: Stack(
+                              children: [
+                                Image.asset(
+                                  'assets/back_arrow_bg.png',
+                                  height: 60.h,
+                                ),
+                                Positioned(
+                                  top: 16,
+                                  left: 12,
+                                  child: Image.asset(
+                                    'assets/back_arrow.png',
+                                    height: 16.h,
                                   ),
                                 )
-                              : InkWell(
-                                  onTap: () {
-                                    _showCameraGalleryOption();
-                                  },
-                                  child: Container(
-                                    width: 150.0.w,
-                                    height: 150.0.h,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xff7c94b6),
-                                      image: DecorationImage(
-                                        image: NetworkImage(userProfilePic),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(80.0)),
-                                      border: Border.all(
-                                        color: blue,
-                                        width: 4.0.w,
-                                      ),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          bottom: 1,
-                                          right: 60,
-                                          child: Image.asset(
-                                            'assets/ic_user.png',
-                                            height: 24.h,
-                                            color: white,
+                              ],
+                            ),
+                          ),
+                        ),
+                        titleSpacing: 0,
+                        title: appLogo(),
+                      ),
+                      body: (loading)
+                          ? Center(
+                              child: circularProgressLoading(40.0),
+                            )
+                          : SingleChildScrollView(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                  SizedBox(
+                                    height: 20.h.h,
+                                  ),
+                                  (userProfilePic.toString() == "")
+                                      ? InkWell(
+                                          onTap: () {
+                                            _showCameraGalleryOption();
+                                          },
+                                          child: Container(
+                                            width: 150.0.w,
+                                            height: 150.0.h,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/ic_dummy_user.png'),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(80.0)),
+                                              border: Border.all(
+                                                color: blue,
+                                                width: 4.0.w,
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  bottom: 1,
+                                                  right: 60,
+                                                  child: Image.asset(
+                                                    'assets/ic_user.png',
+                                                    height: 24.h,
+                                                    color: white,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                          _buildPersolDetails(),
-                          _buildPrimaryAccount(),
-                          _buildVirtualAccount(),
-                          (isInvestAcc) ? _buildInvestorAccount() : Container(),
-                          _buildNotification(),
-                        ])))),
-    ));
+                                      : InkWell(
+                                          onTap: () {
+                                            _showCameraGalleryOption();
+                                          },
+                                          child: Container(
+                                            width: 150.0.w,
+                                            height: 150.0.h,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xff7c94b6),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    userProfilePic),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(80.0)),
+                                              border: Border.all(
+                                                color: blue,
+                                                width: 4.0.w,
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  bottom: 1,
+                                                  right: 60,
+                                                  child: Image.asset(
+                                                    'assets/ic_user.png',
+                                                    height: 24.h,
+                                                    color: white,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  _navigateToPeronaldetail(),
+                                  _navigateToBusinessdetail(),
+                                  _navigateTobanckacdetail(),
+                                  // _buildPersolDetails(),
+                                  // _buildPrimaryAccount(),
+                                  // _buildVirtualAccount(),
+                                  (isInvestAcc)
+                                      ? _buildInvestorAccount()
+                                      : Container(),
+                                  _buildNotification(),
+                                ])))),
+            ));
+  }
+
+  _navigateToPeronaldetail() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/personaldetail');
+      },
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width - 30,
+        margin: EdgeInsets.only(top: 15, left: padding, right: padding),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Personal Details",
+                style: TextStyle(
+                    color: black,
+                    fontSize: font18.sp,
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 15,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _navigateToBusinessdetail() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/businessprofile');
+      },
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width - 30,
+        margin: EdgeInsets.only(top: 15, left: padding, right: padding),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Business Details",
+                style: TextStyle(
+                    color: black,
+                    fontSize: font18.sp,
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 15,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _navigateTobanckacdetail() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/addaccount');
+      },
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width - 30,  
+        margin: EdgeInsets.only(top: 15, left: padding, right: padding),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Bank Account Details",
+                style: TextStyle(
+                    color: black,
+                    fontSize: font18.sp,
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 15,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   _showCameraGalleryOption() {
@@ -526,7 +637,6 @@ class _ProfileState extends State<Profile> {
     final response = await http.post(Uri.parse(getUserProfileAPI),
         body: jsonEncode(body), headers: headers);
 
-
     setState(() {
       var statusCode = response.statusCode;
       if (statusCode == 200) {
@@ -601,6 +711,7 @@ class _ProfileState extends State<Profile> {
   _buildPersolDetails() {
     return Container(
         margin: EdgeInsets.only(top: 15, left: padding, right: padding),
+        width: MediaQuery.of(context).size.width - 50,
         decoration: BoxDecoration(
           color: editBg,
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -630,7 +741,8 @@ class _ProfileState extends State<Profile> {
                             flex: 2,
                             child: Text(
                               "Name",
-                              style: TextStyle(color: black, fontSize: font14.sp.sp),
+                              style: TextStyle(
+                                  color: black, fontSize: font14.sp.sp),
                             ),
                           ),
                           Expanded(
@@ -659,7 +771,8 @@ class _ProfileState extends State<Profile> {
                             flex: 2,
                             child: Text(
                               "Email",
-                              style: TextStyle(color: black, fontSize: font14.sp),
+                              style:
+                                  TextStyle(color: black, fontSize: font14.sp),
                             ),
                           ),
                           Expanded(
@@ -688,7 +801,8 @@ class _ProfileState extends State<Profile> {
                             flex: 2,
                             child: Text(
                               "Mobile",
-                              style: TextStyle(color: black, fontSize: font14.sp),
+                              style:
+                                  TextStyle(color: black, fontSize: font14.sp),
                             ),
                           ),
                           Expanded(
@@ -819,8 +933,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Name",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -849,8 +963,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Account No",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -879,8 +993,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "IFSC Code",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -909,8 +1023,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Branch",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -967,8 +1081,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Name",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -997,8 +1111,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Id",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1027,8 +1141,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Account No",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1057,8 +1171,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "IFSC Code",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1115,8 +1229,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Name",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1145,8 +1259,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Bank Name",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1175,8 +1289,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "Account No",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1205,8 +1319,8 @@ class _ProfileState extends State<Profile> {
                                 flex: 2,
                                 child: Text(
                                   "IFSC Code",
-                                  style:
-                                      TextStyle(color: black, fontSize: font14.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
                                 ),
                               ),
                               Expanded(
@@ -1246,7 +1360,9 @@ class _ProfileState extends State<Profile> {
             child: Text(
               "Settings",
               style: TextStyle(
-                  color: black, fontSize: font18.sp, fontWeight: FontWeight.bold),
+                  color: black,
+                  fontSize: font18.sp,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
@@ -1380,7 +1496,8 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20, top: 0, bottom: 20),
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20, top: 0, bottom: 20),
             child: Row(
               children: [
                 Image.asset(
@@ -1416,7 +1533,8 @@ class _ProfileState extends State<Profile> {
                           padding: const EdgeInsets.only(left: 0.0),
                           child: Text(
                             "Select Language",
-                            style: TextStyle(color: lightBlack, fontSize: font16.sp),
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font16.sp),
                           ),
                         ),
                         icon: Padding(
@@ -1429,19 +1547,20 @@ class _ProfileState extends State<Profile> {
                         onChanged: (value) {
                           setState(() {
                             selectCatPos = value!;
-                            printMessage(screen, "Selected lang : $selectCatPos");
-                            if(selectCatPos.toString()=="English"){
+                            printMessage(
+                                screen, "Selected lang : $selectCatPos");
+                            if (selectCatPos.toString() == "English") {
                               saveLngType("en");
-                            }else if(selectCatPos.toString()=="Hindi"){
+                            } else if (selectCatPos.toString() == "Hindi") {
                               saveLngType("hi");
-                            }else if(selectCatPos.toString()=="Bengali"){
+                            } else if (selectCatPos.toString() == "Bengali") {
                               saveLngType("bn");
-                            }else {
+                            } else {
                               saveLngType("en");
                             }
 
-
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                           });
                         },
                       ),
@@ -1490,10 +1609,8 @@ class _ProfileState extends State<Profile> {
       if (data['status'].toString() == "1") {
         saveWhastAppValue("Yes");
       }
-    }else{
-      setState(() {
-
-      });
+    } else {
+      setState(() {});
       showToastMessage(status500);
     }
   }
@@ -1532,10 +1649,8 @@ class _ProfileState extends State<Profile> {
       if (data['status'].toString() == "1") {
         saveWhastAppValue("No");
       }
-    }else{
-      setState(() {
-
-      });
+    } else {
+      setState(() {});
       showToastMessage(status500);
     }
   }

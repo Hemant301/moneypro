@@ -13,6 +13,9 @@ import 'package:moneypro_new/ui/account/ComplaintManagement.dart';
 import 'package:moneypro_new/ui/account/MyAddress.dart';
 import 'package:moneypro_new/ui/account/Profile.dart';
 import 'package:moneypro_new/ui/account/UpdatePin.dart';
+import 'package:moneypro_new/ui/account/addaccount.dart';
+import 'package:moneypro_new/ui/account/businessprofile.dart';
+import 'package:moneypro_new/ui/account/personaldetail.dart';
 import 'package:moneypro_new/ui/aeps/AEPSLanding.dart';
 import 'package:moneypro_new/ui/aeps/AEPSMiniStatement.dart';
 import 'package:moneypro_new/ui/aeps/AEPSReceipt.dart';
@@ -484,6 +487,9 @@ void main() async {
         '/AddMoneyToBank': (BuildContext context) => new AddMoneyToBank(),
         '/AddMoneyToWallet': (BuildContext context) => new AddMoneyToWallet(),
         '/AppWallet': (BuildContext context) => new AppWallet(),
+        '/personaldetail': (BuildContext context) => new PersonalDetails(),
+        '/businessprofile': (BuildContext context) => new BusinessProfile(),
+        '/addaccount': (BuildContext context) => new AddAccount(),
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
