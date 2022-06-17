@@ -17,7 +17,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 class AddSender extends StatefulWidget {
   final String mobile;
 
@@ -39,8 +38,6 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
   int levelClock = 20;
 
   var checkedValue = false;
-
-
 
   late File _image;
 
@@ -72,11 +69,8 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
     var mpBalc = await getWalletBalance();
     var qrBalc = await getQRBalance();
     var walBalc = await getWelcomeAmt();
-    double mX =0.0;
-    double wX=0.0;
-
-
-
+    double mX = 0.0;
+    double wX = 0.0;
 
     final inheritedWidget = StateContainer.of(context);
 
@@ -101,7 +95,6 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
       inheritedWidget.updateWelBalc(value: walBalc);
     }
 
-
     if (walBalc != null || walBalc != 0) {
       wX = double.parse(walBalc);
     }
@@ -112,7 +105,6 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
     setState(() {
       moneyProBalc = wX + mX;
     });
-
   }
 
   @override
@@ -135,258 +127,271 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
     final InheritedWidget = StateContainer.of(context);
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-            child: Scaffold(
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
                 backgroundColor: white,
-                appBar: AppBar(
-                  elevation: 0,
-                  centerTitle: false,
-                  backgroundColor: white,
-                  brightness: Brightness.light,
-                  leading: InkWell(
-                    onTap: () {
-                      closeKeyBoard(context);
-                      closeCurrentPage(context);
-                    },
-                    child: Container(
-                      height: 60.h,
-                      width: 60.w,
-                      child: Stack(
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    closeCurrentPage(context);
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
+                        ),
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                titleSpacing: 0,
+                title: appLogo(),
+                actions: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: walletBg,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(color: walletBg)),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
+                      child: Wrap(
+                        direction: Axis.horizontal,
                         children: [
                           Image.asset(
-                            'assets/back_arrow_bg.png',
-                            height: 60.h,
+                            "assets/wallet.png",
+                            height: 20.h,
                           ),
-                          Positioned(
-                            top: 16,
-                            left: 12,
-                            child: Image.asset(
-                              'assets/back_arrow.png',
-                              height: 16.h,
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 10, top: 5),
+                              child: Text(
+                                //"${formatDecimal2Digit.format(moneyProBalc)}",
+                                "$moneyProBalc",
+                                style: TextStyle(
+                                    color: white, fontSize: font15.sp),
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  titleSpacing: 0,
-                  title: appLogo(),
-                  actions: [
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: walletBg,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(color: walletBg)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, top: 5, bottom: 5),
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          children: [
-                            Image.asset(
-                              "assets/wallet.png",
-                              height: 20.h,
+                  SizedBox(
+                    width: 10.w,
+                  )
+                ],
+              ),
+              body: (loading)
+                  ? Center(
+                      child: circularProgressLoading(40.0),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 30, left: padding, right: padding),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 10, bottom: 10),
+                            child: TextFormField(
+                              enabled: false,
+                              style: TextStyle(
+                                  color: black, fontSize: inputFont.sp),
+                              keyboardType: TextInputType.phone,
+                              textInputAction: TextInputAction.next,
+                              controller: mobileNoController,
+                              textCapitalization: TextCapitalization.characters,
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 10),
+                                counterText: "",
+                                label: Text("Mobile Number"),
+                              ),
+                              maxLength: 10,
                             ),
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10.0, right: 10, top: 5),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: padding, left: padding, right: padding),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 10, bottom: 10),
+                            child: TextFormField(
+                              style: TextStyle(
+                                  color: black, fontSize: inputFont.sp),
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              controller: nameController,
+                              textCapitalization: TextCapitalization.characters,
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 10),
+                                counterText: "",
+                                label: Text("Name"),
+                              ),
+                              maxLength: 100,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: padding, left: padding, right: padding),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 10, bottom: 10),
+                            child: TextFormField(
+                              style: TextStyle(
+                                  color: black, fontSize: inputFont.sp),
+                              keyboardType: TextInputType.streetAddress,
+                              textInputAction: TextInputAction.next,
+                              controller: addressController,
+                              textCapitalization: TextCapitalization.characters,
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 10),
+                                counterText: "",
+                                label: Text("Address"),
+                              ),
+                              maxLength: 100,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50.h,
+                          margin: EdgeInsets.only(
+                              top: padding, left: padding, right: padding),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              border: Border.all(color: editBg, width: 2)),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    "Select PAN card photo to upload",
+                                    style: TextStyle(
+                                        color: black, fontSize: font15.sp),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 50.h,
+                                width: 50.w,
+                                child: InkWell(
+                                  onTap: () {
+                                    _showCameraGalleryOption();
+                                  },
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.camera_alt_rounded,
+                                      color: lightBlue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        (isImageAttached)
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 2),
                                 child: Text(
-                                  //"${formatDecimal2Digit.format(moneyProBalc)}",
-                                  "$moneyProBalc",
-                                  style:
-                                      TextStyle(color: white, fontSize: font15.sp),
+                                  "File attached",
+                                  style: TextStyle(
+                                    color: black,
+                                    fontSize: font13.sp,
+                                  ),
                                 ),
+                              )
+                            : Container(),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: padding, left: padding, right: padding),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 10, bottom: 10),
+                            child: TextFormField(
+                              style: TextStyle(
+                                  color: black, fontSize: inputFont.sp),
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                              controller: otpController,
+                              textCapitalization: TextCapitalization.characters,
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 10),
+                                counterText: "",
+                                label: Text("OTP"),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    )
-                  ],
-                ),
-                body:  (loading)
-                    ? Center(
-                  child: circularProgressLoading(40.0),
-                )
-                    : SingleChildScrollView(
-                  child: Column(
-                      children: [
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: 30, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          enabled: false,
-                          style: TextStyle(color: black, fontSize: inputFont.sp),
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          controller: mobileNoController,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Mobile Number"),
-                          ),
-                          maxLength: 10,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          style: TextStyle(color: black, fontSize: inputFont.sp),
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                          controller: nameController,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Name"),
-                          ),
-                          maxLength: 100,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          style: TextStyle(color: black, fontSize: inputFont.sp),
-                          keyboardType: TextInputType.streetAddress,
-                          textInputAction: TextInputAction.next,
-                          controller: addressController,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("Address"),
-                          ),
-                          maxLength: 100,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 50.h,
-                      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: editBg,
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                          border: Border.all(color: editBg, width: 2)),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: Text(
-                                "Select PAN card photo to upload",
-                                style: TextStyle(color: black, fontSize: font15.sp),
-                              ),
+                              maxLength: 6,
                             ),
                           ),
-                          Container(
-                            height: 50.h,
-                            width: 50.w,
-                            child: InkWell(
-                              onTap: () {
-                                _showCameraGalleryOption();
-                              },
-                              child: Center(
-                                child: Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: lightBlue,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    (isImageAttached)
-                        ? Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 2),
-                      child: Text(
-                        "File attached",
-                        style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
                         ),
-                      ),
-                    )
-                        : Container(),
-                    Container(
-                      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          style: TextStyle(color: black, fontSize: inputFont.sp),
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                          controller: otpController,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("OTP"),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 20.0, left: 20, top: 10),
+                          child: Countdown(
+                            animation: StepTween(
+                              begin:
+                                  levelClock, // THIS IS A USER ENTERED NUMBER
+                              end: 0,
+                            ).animate(_controller),
                           ),
-                          maxLength: 6,
-                        ),
-                      ),
+                        )
+                      ]),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20.0, left: 20, top: 10),
-                      child: Countdown(
-                        animation: StepTween(
-                          begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                          end: 0,
-                        ).animate(_controller),
-                      ),
-                    )
-                  ]),
-                ),
-            bottomNavigationBar: _buildBottomSection(),)));
+              bottomNavigationBar: _buildBottomSection(),
+            )));
   }
 
   _buildBottomSection() {
@@ -486,7 +491,7 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "data : $data");
@@ -494,18 +499,15 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
       setState(() {
         loading = false;
         var status = data['status'];
-        if (status.toString() == "1") {
-        }
+        if (status.toString() == "1") {}
         showToastMessage(data['message']);
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
       showToastMessage(status500);
     }
-
-
   }
 
   _showCameraGalleryOption() {
@@ -649,7 +651,7 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
     }
   }
 
-  cropImageFunction(File file) async{
+  cropImageFunction(File file) async {
     File? croppedFile = await ImageCropper.cropImage(
         sourcePath: file.path,
         aspectRatioPresets: [
@@ -667,11 +669,10 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
-        )
-    );
+        ));
 
     setState(() {
-      _image=croppedFile!;
+      _image = croppedFile!;
     });
   }
 
@@ -739,9 +740,7 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
         printMessage(screen, "Error : ${response}");
         showToastMessage(status500);
       }
-      setState(() {
-
-      });
+      setState(() {});
     }).catchError((error) => print(error));
   }
 
@@ -780,8 +779,8 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
-
-    if(statusCode==200){
+    print(statusCode);
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Response All Senders : $data");
@@ -798,15 +797,12 @@ class _AddSenderState extends State<AddSender> with TickerProviderStateMixin {
         } else {
           showToastMessage(data['message'].toString());
         }
-
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 }

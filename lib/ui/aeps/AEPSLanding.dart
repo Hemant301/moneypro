@@ -515,7 +515,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
 
     if (Platform.isAndroid) {
       const platform = const MethodChannel("MICRO_ATM_CHANNEL");
-
+      print('${aespMId.length} santosh');
       var arr = {
         "merchantId": "$aespMId",
         "merchantEmailId": "$email",
