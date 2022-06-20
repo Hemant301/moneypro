@@ -21,7 +21,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   }
 
   getdata() async {
-    name = await getFirstName();
+    String firstname = await getFirstName();
+    String lastname = await getLastName();
+    name = "${firstname} ${lastname}";
     email = await getEmail();
     mobile = await getMobile();
     address = await getCompanyAddress();
@@ -225,7 +227,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "$address",
+                            "Address",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.grey[400],
@@ -237,7 +239,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Ranchi Jharkhand",
+                                "$address",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,

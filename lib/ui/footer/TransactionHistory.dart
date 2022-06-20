@@ -111,6 +111,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   bool isBranchReload = false;
   int pageBranch = 1;
+  int pageSort = 1;
   int BranchTotalPage = 0;
   late ScrollController scrollBranchController;
 
@@ -140,7 +141,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
           _tabController?.animateTo(1);
         });
         getDateTransactions(
-            widget.fromDate.toString(), widget.toDate.toString());
+            widget.fromDate.toString(), widget.toDate.toString(), pageSort);
       }
     });
   }
@@ -203,6 +204,13 @@ class _TransactionHistoryState extends State<TransactionHistory>
         });
       }
     }
+  }
+
+  void _scrollEvent() {
+    if (scrollBranchController.position.pixels ==
+        scrollBranchController.position.maxScrollExtent) {
+          
+        }
   }
 
   void _scrollWalletListener() {
@@ -340,7 +348,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                           if (widget.fromDate.toString() != "" &&
                               widget.toDate.toString() != "") {
                             getDateTransactions(widget.fromDate.toString(),
-                                widget.toDate.toString());
+                                widget.toDate.toString(), pageSort);
                           } else {
                             getBranchTransactions();
                           }
@@ -4472,7 +4480,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
     });
   }
 
-  Future getDateTransactions(fromDate, toDate) async {
+  Future getDateTransactions(fromDate, toDate, page) async {
     setState(() {
       todayTxns.clear();
       showDialog(
@@ -4493,7 +4501,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
     final body = {
       "user_token": "$userToken",
       "from_date": "$fromDate",
-      "to_date": "$toDate"
+      "to_date": "$toDate",
+      'page': "$page"
     };
 
     printMessage(screen, "body : $body");

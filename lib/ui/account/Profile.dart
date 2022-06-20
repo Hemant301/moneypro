@@ -290,9 +290,9 @@ class _ProfileState extends State<Profile> {
                                   // _buildPersolDetails(),
                                   // _buildPrimaryAccount(),
                                   // _buildVirtualAccount(),
-                                  (isInvestAcc)
-                                      ? _buildInvestorAccount()
-                                      : Container(),
+                                  // (isInvestAcc)
+                                  //     ? _buildInvestorAccount()
+                                  //     : Container(),
                                   _buildNotification(),
                                 ])))),
             ));

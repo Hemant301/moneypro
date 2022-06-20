@@ -98,6 +98,39 @@ class _AddBankDetailsState extends State<AddBankDetails> {
         builder: () => SafeArea(
                 child: Scaffold(
               backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
+                        ),
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                titleSpacing: 0,
+                title: appLogo(),
+              ),
               body: (loading)
                   ? Center(
                       child: circularProgressLoading(40.0),
@@ -107,7 +140,7 @@ class _AddBankDetailsState extends State<AddBankDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                           SizedBox(
-                            height: 40.h,
+                            height: 35.h,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 25.0),
@@ -143,7 +176,6 @@ class _AddBankDetailsState extends State<AddBankDetails> {
                                   counterText: "",
                                   label: Text("Account Holder Name"),
                                 ),
-                                maxLength: 16,
                               ),
                             ),
                           ),

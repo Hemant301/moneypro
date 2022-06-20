@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moneypro_new/utils/Apicall.dart';
+import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
 import 'package:moneypro_new/utils/Functions.dart';
 import 'package:moneypro_new/utils/SharedPrefs.dart';
+import 'package:http/http.dart' as http;
 
 class AddAccount extends StatefulWidget {
   const AddAccount({Key? key}) : super(key: key);
@@ -14,6 +18,10 @@ class AddAccount extends StatefulWidget {
 }
 
 class _AddAccountState extends State<AddAccount> {
+  var screen = "Profile Pic";
+
+  var loading = false;
+
   var name;
   var accountNo;
   var ifsc;
@@ -21,7 +29,15 @@ class _AddAccountState extends State<AddAccount> {
   var virtualAccountsId;
   var virtualAccountNumber;
   var virtualAccountIfscCode;
-
+  var companyname;
+  var invVirtualAccount;
+  var invIFSC;
+  var invBankName;
+  var invHolderName;
+  var invBranch;
+  var invAccountType;
+  var isInvestAcc = false;
+  var marchantid;
   @override
   void initState() {
     // TODO: implement initState
@@ -29,16 +45,21 @@ class _AddAccountState extends State<AddAccount> {
 
     getData();
     getBankList();
+    getInvestorKycStatus();
   }
 
   getData() async {
-    name = await getFirstName();
+    String firstname = await getFirstName();
+    String lastname = await getLastName();
+    name = "${firstname} ${lastname}";
     accountNo = await getAccountNumber();
+    companyname = await getComapanyName();
     ifsc = await getIFSC();
     branch = await getBranchCity();
     virtualAccountsId = await getVirtualAccId();
     virtualAccountNumber = await getVirtualAccNo();
     virtualAccountIfscCode = await getVirtualAccIFSC();
+    marchantid = await getMATMMerchantId();
     setState(() {});
   }
 
@@ -163,7 +184,7 @@ class _AddAccountState extends State<AddAccount> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Account Number",
+                              "Account No",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.black,
@@ -211,33 +232,143 @@ class _AddAccountState extends State<AddAccount> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Branch",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
-                            Text(
-                              "$branch",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
                       ]),
                 )),
 
             // _buildVirtualAccount(),
+            SizedBox(
+              height: 20,
+            ),
+            isInvestAcc == false
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      // height: 60,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black45.withOpacity(.1),
+                            spreadRadius: 2,
+                            blurRadius: 2,
+                            offset: Offset(1, 2), // changes position of shadow
+                          )
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Investor Account Details",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.grey[400],
+                                      // letterSpacing: 1,
+                                      // fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Icon(
+                                  Icons.verified,
+                                  color: Colors.green,
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Account Holder Name",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      50,
+                                  child: Text(
+                                    "$invHolderName",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        // letterSpacing: 1,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Account No",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Text(
+                                  "$invVirtualAccount",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "IFSC Code",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Text(
+                                  "$invIFSC",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ]),
+                    )),
             SizedBox(
               height: 20,
             ),
@@ -297,33 +428,7 @@ class _AddAccountState extends State<AddAccount> {
                                   fontSize: 15),
                             ),
                             Text(
-                              "$name",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Id",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
-                            Text(
-                              "$virtualAccountsId",
+                              "$companyname",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.black,
@@ -508,35 +613,6 @@ class _AddAccountState extends State<AddAccount> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Account Type",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['acc_type'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
                                             "IFSC Code",
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
@@ -561,61 +637,6 @@ class _AddAccountState extends State<AddAccount> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Type",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['type'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Branch",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['branch'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
                                     ]),
                               )),
                         ),
@@ -624,27 +645,31 @@ class _AddAccountState extends State<AddAccount> {
               height: 50,
             )
           ])),
-      bottomSheet: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, '/addbankaccount');
-        },
-        child: Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.green,
-          child: Center(
-            child: Text(
-              "Add New Account",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: Colors.white,
-                  // letterSpacing: 1,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+      bottomSheet: marchantid == "" || marchantid == null
+          ? Container(
+              height: 10,
+            )
+          : InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/addbankaccount');
+              },
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    "Add New Account",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: Colors.white,
+                        // letterSpacing: 1,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -942,5 +967,57 @@ class _AddAccountState extends State<AddAccount> {
                         ]))
               ],
             )));
+  }
+
+  Future getInvestorKycStatus() async {
+    setState(() {
+      loading = true;
+    });
+
+    var mobile = await getMobile();
+    var pan = await getPANNo();
+
+    var headers = {
+      "Content-Type": "application/json",
+    };
+
+    final body = {
+      "mobile": mobile,
+    };
+
+    printMessage(screen, "body : $body");
+
+    final response = await http.post(Uri.parse(investorKycStatusAPI),
+        body: jsonEncode(body), headers: headers);
+
+    int statusCode = response.statusCode;
+
+    if (statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      printMessage(screen, "Response statusCode : ${data}");
+
+      setState(() {
+        loading = false;
+
+        if (data['status'].toString() == "1") {
+          invVirtualAccount =
+              data['profile_data']['virtual_account'].toString();
+          invIFSC = data['profile_data']['IFSC'].toString();
+          invBankName = data['profile_data']['bank_name'].toString();
+          invHolderName = data['profile_data']['holder_name'].toString();
+          invBranch = data['profile_data']['branch'].toString();
+          invAccountType = data['profile_data']['account_type'].toString();
+          isInvestAcc = true;
+        } else {
+          isInvestAcc = false;
+        }
+      });
+    } else {
+      setState(() {
+        loading = false;
+        showToastMessage(status500);
+      });
+    }
   }
 }

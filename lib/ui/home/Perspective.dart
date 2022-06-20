@@ -55,6 +55,8 @@ class Perspective extends StatefulWidget {
   _PerspectiveState createState() => _PerspectiveState();
 }
 
+String storeimg = "";
+
 class _PerspectiveState extends State<Perspective> {
   var screen = "Perspective";
 
@@ -2597,6 +2599,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
 
       if (data['status'].toString() == "1") {
         setState(() {
+          storeimg = "${data['user']['store_img'].toString()}";
           saveFirstName("${data['user']['first_name'].toString()}");
           saveLastName("${data['user']['last_name'].toString()}");
           saveEmail("${data['user']['email'].toString()}");

@@ -1,11 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
 import 'package:moneypro_new/utils/Functions.dart';
+import 'package:moneypro_new/utils/SharedPrefs.dart';
 
-class BusinessProfile extends StatelessWidget {
+class BusinessProfile extends StatefulWidget {
   const BusinessProfile({Key? key}) : super(key: key);
+
+  @override
+  State<BusinessProfile> createState() => _BusinessProfileState();
+}
+
+class _BusinessProfileState extends State<BusinessProfile> {
+  var businessName;
+  var category;
+  var companyaddress;
+  var phone;
+  var gstin;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    businessName = await getComapanyName();
+    category = await getBusinessSegment();
+    companyaddress = await getCompanyAddress();
+    phone = await getMobile();
+    gstin = await getGSTNo();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +112,7 @@ class BusinessProfile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Rohan Stores",
+                            "$businessName",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.black,
@@ -138,7 +166,7 @@ class BusinessProfile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Retail and Shopping",
+                            "$category",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.black,
@@ -195,7 +223,7 @@ class BusinessProfile extends StatelessWidget {
                             width: 30,
                           ),
                           Text(
-                            "PhonePe Wallet, All BHIM UPI app",
+                            "All BHIM UPI app",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.black,
@@ -251,7 +279,7 @@ class BusinessProfile extends StatelessWidget {
                             width: 20,
                           ),
                           Text(
-                            "8210*****42",
+                            "$phone",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.black,
@@ -279,7 +307,7 @@ class BusinessProfile extends StatelessWidget {
                           Container(
                             width: MediaQuery.of(context).size.width / 2 + 40,
                             child: Text(
-                              "2504 bought, last redeemed yesterday2504 bought, last redeemed yesterday2504 bought, last redeemed yesterday",
+                              "$companyaddress",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: Colors.black,
@@ -379,10 +407,16 @@ class BusinessProfile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.network(
-                            "https://cdn4.vectorstock.com/i/1000x1000/70/83/shop-store-icon-vector-30737083.jpg",
-                            width: MediaQuery.of(context).size.width / 2,
-                            fit: BoxFit.fitWidth,
-                          ),
+                              "https://www.moneyprowealth.in/moneypay/upload/docs/$storeimg",
+                              width: MediaQuery.of(context).size.width / 2,
+                              fit: BoxFit.fitWidth,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.network(
+                                    'https://cdn4.vectorstock.com/i/1000x1000/70/83/shop-store-icon-vector-30737083.jpg',
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    fit: BoxFit.fitWidth,
+                                  )),
                           SizedBox(
                             width: 30,
                           ),

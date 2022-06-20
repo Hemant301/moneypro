@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:moneypro_new/ui/models/Banks.dart';
+import 'package:moneypro_new/utils/Apicall.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/AppKeys.dart';
 import 'package:moneypro_new/utils/Constants.dart';
@@ -19,7 +21,10 @@ class Withdrwal extends StatefulWidget {
   final double maxAmt;
 
   const Withdrwal(
-      {Key? key, required this.isMWalletShow, required this.isInvestShow,required this.maxAmt})
+      {Key? key,
+      required this.isMWalletShow,
+      required this.isInvestShow,
+      required this.maxAmt})
       : super(key: key);
 
   @override
@@ -27,7 +32,6 @@ class Withdrwal extends StatefulWidget {
 }
 
 class _WithdrwalState extends State<Withdrwal> {
-
   final amountController = new TextEditingController();
   TextEditingController walletAmtController = new TextEditingController();
 
@@ -62,11 +66,12 @@ class _WithdrwalState extends State<Withdrwal> {
     fetchUserAccountBalance();
     getWalletBalFromPrefs();
     printMessage(screen, "Max Amt : ${widget.maxAmt}");
+    getBankList();
     setState(() {
       maxAmount = widget.maxAmt;
     });
 
-    getBankList();
+    fetchBankList();
   }
 
   getWalletBalFromPrefs() async {
@@ -87,10 +92,10 @@ class _WithdrwalState extends State<Withdrwal> {
 
     setState(() {
       name = "$fn $ln";
-      accountNo = acNo;
-      branchName = bCity;
-      bankName = bName;
-      bankIfsc = bIFSC;
+      // accountNo = acNo;
+      // branchName = bCity;
+      // bankName = bName;
+      // bankIfsc = bIFSC;
       if (bankName.contains(".")) bankName = bankName.replaceAll(".", "");
       mprWalAmt = walAmt;
       approved = app;
@@ -106,143 +111,257 @@ class _WithdrwalState extends State<Withdrwal> {
     super.dispose();
   }
 
+  fetchBankList() async {
+    Map data = await homeapi.fetchBankList();
+    print(data);
+    setState(() {
+      bankData = data;
+    });
+  }
+
+  String selectLabel = "Select Bank Account";
+  bool dropdownIndex = false;
+  int is_selected = 0;
+
+  Map bankData = {};
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-        backgroundColor: white,
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: false,
-          backgroundColor: white,
-          leading: InkWell(
-            onTap: () {
-              closeKeyBoard(context);
-              closeCurrentPage(context);
-            },
-            child: Container(
-              height: 60.h,
-              width: 60.w,
-              child: Stack(
-                children: [
-                  Image.asset(
-                    'assets/back_arrow_bg.png',
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    closeCurrentPage(context);
+                  },
+                  child: Container(
                     height: 60.h,
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 12,
-                    child: Image.asset(
-                      'assets/back_arrow.png',
-                      height: 16.h,
+                    width: 60.w,
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
+                        ),
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
+                  ),
+                ),
+                titleSpacing: 0,
+                title: appLogo(),
               ),
-            ),
-          ),
-          titleSpacing: 0,
-          title: appLogo(),
-        ),
-        body: SingleChildScrollView(
-        child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildAccountSection(),
-          (widget.isMWalletShow)?_buildMoneyWallet():Container(),
-          (widget.isInvestShow)?_buildInputSection():Container(),
-
-        ])),
-          bottomNavigationBar: InkWell(
-            onTap: () {
-              setState(() {
-                closeKeyBoard(context);
-
-
-                if(!investValue && !mpWallValue){
-                  showToastMessage("Select any one");
-                  return;
-                }
-
-                if(investValue){
-                  var amount = amountController.text.toString();
-
-                  if (amount == "0" || amount.length == 0) {
-                    showToastMessage("enter amount");
+              body: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    // _buildAccountSection(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 22),
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              if (dropdownIndex == false) {
+                                setState(() {
+                                  dropdownIndex = true;
+                                });
+                              } else {
+                                setState(() {
+                                  dropdownIndex = false;
+                                });
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 14),
+                              decoration: BoxDecoration(
+                                  color: editBg,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('$selectLabel'),
+                                    Icon(Icons.arrow_downward)
+                                  ]),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          dropdownIndex == false
+                              ? Container()
+                              : Column(
+                                  children: List.generate(
+                                  bankData['accounts'].length,
+                                  (index) => Align(
+                                      alignment: Alignment.topLeft,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            is_selected = 1;
+                                            selectLabel = bankData['accounts']
+                                                [index]['account'];
+                                            accountNo = bankData['accounts']
+                                                    [index]['account']
+                                                .toString();
+                                            branchName = bankData['accounts']
+                                                    [index]['bank_name']
+                                                .toString();
+                                            bankName = bankData['accounts']
+                                                    [index]['bank_name']
+                                                .toString();
+                                            bankIfsc = bankData['accounts']
+                                                    [index]['ifsc']
+                                                .toString();
+                                            dropdownIndex = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4.0),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              50,
+                                          decoration: BoxDecoration(
+                                            color: editBg,
+                                          ),
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(bankData['accounts']
+                                                      [index]['bank_name']),
+                                                  Text(
+                                                    bankData['accounts'][index]
+                                                        ['account'],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Divider()
+                                                ],
+                                              )),
+                                        ),
+                                      )),
+                                ))
+                        ],
+                      ),
+                    ),
+                    (widget.isMWalletShow) ? _buildMoneyWallet() : Container(),
+                    (widget.isInvestShow) ? _buildInputSection() : Container(),
+                  ])),
+              bottomNavigationBar: InkWell(
+                onTap: () {
+                  if (is_selected == 0) {
+                    Fluttertoast.showToast(
+                        msg: 'Select Bank Account to proceed');
                     return;
                   }
+                  setState(() {
+                    closeKeyBoard(context);
 
-                  double a = double.parse(amount);
+                    if (!investValue && !mpWallValue) {
+                      showToastMessage("Select any one");
+                      return;
+                    }
 
-                  printMessage(screen, "Amount is : $a");
-                  printMessage(screen, "Amount max : $maxAmount");
+                    if (investValue) {
+                      var amount = amountController.text.toString();
 
-                  if (a > maxAmount) {
-                    showToastMessage("You do not have enough balance");
-                  } else {
-                    _showConfirmWithDr("$name", "$a", "$accountNo", "$branchName");
-                  }
-                }
+                      if (amount == "0" || amount.length == 0) {
+                        showToastMessage("enter amount");
+                        return;
+                      }
 
+                      double a = double.parse(amount);
 
-                if(mpWallValue){
-                  printMessage(screen, "Options : $_site");
+                      printMessage(screen, "Amount is : $a");
+                      printMessage(screen, "Amount max : $maxAmount");
 
-                  if (_site.toString() == "BestTutorSite.imps") {
-                    setState(() {
-                      withdrawOptions = "IMPS";
-                    });
-                  } else if (_site.toString() == "BestTutorSite.neft") {
-                    setState(() {
-                      withdrawOptions = "NEFT";
-                    });
-                  }
+                      if (a > maxAmount) {
+                        showToastMessage("You do not have enough balance");
+                      } else {
+                        _showConfirmWithDr(
+                            "$name", "$a", "$accountNo", "$branchName");
+                      }
+                    }
 
-                  var amount = walletAmtController.text.toString();
+                    if (mpWallValue) {
+                      printMessage(screen, "Options : $_site");
 
-                  if (amount == "0" || amount.length == 0) {
-                    showToastMessage("enter amount");
-                    return;
-                  } else if (withdrawOptions.length == 0) {
-                    showToastMessage("Select IMPS or NEFT");
-                    return;
-                  }
+                      if (_site.toString() == "BestTutorSite.imps") {
+                        setState(() {
+                          withdrawOptions = "IMPS";
+                        });
+                      } else if (_site.toString() == "BestTutorSite.neft") {
+                        setState(() {
+                          withdrawOptions = "NEFT";
+                        });
+                      }
 
-                  printMessage(screen, "Amount is : $amount");
+                      var amount = walletAmtController.text.toString();
 
-                  double amt = double.parse(amount);
-                  double maxAmount = double.parse(mprWalAmt);
+                      if (amount == "0" || amount.length == 0) {
+                        showToastMessage("enter amount");
+                        return;
+                      } else if (withdrawOptions.length == 0) {
+                        showToastMessage("Select IMPS or NEFT");
+                        return;
+                      }
 
-                  printMessage(screen, "Amount is : $amt");
-                  printMessage(screen, "Amount max : $maxAmount");
+                      printMessage(screen, "Amount is : $amount");
 
-                  if (amt > maxAmount) {
-                    showToastMessage("You do not have enough balance");
-                  } else {
-                    generatePayoutToken(amount);
-                  }
+                      double amt = double.parse(amount);
+                      double maxAmount = double.parse(mprWalAmt);
 
-                }
-              });
-            },
-            child: Container(
-              height: 45.h,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
-              decoration: BoxDecoration(
-                color: lightBlue,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              child: Center(
-                child: Text(
-                  submit.toUpperCase(),
-                  style: TextStyle(fontSize: font13.sp, color: white),
+                      printMessage(screen, "Amount is : $amt");
+                      printMessage(screen, "Amount max : $maxAmount");
+
+                      if (amt > maxAmount) {
+                        showToastMessage("You do not have enough balance");
+                      } else {
+                        generatePayoutToken(amount);
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                  height: 45.h,
+                  width: MediaQuery.of(context).size.width,
+                  margin:
+                      EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
+                  decoration: BoxDecoration(
+                    color: lightBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      submit.toUpperCase(),
+                      style: TextStyle(fontSize: font13.sp, color: white),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),)));
+            )));
   }
 
   _buildMoneyWallet() {
@@ -274,7 +393,7 @@ class _WithdrwalState extends State<Withdrwal> {
                       setState(() {
                         closeKeyBoard(context);
                         mpWallValue = val!;
-                        investValue= false;
+                        investValue = false;
                       });
                     }),
                 SizedBox(
@@ -306,7 +425,9 @@ class _WithdrwalState extends State<Withdrwal> {
                     counterText: "",
                     hintText: "$enterAmount",
                     hintStyle: TextStyle(
-                      color: black, fontSize: font15.sp,),
+                      color: black,
+                      fontSize: font15.sp,
+                    ),
                   ),
                   maxLength: 7,
                 ),
@@ -385,7 +506,9 @@ class _WithdrwalState extends State<Withdrwal> {
                 Text(
                   "Investment Withdrawal",
                   style: TextStyle(
-                      color: black, fontSize: font15.sp, fontWeight: FontWeight.bold),
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
                 Checkbox(
@@ -394,7 +517,7 @@ class _WithdrwalState extends State<Withdrwal> {
                       setState(() {
                         closeKeyBoard(context);
                         investValue = val!;
-                        mpWallValue= false;
+                        mpWallValue = false;
                       });
                     }),
                 SizedBox(
@@ -426,10 +549,11 @@ class _WithdrwalState extends State<Withdrwal> {
                     counterText: "",
                     hintText: "$enterAmount",
                     hintStyle: TextStyle(
-                        color: black, fontSize: font15.sp,),
+                      color: black,
+                      fontSize: font15.sp,
+                    ),
                   ),
                   maxLength: 7,
-
                 ),
               ),
             ),
@@ -478,18 +602,18 @@ class _WithdrwalState extends State<Withdrwal> {
                   padding: const EdgeInsets.only(left: 25.0, top: 0, right: 15),
                   child: (bankLogo == "")
                       ? Image.asset(
-                    'assets/bank.png',
-                    height: 30.h,
-                  )
+                          'assets/bank.png',
+                          height: 30.h,
+                        )
                       : SizedBox(
-                    width: 30.w,
-                    height: 30.h,
-                    child: Image.network(
-                      "$bankIconUrl$bankLogo",
-                      width: 30.w,
-                      height: 30.h,
-                    ),
-                  ),
+                          width: 30.w,
+                          height: 30.h,
+                          child: Image.network(
+                            "$bankIconUrl$bankLogo",
+                            width: 30.w,
+                            height: 30.h,
+                          ),
+                        ),
                 ),
                 Expanded(
                   flex: 1,
@@ -528,16 +652,16 @@ class _WithdrwalState extends State<Withdrwal> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: ConfirmWithDrl(
-            name: name,
-            amount: amount,
-            accNo: accNo,
-            branch: branch,
-            mode: withdrawOptions,
-            bankIfsc: bankIfsc,
-          ),
-        ));
+              padding: MediaQuery.of(context).viewInsets,
+              child: ConfirmWithDrl(
+                name: name,
+                amount: amount,
+                accNo: accNo,
+                branch: branch,
+                mode: withdrawOptions,
+                bankIfsc: bankIfsc,
+              ),
+            ));
   }
 
   _buildChangesNotes() {
@@ -599,7 +723,6 @@ class _WithdrwalState extends State<Withdrwal> {
 
     final response = await http.post(Uri.parse(bankListAPI), headers: headers);
 
-
     setState(() {
       loading = false;
       var statusCode = response.statusCode;
@@ -607,7 +730,7 @@ class _WithdrwalState extends State<Withdrwal> {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         if (data['status'].toString() == "1") {
           var result =
-          Banks.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+              Banks.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
           bankList = result.data;
 
           for (int i = 0; i < bankList.length; i++) {
@@ -645,7 +768,7 @@ class _WithdrwalState extends State<Withdrwal> {
     };
 
     final response =
-    await http.post(Uri.parse(payoutTokenGenerateAPI), headers: headers);
+        await http.post(Uri.parse(payoutTokenGenerateAPI), headers: headers);
 
     var statusCode = response.statusCode;
     Navigator.pop(context);
@@ -717,7 +840,7 @@ class _WithdrwalState extends State<Withdrwal> {
             builder: (BuildContext context) {
               return showMessageDialog(
                   message:
-                  "Your request is submitted successfully.\nYou may check your transaction status in History after 5 minutes.",
+                      "Your request is submitted successfully.\nYou may check your transaction status in History after 5 minutes.",
                   action: 3);
             });
       } else {
@@ -741,12 +864,12 @@ class ConfirmWithDrl extends StatefulWidget {
 
   const ConfirmWithDrl(
       {Key? key,
-        required this.name,
-        required this.amount,
-        required this.accNo,
-        required this.branch,
-        required this.mode,
-        required this.bankIfsc})
+      required this.name,
+      required this.amount,
+      required this.accNo,
+      required this.branch,
+      required this.mode,
+      required this.bankIfsc})
       : super(key: key);
 
   @override
@@ -765,180 +888,192 @@ class _ConfirmWithDrlState extends State<ConfirmWithDrl> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>Wrap(
-          children: [
-            Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: new BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(40.0),
-                        topRight: const Radius.circular(40.0))),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      Center(
-                          child: Image.asset(
+        builder: () => Wrap(
+              children: [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(40.0),
+                            topRight: const Radius.circular(40.0))),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          Center(
+                              child: Image.asset(
                             'assets/pin_alert.png',
                             height: 72.h,
                           )),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Center(
-                        child: Text(
-                          "Withdrawal Request",
-                          style: TextStyle(color: green, fontSize: font16.sp),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                        child: Center(
-                          child: Text(
-                            "Amount will be transferred to your bank a/c\nwithin 24 working hours.",
-                            style: TextStyle(color: black, fontSize: font13.sp),
-                            textAlign: TextAlign.center,
+                          SizedBox(
+                            height: 10.h,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 40.0, right: 40, top: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Amount",
-                              style: TextStyle(color: lightBlack, fontSize: font14.sp),
-                            ),
-                            Spacer(),
-                            Text(
-                              "$rupeeSymbol ${widget.amount}",
-                              style: TextStyle(
-                                  color: black,
-                                  fontSize: font16.sp,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Divider(),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 40.0, right: 30, top: 00),
-                        child: Text(
-                          "Transfer to",
-                          style: TextStyle(
-                              color: black,
-                              fontSize: font14.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 40, top: 15, bottom: 10),
+                          Center(
                             child: Text(
-                              myAccount,
-                              style: TextStyle(
-                                  color: black,
-                                  fontSize: font15.sp,
-                                  fontWeight: FontWeight.bold),
+                              "Withdrawal Request",
+                              style:
+                                  TextStyle(color: green, fontSize: font16.sp),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 20, right: 20, top: 0, bottom: 0),
-                            decoration: BoxDecoration(
-                              color: tabBg,
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15.0, bottom: 15),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 25.0, top: 0, right: 15),
-                                    child: Image.asset(
-                                      'assets/banksym.png',
-                                      height: 30.h,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("${widget.name}",
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font15.sp,
-                                                fontWeight: FontWeight.bold)),
-                                        SizedBox(
-                                          height: 2.h,
-                                        ),
-                                        Text("${widget.accNo}",
-                                            style: TextStyle(
-                                                color: black, fontSize: font12.sp)),
-                                        SizedBox(
-                                          height: 2.h,
-                                        ),
-                                        Text("Branch : ${widget.branch}",
-                                            style: TextStyle(
-                                                color: black, fontSize: font12.sp)),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, right: 20, top: 10),
+                            child: Center(
+                              child: Text(
+                                "Amount will be transferred to your bank a/c\nwithin 24 working hours.",
+                                style: TextStyle(
+                                    color: black, fontSize: font13.sp),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          /*if (now.isAfter(exitTime)) {
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 40.0, right: 40, top: 20),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Amount",
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font14.sp),
+                                ),
+                                Spacer(),
+                                Text(
+                                  "$rupeeSymbol ${widget.amount}",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font16.sp,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 40.0, right: 30, top: 00),
+                            child: Text(
+                              "Transfer to",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font14.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 40, top: 15, bottom: 10),
+                                child: Text(
+                                  myAccount,
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font15.sp,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 20, right: 20, top: 0, bottom: 0),
+                                decoration: BoxDecoration(
+                                  color: tabBg,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 15.0, bottom: 15),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 25.0, top: 0, right: 15),
+                                        child: Image.asset(
+                                          'assets/banksym.png',
+                                          height: 30.h,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("${widget.name}",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font15.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            SizedBox(
+                                              height: 2.h,
+                                            ),
+                                            Text("${widget.accNo}",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font12.sp)),
+                                            SizedBox(
+                                              height: 2.h,
+                                            ),
+                                            Text("Branch : ${widget.branch}",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font12.sp)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              /*if (now.isAfter(exitTime)) {
                         showAlertDialog(context, "${widget.amount}");
                       } else {
                         generatePayoutToken("${widget.amount}");
                       }*/
-                          generatePayoutToken("${widget.amount}");
-                        },
-                        child: Container(
-                          height: 45.h,
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(
-                              top: 0, left: 30, right: 30, bottom: 20),
-                          decoration: BoxDecoration(
-                            color: lightBlue,
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Confirm".toUpperCase(),
-                              style: TextStyle(fontSize: font13.sp, color: white),
+                              generatePayoutToken("${widget.amount}");
+                            },
+                            child: Container(
+                              height: 45.h,
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(
+                                  top: 0, left: 30, right: 30, bottom: 20),
+                              decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Confirm".toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: font13.sp, color: white),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ]))
-          ],
-        ));
+                          )
+                        ]))
+              ],
+            ));
   }
 
   Future generatePayoutToken(amount) async {
@@ -957,7 +1092,7 @@ class _ConfirmWithDrlState extends State<ConfirmWithDrl> {
     };
 
     final response =
-    await http.post(Uri.parse(payoutTokenGenerateAPI), headers: headers);
+        await http.post(Uri.parse(payoutTokenGenerateAPI), headers: headers);
 
     var statusCode = response.statusCode;
     Navigator.pop(context);
@@ -1031,7 +1166,7 @@ class _ConfirmWithDrlState extends State<ConfirmWithDrl> {
             builder: (BuildContext context) {
               return showMessageDialog(
                   message:
-                  "Your request is submitted successfully.\nYou may check your transaction status in Investor dashboard after 5 minutes.",
+                      "Your request is submitted successfully.\nYou may check your transaction status in Investor dashboard after 5 minutes.",
                   action: 4);
             });
       } else {
@@ -1043,5 +1178,4 @@ class _ConfirmWithDrlState extends State<ConfirmWithDrl> {
       });
     }
   }
-
 }
