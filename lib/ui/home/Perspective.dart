@@ -5907,7 +5907,8 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
 
 Future<void> showNotification(title, msg, _audioSound) async {
   var lTy = await getLngType();
-
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/applogo');
   printMessage("showNotification", "Lang Type : $lTy");
 
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
@@ -5916,8 +5917,10 @@ Future<void> showNotification(title, msg, _audioSound) async {
     "com.moneyproapp",
     playSound: true,
     importance: Importance.max,
+    color: Colors.blue,
     priority: Priority.high,
   );
+
   var iOSPlatformChannelSpecifics =
       new IOSNotificationDetails(presentSound: false);
   var platformChannelSpecifics = new NotificationDetails(

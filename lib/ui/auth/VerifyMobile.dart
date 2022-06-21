@@ -14,6 +14,8 @@ import 'package:http/http.dart' as http;
 import 'package:network_info_plus/network_info_plus.dart';
 import 'dart:convert';
 import 'package:dart_ipify/dart_ipify.dart';
+import 'package:otp_autofill/otp_autofill.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 //import 'package:telephony/telephony.dart';
 
@@ -35,6 +37,7 @@ class _VerifyMobileState extends State<VerifyMobile>
   var screen = "Mobile Verify";
 
   late AnimationController _controller;
+  late OTPInteractor _otpInteractor;
 
   final info = NetworkInfo();
 
@@ -43,6 +46,7 @@ class _VerifyMobileState extends State<VerifyMobile>
   int levelClock = 20;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+  TextEditingController otpMainController = new TextEditingController();
   TextEditingController otp0Controller = new TextEditingController();
   TextEditingController otp1Controller = new TextEditingController();
   TextEditingController otp2Controller = new TextEditingController();
@@ -61,7 +65,7 @@ class _VerifyMobileState extends State<VerifyMobile>
 
   /*String _message = "";
   final telephony = Telephony.instance;*/
-
+  String rcvdOtp = "";
   @override
   void initState() {
     super.initState();
@@ -73,6 +77,22 @@ class _VerifyMobileState extends State<VerifyMobile>
     setState(() {
       this.startTimer();
     });
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('signature - $value'));
+    otpMainController = OTPTextEditController(
+      codeLength: 6,
+      //ignore: avoid_print
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{6})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+      );
 
     sendOTP("${widget.mobile}");
   }
@@ -141,400 +161,453 @@ class _VerifyMobileState extends State<VerifyMobile>
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-            backgroundColor: white,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              backgroundColor: white,
-              leading: IconButton(
-                icon: backArrow(),
-                onPressed: () {
-                  closeCurrentPage(context);
-                },
-              ),
-            ),
-            body: (loading)
-                ? Center(
-                    child: circularProgressLoading(40.0),
-                  )
-                : SingleChildScrollView(
-                    child: Column(children: [
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Center(
-                        child: Image.asset(
-                      'assets/otp_get.png',
-                      height: 250.h,
-                    )),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Text(
-                      enterOtp,
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font15.sp,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 40.0, right: 40, top: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            weHaveSent,
-                            style: TextStyle(color: black, fontSize: font15.sp),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            height: 4.h,
-                          ),
-                          Text("+91- ${widget.mobile}",
-                              style: TextStyle(
-                                  color: lightBlue,
-                                  fontSize: font26.sp,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 4.h,
-                          ),
-                          Text(
-                            "(Sit back & relax, we will auto fetch the OTP)",
-                            style:
-                                TextStyle(fontSize: font11.sp, color: lightBlack),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 50.h,
-                    ),
-                    Card(
-                        elevation: 15,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+        builder: () => SafeArea(
+            child: Scaffold(
+                backgroundColor: white,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  leading: IconButton(
+                    icon: backArrow(),
+                    onPressed: () {
+                      closeCurrentPage(context);
+                    },
+                  ),
+                ),
+                body: (loading)
+                    ? Center(
+                        child: circularProgressLoading(40.0),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(children: [
+                        SizedBox(
+                          height: 20.h,
                         ),
-                        margin: EdgeInsets.only(top: 00, left: 15, right: 15),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Container(
-                                    height: 50.h,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 40.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node00,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: otp0Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
+                        Center(
+                            child: Image.asset(
+                          'assets/otp_get.png',
+                          height: 250.h,
+                        )),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Text(
+                          enterOtp,
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font15.sp,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 40.0, right: 40, top: 10),
+                          child: Column(
+                            children: [
+                              Text(
+                                weHaveSent,
+                                style: TextStyle(
+                                    color: black, fontSize: font15.sp),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Text("+91- ${widget.mobile}",
+                                  style: TextStyle(
+                                      color: lightBlue,
+                                      fontSize: font26.sp,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Text(
+                                "(Sit back & relax, we will auto fetch the OTP)",
+                                style: TextStyle(
+                                    fontSize: font11.sp, color: lightBlack),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        Card(
+                            elevation: 15,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            margin:
+                                EdgeInsets.only(top: 00, left: 15, right: 15),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      Container(
+                                        height: 50.h,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    50,
+                                                height: 50,
+                                                // margin: EdgeInsets.only(top: 50),
+                                                child: PinInputTextField(
+                                                  controller: otpMainController,
+                                                  pinLength: 6,
+                                                  cursor: Cursor(
+                                                    width: 2,
+                                                    height: 30,
+                                                    color: Colors.black,
+                                                    enabled: true,
+                                                  ),
+                                                  decoration:
+                                                      UnderlineDecoration(
+                                                    colorBuilder:
+                                                        FixedColorBuilder(
+                                                            Colors.black),
+                                                    lineHeight: 1.0,
+                                                    textStyle: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 18,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node01);
-                                              }
-                                            },
-                                          ),
+                                            // SizedBox(
+                                            //   width: 40.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node00,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.next,
+                                            //     controller: otp0Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node01);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 15.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node01,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.next,
+                                            //     controller: otp1Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node02);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 15.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node02,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.next,
+                                            //     controller: otp2Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node03);
+                                            //       } else if (val.length == 0) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node01);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 15.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node03,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.next,
+                                            //     controller: otp3Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node04);
+                                            //       } else if (val.length == 0) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node02);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 15.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node04,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.next,
+                                            //     controller: otp4Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node05);
+                                            //       } else if (val.length == 0) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node03);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 15.w,
+                                            // ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: TextFormField(
+                                            //     focusNode: node05,
+                                            //     textAlign: TextAlign.center,
+                                            //     style: TextStyle(
+                                            //         color: black,
+                                            //         fontSize: inputFont.sp),
+                                            //     keyboardType:
+                                            //         TextInputType.number,
+                                            //     textInputAction:
+                                            //         TextInputAction.done,
+                                            //     controller: otp5Controller,
+                                            //     decoration: new InputDecoration(
+                                            //       isDense: true,
+                                            //       border: UnderlineInputBorder(
+                                            //           borderSide: BorderSide(
+                                            //               style:
+                                            //                   BorderStyle.solid,
+                                            //               width: 0)),
+                                            //       counterText: "",
+                                            //     ),
+                                            //     maxLength: 1,
+                                            //     onChanged: (val) {
+                                            //       if (val.length == 1) {
+                                            //         closeKeyBoard(context);
+                                            //       } else if (val.length == 0) {
+                                            //         FocusScope.of(context)
+                                            //             .requestFocus(node04);
+                                            //       }
+                                            //     },
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 40.w,
+                                            // ),
+                                          ],
                                         ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node01,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: otp1Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
-                                            ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node02);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node02,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: otp2Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
-                                            ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node03);
-                                              } else if (val.length == 0) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node01);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node03,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: otp3Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
-                                            ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node04);
-                                              } else if (val.length == 0) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node02);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node04,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: otp4Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
-                                            ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node05);
-                                              } else if (val.length == 0) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node03);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextFormField(
-                                            focusNode: node05,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: inputFont.sp),
-                                            keyboardType: TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            controller: otp5Controller,
-                                            decoration: new InputDecoration(
-                                              isDense: true,
-                                              border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      style: BorderStyle.solid,
-                                                      width: 0)),
-                                              counterText: "",
-                                            ),
-                                            maxLength: 1,
-                                            onChanged: (val) {
-                                              if (val.length == 1) {
-                                                closeKeyBoard(context);
-                                              } else if (val.length == 0) {
-                                                FocusScope.of(context)
-                                                    .requestFocus(node04);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 40.w,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 40.h,
-                                    margin: EdgeInsets.only(
-                                        left: 40,
-                                        right: 40,
-                                        top: 20,
-                                        bottom: 20),
-                                    decoration: BoxDecoration(
-                                        color: lightBlue,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25)),
-                                        border: Border.all(color: lightBlue)),
-                                    child: InkWell(
-                                      onTap: () {
-                                        var _code0 =
-                                            otp0Controller.text.toString();
-                                        var _code1 =
-                                            otp1Controller.text.toString();
-                                        var _code2 =
-                                            otp2Controller.text.toString();
-                                        var _code3 =
-                                            otp3Controller.text.toString();
-                                        var _code4 =
-                                            otp4Controller.text.toString();
-                                        var _code5 =
-                                            otp5Controller.text.toString();
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 40.h,
+                                        margin: EdgeInsets.only(
+                                            left: 40,
+                                            right: 40,
+                                            top: 20,
+                                            bottom: 20),
+                                        decoration: BoxDecoration(
+                                            color: lightBlue,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25)),
+                                            border:
+                                                Border.all(color: lightBlue)),
+                                        child: InkWell(
+                                          onTap: () {
+                                            var _code0 =
+                                                otp0Controller.text.toString();
+                                            var _code1 =
+                                                otp1Controller.text.toString();
+                                            var _code2 =
+                                                otp2Controller.text.toString();
+                                            var _code3 =
+                                                otp3Controller.text.toString();
+                                            var _code4 =
+                                                otp4Controller.text.toString();
+                                            var _code5 =
+                                                otp5Controller.text.toString();
 
-                                        var _code =
-                                            "$_code0$_code1$_code2$_code3$_code4$_code5";
+                                            var _code =
+                                                '${otpMainController.text}';
 
-                                        if (_code.toString() == "" ||
-                                            _code.length != 6) {
-                                          showToastMessage("Enter 6-digit OTP");
-                                        } else {
-                                          closeKeyBoard(context);
-                                          submitOTPTask(_code.toString());
-                                        }
-                                      },
-                                      child: Center(
-                                        child: Text(
-                                          "$continue_",
-                                          style: TextStyle(
-                                            color: white,
-                                            fontSize: font14.sp,
+                                            if (_code.toString() == "" ||
+                                                _code.length != 6) {
+                                              showToastMessage(
+                                                  "Enter 6-digit OTP");
+                                            } else {
+                                              closeKeyBoard(context);
+                                              submitOTPTask(_code.toString());
+                                            }
+                                          },
+                                          child: Center(
+                                            child: Text(
+                                              "$continue_",
+                                              style: TextStyle(
+                                                color: white,
+                                                fontSize: font14.sp,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ]))),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if (_controller.status.toString() ==
-                            "AnimationStatus.completed") {
-                          reSendOTP(widget.mobile);
-                        } else {
-                          printMessage(screen, "Still hope");
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "$resendCode",
-                            style:
-                                TextStyle(color: lightBlue, fontSize: font12.sp),
-                          ),
-                          SizedBox(
-                            width: 3.w,
-                          ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 0.0),
-                              child: Countdown(
-                                animation: StepTween(
-                                  begin: levelClock,
-                                  // THIS IS A USER ENTERED NUMBER
-                                  end: 0,
-                                ).animate(_controller),
+                                    ]))),
+                        SizedBox(
+                          height: 40.h,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (_controller.status.toString() ==
+                                "AnimationStatus.completed") {
+                              reSendOTP(widget.mobile);
+                            } else {
+                              printMessage(screen, "Still hope");
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "$resendCode",
+                                style: TextStyle(
+                                    color: lightBlue, fontSize: font12.sp),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                  ])))));
+                              SizedBox(
+                                width: 3.w,
+                              ),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 0.0),
+                                  child: Countdown(
+                                    animation: StepTween(
+                                      begin: levelClock,
+                                      // THIS IS A USER ENTERED NUMBER
+                                      end: 0,
+                                    ).animate(_controller),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                      ])))));
   }
 
   Future reSendOTP(mobile) async {
@@ -562,7 +635,7 @@ class _VerifyMobileState extends State<VerifyMobile>
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Register data : $data");
@@ -578,12 +651,10 @@ class _VerifyMobileState extends State<VerifyMobile>
         }
         showToastMessage(data['message']);
       });
-    }else{
+    } else {
       Navigator.pop(context);
       showToastMessage(status500);
     }
-
-
   }
 
   Future sendOTP(mobile) async {
@@ -606,7 +677,7 @@ class _VerifyMobileState extends State<VerifyMobile>
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Register data : $data");
@@ -621,12 +692,10 @@ class _VerifyMobileState extends State<VerifyMobile>
         }
         showToastMessage(data['message']);
       });
-    }else{
+    } else {
       loading = false;
       showToastMessage(status500);
     }
-
-
   }
 
   Future submitOTPTask(otp) async {
@@ -682,11 +751,9 @@ class _VerifyMobileState extends State<VerifyMobile>
     final response = await http.post(Uri.parse(loginAPI),
         body: jsonEncode(body), headers: headers);
 
-
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
-
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "data : ${data}");
@@ -716,12 +783,9 @@ class _VerifyMobileState extends State<VerifyMobile>
           showToastMessage(data['message'].toString());
         }
       });
-
-    }else{
+    } else {
       Navigator.pop(context);
       showToastMessage(status500);
     }
-
-
   }
 }

@@ -112,6 +112,7 @@ dependencies:
   # emp calander
   syncfusion_flutter_calendar: ^20.1.50
   # new app lib
+  otp_autofill: ^2.1.0
 
 
 dev_dependencies:
