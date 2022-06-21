@@ -37,7 +37,7 @@ class _AddAccountState extends State<AddAccount> {
   var invBranch;
   var invAccountType;
   var isInvestAcc = false;
-  var marchantid;
+  var qrName;
   @override
   void initState() {
     // TODO: implement initState
@@ -59,7 +59,7 @@ class _AddAccountState extends State<AddAccount> {
     virtualAccountsId = await getVirtualAccId();
     virtualAccountNumber = await getVirtualAccNo();
     virtualAccountIfscCode = await getVirtualAccIFSC();
-    marchantid = await getMATMMerchantId();
+    qrName = await getQRDisplayName();
     setState(() {});
   }
 
@@ -661,7 +661,7 @@ class _AddAccountState extends State<AddAccount> {
               height: 50,
             )
           ])),
-      bottomSheet: marchantid == "" || marchantid.toString() == "null"
+      bottomSheet: qrName == "" || qrName.toString() == "null"
           ? Container(
               height: 10,
             )

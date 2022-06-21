@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
 
   var selectCatPos;
   var lngConvt = "en";
-  var marId;
+  var qrName;
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _ProfileState extends State<Profile> {
     var district = await getDistrict();
     var state = await getState();
     var pin = await getPinCode();
-    marId = await getMATMMerchantId();
+    qrName = await getQRDisplayName();
     companyName = await getComapanyName();
 
     var contactName = await getContactName();
@@ -202,7 +202,7 @@ class _ProfileState extends State<Profile> {
                         titleSpacing: 0,
                         title: InkWell(
                             onTap: () {
-                              print(marId.toString() == "null");
+                              print(qrName.toString() == "null");
                             },
                             child: appLogo()),
                       ),
@@ -290,7 +290,7 @@ class _ProfileState extends State<Profile> {
                                           ),
                                         ),
                                   _navigateToPeronaldetail(),
-                                  marId.toString() == "null" || marId == ""
+                                  qrName.toString() == "null" || qrName == ""
                                       ? Container()
                                       : _navigateToBusinessdetail(),
                                   _navigateTobanckacdetail(),
