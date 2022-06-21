@@ -64,6 +64,7 @@ class _ProfileState extends State<Profile> {
 
   var selectCatPos;
   var lngConvt = "en";
+  var marId;
 
   @override
   void initState() {
@@ -93,7 +94,7 @@ class _ProfileState extends State<Profile> {
     var district = await getDistrict();
     var state = await getState();
     var pin = await getPinCode();
-
+    marId = await getMATMMerchantId();
     companyName = await getComapanyName();
 
     var contactName = await getContactName();
@@ -199,7 +200,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         titleSpacing: 0,
-                        title: appLogo(),
+                        title: InkWell(
+                            onTap: () {
+                              print(marId.toString() == "null");
+                            },
+                            child: appLogo()),
                       ),
                       body: (loading)
                           ? Center(
@@ -285,7 +290,9 @@ class _ProfileState extends State<Profile> {
                                           ),
                                         ),
                                   _navigateToPeronaldetail(),
-                                  _navigateToBusinessdetail(),
+                                  marId.toString() == "null" || marId == ""
+                                      ? Container()
+                                      : _navigateToBusinessdetail(),
                                   _navigateTobanckacdetail(),
                                   // _buildPersolDetails(),
                                   // _buildPrimaryAccount(),

@@ -19,6 +19,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
   var companyaddress;
   var phone;
   var gstin;
+  var city;
+  var district;
+  var state;
+  var pin;
   @override
   void initState() {
     // TODO: implement initState
@@ -32,6 +36,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
     companyaddress = await getCompanyAddress();
     phone = await getMobile();
     gstin = await getGSTNo();
+    city = await getCity();
+    district = await getDistrict();
+    state = await getState();
+    pin = await getPinCode();
     setState(() {});
   }
 
@@ -165,14 +173,17 @@ class _BusinessProfileState extends State<BusinessProfile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "$category",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Colors.black,
-                                // letterSpacing: 1,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            child: Text(
+                              "$category",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  // letterSpacing: 1,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
                           ),
                           Icon(Icons.edit)
                         ],
@@ -303,18 +314,26 @@ class _BusinessProfileState extends State<BusinessProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.location_city),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2 + 40,
-                            child: Text(
-                              "$companyaddress",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.location_city),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width:
+                                    MediaQuery.of(context).size.width / 2 + 40,
+                                child: Text(
+                                  "$companyaddress, $district, $city, $state\n$pin",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ],
                           ),
                           Icon(Icons.edit),
                         ],
@@ -332,18 +351,25 @@ class _BusinessProfileState extends State<BusinessProfile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.money),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: Text(
-                              "GSTIN",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  // letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.money),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                child: Text(
+                                  "GSTIN",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      // letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ],
                           ),
                           Text(
                             "Update",
@@ -411,12 +437,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                               width: MediaQuery.of(context).size.width / 2,
                               fit: BoxFit.fitWidth,
                               errorBuilder: (context, error, stackTrace) =>
-                                  Image.network(
-                                    'https://cdn4.vectorstock.com/i/1000x1000/70/83/shop-store-icon-vector-30737083.jpg',
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    fit: BoxFit.fitWidth,
-                                  )),
+                                  Container()),
                           SizedBox(
                             width: 30,
                           ),

@@ -114,6 +114,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
   int pageSort = 1;
   int BranchTotalPage = 0;
   late ScrollController scrollBranchController;
+  ScrollController scrollsortController = ScrollController();
 
   @override
   void initState() {
@@ -127,6 +128,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
     scrollBranchController = new ScrollController()
       ..addListener(_scrollBranchListener);
+    print('at scroller');
+    scrollsortController.addListener(_scrollEvent);
 
     fetchUserAccountBalance();
     _tabController = new TabController(vsync: this, length: tabs.length);
@@ -207,10 +210,11 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   void _scrollEvent() {
-    if (scrollBranchController.position.pixels ==
-        scrollBranchController.position.maxScrollExtent) {
-          
-        }
+    print('jst litening');
+    if (scrollsortController.position.pixels ==
+        scrollsortController.position.maxScrollExtent) {
+      print('scroll ho rha');
+    }
   }
 
   void _scrollWalletListener() {
@@ -244,6 +248,15 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   void _scrollBranchListener() {
+    if (isSort == true) {
+      if (scrollBranchController.position.pixels ==
+          scrollBranchController.position.maxScrollExtent) {
+        setState(() {
+          pageSort = pageSort + 1;
+          getSortedDateTransactions(widget.fromDate, widget.toDate, pageSort);
+        });
+      }
+    }
     if (pageBranch <= BranchTotalPage) {
       // if (scrollBranchController.position.extentAfter < 500) {
       if (scrollBranchController.position.pixels ==
@@ -944,26 +957,31 @@ class _TransactionHistoryState extends State<TransactionHistory>
               ),
               _buildTabSection(),
               (isSort)
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                          left: 25.0, top: 10, bottom: 10),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/qr_menu.png',
-                            height: 16.h,
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Text(
-                            "Total $rupeeSymbol ${formatDecimal2Digit.format(totalAmt)}",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font20.sp,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
+                  ? InkWell(
+                      onTap: () {
+                        print(isSort);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, top: 10, bottom: 10),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/qr_menu.png',
+                              height: 16.h,
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            Text(
+                              "Total $rupeeSymbol ${formatDecimal2Digit.format(totalAmt)}",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font20.sp,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   : Container(),
@@ -1018,7 +1036,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
                         padding: const EdgeInsets.only(
                             left: 20.0, right: 20, top: 0),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            print('object');
+                          },
                           child: Container(
                             margin: EdgeInsets.only(top: 10),
                             width: MediaQuery.of(context).size.width,
@@ -2750,6 +2770,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   _buildTodayTransactions() {
     return ListView.builder(
+      // controller: scrollBranchController,
       itemCount: todayTxns.length,
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -2758,7 +2779,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20, top: 0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print('yahi h');
+            },
             child: Container(
               margin: EdgeInsets.only(top: 10),
               width: MediaQuery.of(context).size.width,
@@ -4523,8 +4546,62 @@ class _TransactionHistoryState extends State<TransactionHistory>
         if (data['status'].toString() == "1") {
           var result = SortBranchData.fromJson(
               jsonDecode(utf8.decode(response.bodyBytes)));
+          // todayTxns.addAll(result.todayTxn);
           todayTxns = result.todayTxn;
           totalAmt = result.totalAmount;
+
+          if (todayTxns.length != 0) {
+            isSort = true;
+          } else {
+            isSort = false;
+          }
+        } else {
+          isSort = true;
+          totalAmt = 0.0;
+        }
+      });
+    } else {
+      setState(() {
+        isSort = false;
+      });
+      showToastMessage(status500);
+    }
+  }
+
+  Future getSortedDateTransactions(fromDate, toDate, page) async {
+    var userToken = await getToken();
+
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": "$authHeader",
+    };
+
+    final body = {
+      "user_token": "$userToken",
+      "from_date": "$fromDate",
+      "to_date": "$toDate",
+      'page': "$page"
+    };
+
+    printMessage(screen, "body : $body");
+
+    final response = await http.post(Uri.parse(qrTransctionsSortingAPI),
+        body: jsonEncode(body), headers: headers);
+
+    int statusCode = response.statusCode;
+
+    if (statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      printMessage(screen, "All b Txn : $data");
+
+      setState(() {
+        if (data['status'].toString() == "1") {
+          var result = SortBranchData.fromJson(
+              jsonDecode(utf8.decode(response.bodyBytes)));
+          todayTxns.addAll(result.todayTxn);
+          // todayTxns = result.todayTxn;
+          totalAmt = totalAmt + result.totalAmount;
 
           if (todayTxns.length != 0) {
             isSort = true;

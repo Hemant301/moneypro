@@ -13,6 +13,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   var email;
   var mobile;
   var address;
+  var city;
+  var district;
+  var state;
+  var pin;
   @override
   void initState() {
     // TODO: implement initState
@@ -27,6 +31,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     email = await getEmail();
     mobile = await getMobile();
     address = await getCompanyAddress();
+    city = await getCity();
+    district = await getDistrict();
+    state = await getState();
+    pin = await getPinCode();
     setState(() {});
   }
 
@@ -204,54 +212,62 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               SizedBox(
                 height: 15,
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    // height: 60,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black45.withOpacity(.1),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                          offset: Offset(1, 2), // changes position of shadow
-                        )
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Address",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Colors.grey[400],
-                                // letterSpacing: 1,
-                                // fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              address.toString() == "null"
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        // height: 60,
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black45.withOpacity(.1),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(1, 2), // changes position of shadow
+                            )
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "$address",
+                                "Address",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.grey[400],
                                     // letterSpacing: 1,
-                                    fontWeight: FontWeight.bold,
+                                    // fontWeight: FontWeight.bold,
                                     fontSize: 15),
                               ),
-                              Icon(Icons.edit)
-                            ],
-                          ),
-                        ]),
-                  )),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width - 100,
+                                    child: Text(
+                                      "$address",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          // letterSpacing: 1,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                  Icon(Icons.edit)
+                                ],
+                              ),
+                            ]),
+                      )),
               SizedBox(
                 height: 15,
               ),

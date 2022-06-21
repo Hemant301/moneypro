@@ -542,7 +542,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
 
           var partnerRefId = json['data']['partnerRefId'];
           var amount = json['data']['amount'];
-          var message = json['message'];
+          var message = json['message'] ?? "Pending";
           var bankResponseMsg = json['data']['bankResponseMsg'];
           var merchantMobileNo = json['data']['merchantMobileNo'];
           var aadhaarNo = json['data']['aadhaarNo'];

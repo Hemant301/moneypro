@@ -68,6 +68,7 @@ class _BranchTransactionsState extends State<BranchTransactions> {
 
   var isFromDateSelected = false;
   var isToDateSelected = false;
+  int pageSort = 1;
 
   @override
   void initState() {
@@ -87,7 +88,7 @@ class _BranchTransactionsState extends State<BranchTransactions> {
       setState(() {});
       Timer(Duration(seconds: 1), () {
         getDateTransactions(
-            widget.fromDate.toString(), widget.toDate.toString());
+            widget.fromDate.toString(), widget.toDate.toString(), pageSort);
       });
     } else {
       setState(() {
@@ -102,6 +103,17 @@ class _BranchTransactionsState extends State<BranchTransactions> {
   }
 
   void _scrollQrResponseListener() {
+    if (isSort == true) {
+      // print('issort his h');
+      if (scrollQrResponseController.position.pixels ==
+          scrollQrResponseController.position.maxScrollExtent) {
+        setState(() {
+          pageSort = pageSort + 1;
+          getSortDateTransactions(
+              widget.fromDate.toString(), widget.toDate.toString(), pageSort);
+        });
+      }
+    }
     if (pageQrResponse <= qrResponseTotalPage) {
       // if (scrollQrResponseController.position.extentAfter < 500) {
       if (scrollQrResponseController.position.pixels ==
@@ -239,30 +251,35 @@ class _BranchTransactionsState extends State<BranchTransactions> {
                                             ? _emptyData()
                                             : Column(
                                                 children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 25.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Image.asset(
-                                                          'assets/qr_menu.png',
-                                                          height: 20.h,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5.w,
-                                                        ),
-                                                        Text(
-                                                          "Total $rupeeSymbol $totalAmt",
-                                                          style: TextStyle(
-                                                              color: black,
-                                                              fontSize:
-                                                                  font18.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )
-                                                      ],
+                                                  InkWell(
+                                                    onTap: () {
+                                                      print('object');
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 25.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            'assets/qr_menu.png',
+                                                            height: 20.h,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5.w,
+                                                          ),
+                                                          Text(
+                                                            "Total $rupeeSymbol $totalAmt",
+                                                            style: TextStyle(
+                                                                color: black,
+                                                                fontSize:
+                                                                    font18.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                   _buildTodayTransactions()
@@ -458,7 +475,9 @@ class _BranchTransactionsState extends State<BranchTransactions> {
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20, top: 0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print('ye lo');
+            },
             child: Container(
               margin: EdgeInsets.only(top: 10),
               width: MediaQuery.of(context).size.width,
@@ -913,7 +932,8 @@ class _BranchTransactionsState extends State<BranchTransactions> {
 
                         getDateTransactions(
                             passDateFormat.format(currentFromDate),
-                            passDateFormat.format(currentToDate));
+                            passDateFormat.format(currentToDate),
+                            pageSort);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -980,7 +1000,7 @@ class _BranchTransactionsState extends State<BranchTransactions> {
     }
   }
 
-  Future getDateTransactions(fromDate, toDate) async {
+  Future getDateTransactions(fromDate, toDate, pageSort) async {
     setState(() {
       todayTxns.clear();
       showDialog(
@@ -999,7 +1019,8 @@ class _BranchTransactionsState extends State<BranchTransactions> {
     final body = {
       "branch_id": "${widget.branchId}",
       "from_date": "$fromDate",
-      "to_date": "$toDate"
+      "to_date": "$toDate",
+      'page': pageSort
     };
 
     printMessage(screen, "body : $body");
@@ -1022,6 +1043,57 @@ class _BranchTransactionsState extends State<BranchTransactions> {
               jsonDecode(utf8.decode(response.bodyBytes)));
           todayTxns = result.todayTxn;
           totalAmt = result.totalAmount;
+
+          if (todayTxns.length != 0) {
+            isSort = true;
+          } else {
+            isSort = false;
+          }
+        } else {
+          isSort = true;
+          totalAmt = 0.0;
+        }
+      });
+    } else {
+      setState(() {
+        isSort = false;
+      });
+      showToastMessage(status500);
+    }
+  }
+
+  Future getSortDateTransactions(fromDate, toDate, pageSort) async {
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": "$authHeader",
+    };
+
+    final body = {
+      "branch_id": "${widget.branchId}",
+      "from_date": "$fromDate",
+      "to_date": "$toDate",
+      'page': '$pageSort'
+    };
+
+    printMessage(screen, "body : $body");
+
+    final response = await http.post(Uri.parse(qrBranchTransctionsSortingAPI),
+        body: jsonEncode(body), headers: headers);
+
+    int statusCode = response.statusCode;
+
+    if (statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      printMessage(screen, "All Today Txn : $data");
+
+      setState(() {
+        if (data['status'].toString() == "1") {
+          var result = SortBranchData.fromJson(
+              jsonDecode(utf8.decode(response.bodyBytes)));
+          todayTxns.addAll(result.todayTxn);
+          // todayTxns = result.todayTxn;
+          totalAmt = totalAmt + result.totalAmount;
 
           if (todayTxns.length != 0) {
             isSort = true;
