@@ -242,7 +242,7 @@ class _WithdrwalState extends State<Withdrwal> {
                                                     [index]['account']
                                                 .toString();
                                             branchName = bankData['accounts']
-                                                    [index]['bank_name']
+                                                    [index]['branch']
                                                 .toString();
                                             bankName = bankData['accounts']
                                                     [index]['bank_name']

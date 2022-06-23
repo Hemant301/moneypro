@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:moneypro_new/utils/Apicall.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
@@ -66,11 +67,18 @@ class _AddAccountState extends State<AddAccount> {
   getBankList() async {
     Map data = await homeapi.fetchBankList();
     print(data);
-    setState(() {
-      bankData = data;
-    });
+    if (data['status'].toString() == '1') {
+      setState(() {
+        bankData = data;
+        showData = true;
+      });
+    } else {
+      Fluttertoast.showToast(msg: data['message']);
+      showData = false;
+    }
   }
 
+  bool showData = false;
   Map bankData = {};
   @override
   Widget build(BuildContext context) {
@@ -510,153 +518,156 @@ class _AddAccountState extends State<AddAccount> {
             SizedBox(
               height: 15,
             ),
-            bankData.isEmpty
-                ? CircularProgressIndicator()
-                : bankData['accounts'].isEmpty
-                    ? Container(
-                        child: Text('No Data Found'),
-                      )
-                    : Column(
-                        children: List.generate(
-                          bankData['accounts'].length,
-                          (index) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                // height: 60,
-                                padding: const EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black45.withOpacity(.1),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: Offset(
-                                          1, 2), // changes position of shadow
-                                    )
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
+            showData == false
+                ? Container()
+                : bankData.isEmpty
+                    ? CircularProgressIndicator()
+                    : bankData['accounts'].isEmpty
+                        ? Container(
+                            child: Text('No Data Found'),
+                          )
+                        : Column(
+                            children: List.generate(
+                              bankData['accounts'].length,
+                              (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    // height: 60,
+                                    padding: const EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black45.withOpacity(.1),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: Offset(1,
+                                              2), // changes position of shadow
+                                        )
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "Bank Account",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                // letterSpacing: 1,
-                                                // fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Bank Account",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    // letterSpacing: 1,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              Icon(
+                                                Icons.verified,
+                                                color: Colors.green,
+                                              )
+                                            ],
                                           ),
-                                          Icon(
-                                            Icons.verified,
-                                            color: Colors.green,
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Account Holder Name",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                          SizedBox(
+                                            height: 10,
                                           ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['holder_name'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Account Holder Name",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                bankData['accounts'][index]
+                                                        ['holder_name'] ??
+                                                    "",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Account No",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                          SizedBox(
+                                            height: 10,
                                           ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['account'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Account No",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                bankData['accounts'][index]
+                                                        ['account'] ??
+                                                    "",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "IFSC Code",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                          SizedBox(
+                                            height: 10,
                                           ),
-                                          Text(
-                                            bankData['accounts'][index]
-                                                    ['ifsc'] ??
-                                                "",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                // letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "IFSC Code",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                bankData['accounts'][index]
+                                                        ['ifsc'] ??
+                                                    "",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    // letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ]),
-                              )),
-                        ),
-                      ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ]),
+                                  )),
+                            ),
+                          ),
             SizedBox(
               height: 50,
             )

@@ -2265,7 +2265,18 @@ class _TransactionHistoryState extends State<TransactionHistory>
                     color: lightBlue,
                   ),
                 )
-              : Container(),
+              : InkWell(
+                  onTap: () {
+                    openTransactionHistoryEmpUser(context);
+                  },
+                  child: Container(
+                    child: Image.asset(
+                      'assets/filter_opt.png',
+                      height: 20.h,
+                      color: lightBlue,
+                    ),
+                  ),
+                ),
           SizedBox(
             width: 15.w,
           ),
@@ -2284,7 +2295,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20, top: 0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print('branch0');
+            },
             child: Container(
               margin: EdgeInsets.only(top: 10),
               width: MediaQuery.of(context).size.width,
