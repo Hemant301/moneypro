@@ -408,39 +408,60 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                                     )
                                   : Container(),
                               (role.toString() == "3")
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                          color: walletBg,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          border: Border.all(color: walletBg)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 6.0,
-                                            top: 10,
-                                            bottom: 10,
-                                            right: 6),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              "assets/wallet.png",
-                                              height: 20.h,
-                                            ),
-                                            Center(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 6.0,
-                                                    right: 6,
-                                                    top: 0),
-                                                child: Text(
-                                                  "${formatDecimal2Digit.format(walletBal)}",
-                                                  style: TextStyle(
-                                                      color: white,
-                                                      fontSize: font15.sp),
+                                  ? InkWell(
+                                      onTap: () async {
+                                        String aepsstatus =
+                                            await getAepsStatus();
+                                        String dmtstatus = await getDmtStatus();
+                                        String matmstatus =
+                                            await getMatmStatus();
+                                        print(
+                                            '$aepsstatus $dmtstatus $matmstatus');
+
+                                        if (aepsstatus == "1" ||
+                                            dmtstatus == "1" ||
+                                            matmstatus == "1") {
+                                          openAddMoneyToWallet(context);
+                                        } else {
+                                          return;
+                                        }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: walletBg,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)),
+                                            border:
+                                                Border.all(color: walletBg)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 6.0,
+                                              top: 10,
+                                              bottom: 10,
+                                              right: 6),
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                "assets/wallet.png",
+                                                height: 20.h,
+                                              ),
+                                              Center(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 6.0,
+                                                          right: 6,
+                                                          top: 0),
+                                                  child: Text(
+                                                    "${formatDecimal2Digit.format(walletBal)}",
+                                                    style: TextStyle(
+                                                        color: white,
+                                                        fontSize: font15.sp),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     )
@@ -2888,7 +2909,8 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
     // onMessage: When the app is open and it receives a push notification
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage data: ${message.notification?.title}");
-      //showToastMessage(message.data.toString());
+      print('santosh ${message.notification.toString()}');
+      print('santosh body ${message.data}');
       String? title = message.notification?.title.toString();
       String? msg = message.notification?.body.toString();
       showNotification(title, msg, _audioSound);
@@ -4294,8 +4316,9 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             margin: EdgeInsets.only(left: 20, right: 10, bottom: 10, top: 0),
             child: InkWell(
               onTap: () {
+                setState(() {});
                 // Navigator.pop(context);
-                LogoutPopup();
+                LogoutPopup(context);
               },
               child: Row(
                 children: [
@@ -4630,7 +4653,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             child: InkWell(
               onTap: () {
                 // Navigator.pop(context);
-                LogoutPopup();
+                LogoutPopup(context);
               },
               child: Row(
                 children: [
@@ -5108,7 +5131,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
               child: InkWell(
                 onTap: () {
                   // Navigator.pop(context);
-                  LogoutPopup();
+                  LogoutPopup(context);
                 },
                 child: Row(
                   children: [
@@ -5362,7 +5385,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             ));
   }
 
-  LogoutPopup() {
+  LogoutPopup(context) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -5933,11 +5956,14 @@ Future<void> showNotification(title, msg, _audioSound) async {
     printMessage("showNotification", "translation : $translation");
     FlutterTts flutterTts = FlutterTts();
     flutterTts.speak(translation.toString());
-    Navigator.push(
-        StateContainer.navigatorKey.currentState!.context,
-        MaterialPageRoute(
-          builder: (context) => Perspective(isShowWelcome: false),
-        ));
+    Navigator.pushNamed(
+        StateContainer.navigatorKey.currentState!.context, '/receivedscreen',
+        arguments: {'amount': msg.replaceAll(new RegExp(r'[^0-9,^.]'), '')});
+    // Navigator.push(
+    //     StateContainer.navigatorKey.currentState!.context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Perspective(isShowWelcome: false),
+    //     ));
   }
 
   await flutterLocalNotificationsPlugin.show(

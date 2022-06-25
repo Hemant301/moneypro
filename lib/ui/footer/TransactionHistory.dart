@@ -111,6 +111,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   bool isBranchReload = false;
   int pageBranch = 1;
+  int qrPage = 1;
   int pageSort = 1;
   int BranchTotalPage = 0;
   late ScrollController scrollBranchController;
@@ -210,10 +211,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   void _scrollEvent() {
-    print('jst litening');
+    // print('jst litening');
     if (scrollsortController.position.pixels ==
         scrollsortController.position.maxScrollExtent) {
-      print('scroll ho rha');
+      // print('scroll ho rha');
     }
   }
 
@@ -248,10 +249,23 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   void _scrollBranchListener() {
+    print('scrolling');
+
+    if (branchCreate.toString() != "1") {
+      if (scrollBranchController.position.pixels ==
+          scrollBranchController.position.maxScrollExtent) {
+        setState(() {
+          qrPage = qrPage + 1;
+          getQRTransactions(qrPage);
+          print('inkwell');
+        });
+      }
+    }
     if (isSort == true) {
       if (scrollBranchController.position.pixels ==
           scrollBranchController.position.maxScrollExtent) {
         setState(() {
+          print('branchwala');
           pageSort = pageSort + 1;
           getSortedDateTransactions(widget.fromDate, widget.toDate, pageSort);
         });
@@ -366,7 +380,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                             getBranchTransactions();
                           }
                         } else {
-                          getQRTransactions();
+                          getQRTransactions(qrPage);
                         }
                       } else if (val == 2) {
                         // M ATM response here
@@ -2188,7 +2202,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                     if (branchTransHistories.length == 0)
                       getBranchTransactions();
                   } else {
-                    if (qrResponse.length == 0) getQRTransactions();
+                    if (qrResponse.length == 0) getQRTransactions(qrPage);
                   }
                 });
               },
@@ -2267,14 +2281,12 @@ class _TransactionHistoryState extends State<TransactionHistory>
                 )
               : InkWell(
                   onTap: () {
-                    openTransactionHistoryEmpUser(context);
+                    Navigator.pushNamed(context, '/filtertransaction');
                   },
-                  child: Container(
-                    child: Image.asset(
-                      'assets/filter_opt.png',
-                      height: 20.h,
-                      color: lightBlue,
-                    ),
+                  child: Image.asset(
+                    'assets/filter_opt.png',
+                    height: 20.h,
+                    color: lightBlue,
                   ),
                 ),
           SizedBox(
@@ -3375,10 +3387,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
     }
   }
 
-  Future getQRTransactions() async {
-    setState(() {
-      loading2 = true;
-    });
+  Future getQRTransactions(qrPage) async {
+    // setState(() {
+    //   loading2 = true;
+    // });
 
     var token = await getToken();
 
@@ -3387,9 +3399,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
       "Authorization": "$authHeader",
     };
 
-    final body = {
-      "token": token,
-    };
+    final body = {"token": token, 'page': "$qrPage"};
 
     printMessage(screen, "body : $body");
 
@@ -3406,9 +3416,8 @@ class _TransactionHistoryState extends State<TransactionHistory>
         if (data['status'].toString() == "1") {
           var result =
               History.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-          qrResponse = result.qrResponse;
-
-          qrResponse.sort((a, b) => b.date.compareTo(a.date));
+          qrResponse.addAll(result.qrResponse);
+          // qrResponse.sort((a, b) => b.date.compareTo(a.date));
           printMessage(screen, "QR Size : ${qrResponse.length}");
         } else {
           // showToastMessage(data['message'].toString());

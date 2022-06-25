@@ -73,10 +73,12 @@ import 'package:moneypro_new/ui/footer/ShowCashback.dart';
 import 'package:moneypro_new/ui/footer/TransactionHistory.dart';
 import 'package:moneypro_new/ui/footer/TransactionHistoryEmpUser.dart';
 import 'package:moneypro_new/ui/footer/WelcomeOfferPopup.dart';
+import 'package:moneypro_new/ui/footer/filtertransaction.dart';
 import 'package:moneypro_new/ui/home/DummyClass.dart';
 import 'package:moneypro_new/ui/home/MoreCategories.dart';
 import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/home/ShowWebViews.dart';
+import 'package:moneypro_new/ui/home/receivedscreen.dart';
 import 'package:moneypro_new/ui/home/splash.dart';
 import 'package:moneypro_new/ui/investment/InvestorLanding.dart';
 import 'package:moneypro_new/ui/investment/InvestorPayment.dart';
@@ -476,6 +478,7 @@ void main() async {
         //team
         '/TeamMemberList': (BuildContext context) => new TeamMemberList(),
         '/AddMember': (BuildContext context) => new AddMember(),
+        '/filtertransaction': (BuildContext context) => new Filtertransaction(),
         '/AddTeamIntro': (BuildContext context) => new AddTeamIntro(),
 
         //useronboarding
@@ -492,6 +495,7 @@ void main() async {
         '/businessprofile': (BuildContext context) => new BusinessProfile(),
         '/addaccount': (BuildContext context) => new AddAccount(),
         '/addbankaccount': (BuildContext context) => new AddBankDetails(),
+        '/receivedscreen': (BuildContext context) => new Receivedscreen(),
       },
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
