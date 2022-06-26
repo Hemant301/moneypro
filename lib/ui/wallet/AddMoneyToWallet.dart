@@ -180,8 +180,8 @@ class _AddMoneyToWalletState extends State<AddMoneyToWallet> {
                               padding: const EdgeInsets.only(
                                   left: 10.0, right: 10, top: 5),
                               child: Text(
-                                //"${formatDecimal2Digit.format(mainWallet)}",
-                                "$mainWallet",
+                                "${formatDecimal2Digit.format(mainWallet)}",
+                                // "$mainWallet",
                                 style: TextStyle(
                                     color: white, fontSize: font15.sp),
                               ),
