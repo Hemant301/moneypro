@@ -136,6 +136,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   var adVal = await getAudioSound();
   String? title = message.notification?.title.toString();
   String? msg = message.notification?.body.toString();
+
   showNotification(title, msg, adVal);
 }
 

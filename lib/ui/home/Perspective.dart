@@ -175,27 +175,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
       _pageController = PageController();
       autoAnimateBanner();
     }
-    // NotificationService.init();
-    // NotificationService.init();
 
-    // FirebaseMessaging.instance.getInitialMessage().then((message) {
-    //   if (message != null) {
-    //     //code for navigation
-    //   }
-    // });
-
-    // FirebaseMessaging.onMessage.listen((message) {
-    //   if (message.notification != null) {
-    //     print(message.notification!.title);
-    //     print(message.notification!.body);
-    //   }
-
-    //   NotificationService.showNotification(message);
-    // });
-
-    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //   //code for navigation
-    // });
     getUserAllDetails();
     _determinePosition();
     updateATMStatus(context);
@@ -227,9 +207,11 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
   }
 
   refreshPage() {
-    print('refresh');
-    Future.delayed(Duration(seconds: 3), () {
-      setState(() {});
+    // print('refresh');
+    Future.delayed(Duration(seconds: 5), () {
+      setState(() {
+        refreshPage();
+      });
     });
   }
 
@@ -5961,6 +5943,7 @@ Future<void> showNotification(title, msg, _audioSound) async {
     "com.moneyproapp",
     playSound: true,
     importance: Importance.max,
+    fullScreenIntent: true,
     color: Colors.blue,
     priority: Priority.high,
   );
@@ -5995,41 +5978,3 @@ Future<void> showNotification(title, msg, _audioSound) async {
     payload: "This is payload message",
   );
 }
-
-// class NotificationService {
-//   static final _notifications = FlutterLocalNotificationsPlugin();
-
-//   static Future init() async {
-//     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
-
-//     final settings = InitializationSettings(android: android);
-
-//     await _notifications.initialize(
-//       settings,
-//       onSelectNotification: (payload) async {
-//         //code for navigation
-//       },
-//     );
-//   }
-
-//   static Future _notificationDetails() async {
-//     return NotificationDetails(
-//       android: AndroidNotificationDetails(
-//         'channel id',
-//         'channel name',
-//         'channel name',
-//         importance: Importance.max,
-//       ),
-//     );
-//   }
-
-//   static Future showNotification(RemoteMessage message) async {
-//     final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-//     return _notifications.show(
-//       id,
-//       message.notification!.title,
-//       message.notification!.body,
-//       await _notificationDetails(),
-//     );
-//   }
-// }
