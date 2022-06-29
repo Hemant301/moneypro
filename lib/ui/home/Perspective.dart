@@ -5963,6 +5963,7 @@ Future<void> showNotification(title, msg, _audioSound) async {
     Navigator.pushNamed(
         StateContainer.navigatorKey.currentState!.context, '/receivedscreen',
         arguments: {'amount': msg.replaceAll(new RegExp(r'[^0-9,^.]'), '')});
+
     // Navigator.push(
     //     StateContainer.navigatorKey.currentState!.context,
     //     MaterialPageRoute(

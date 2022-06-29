@@ -130,19 +130,42 @@ import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/Functions.dart';
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/StateContainer.dart';
+import 'package:system_alert_window/system_alert_window.dart';
+import 'package:uuid/uuid.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('onBackgroundMessage data: ${message.data.length}');
   var adVal = await getAudioSound();
   String? title = message.notification?.title.toString();
   String? msg = message.notification?.body.toString();
+  String data = msg!.replaceAll(new RegExp(r'[^0-9,^.]'), '');
+  String newdata = data.substring(1);
+  // print('$newdata newdata amount');
 
+  String realamount = newdata.substring(0, newdata.length - 1);
   showNotification(title, msg, adVal);
+  _showOverlayWindow(msg, realamount);
 }
 
 FirebaseAnalytics analytics = FirebaseAnalytics();
 FirebaseAnalyticsObserver observer =
     FirebaseAnalyticsObserver(analytics: analytics);
+void callBack(String tag) {
+  WidgetsFlutterBinding.ensureInitialized();
+  print(tag);
+  switch (tag) {
+    case "simple_button":
+    case "updated_simple_button":
+      SystemAlertWindow.closeSystemWindow(
+          prefMode: SystemWindowPrefMode.OVERLAY);
+      break;
+    case "focus_button":
+      print("Focus button has been called");
+      break;
+    default:
+      print("OnClick event of $tag");
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -150,7 +173,7 @@ void main() async {
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   );
-
+  SystemAlertWindow.registerOnClickListener(callBack);
   /*SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.blue, // navigation bar color
     statusBarColor: lightBlue, // status bar color
@@ -503,4 +526,93 @@ void main() async {
       ],
     ),
   ));
+}
+
+void _showOverlayWindow(msg, realamount) {
+  SystemWindowHeader header = SystemWindowHeader(
+      title:
+          SystemWindowText(text: "", fontSize: 10, textColor: Colors.black45),
+      padding: SystemWindowPadding.setSymmetricPadding(12, 12),
+      subTitle: SystemWindowText(
+          text: "Moneypro",
+          fontSize: 14,
+          fontWeight: FontWeight.BOLD,
+          textColor: Colors.black87),
+      decoration: SystemWindowDecoration(startColor: Colors.grey[100]),
+      buttonPosition: ButtonPosition.TRAILING);
+  SystemWindowBody body = SystemWindowBody(
+    rows: [
+      EachRow(
+        columns: [],
+        gravity: ContentGravity.CENTER,
+      ),
+      EachRow(columns: [
+        EachColumn(
+            text: SystemWindowText(
+                text: "$rupeeSymbol ${realamount}",
+                fontSize: 24,
+                textColor: Colors.black87,
+                fontWeight: FontWeight.BOLD),
+            padding: SystemWindowPadding.setSymmetricPadding(6, 8),
+            decoration: SystemWindowDecoration(
+                startColor: Colors.black12, borderRadius: 25.0),
+            margin: SystemWindowMargin(top: 4)),
+      ], gravity: ContentGravity.CENTER),
+      EachRow(
+        columns: [
+          EachColumn(
+            text: SystemWindowText(
+                text: "Remark", fontSize: 10, textColor: Colors.black45),
+          ),
+        ],
+        gravity: ContentGravity.LEFT,
+        margin: SystemWindowMargin(top: 8),
+      ),
+      EachRow(
+        columns: [
+          EachColumn(
+            text: SystemWindowText(
+                text: "$msg.",
+                fontSize: 13,
+                textColor: Colors.black54,
+                fontWeight: FontWeight.BOLD),
+          ),
+        ],
+        gravity: ContentGravity.LEFT,
+      ),
+    ],
+    padding: SystemWindowPadding(left: 16, right: 16, bottom: 12, top: 12),
+  );
+  SystemWindowFooter footer = SystemWindowFooter(
+      buttons: [
+        SystemWindowButton(
+          text: SystemWindowText(
+              text: "Close",
+              fontSize: 14,
+              textColor: Color.fromRGBO(250, 139, 97, 1)),
+          tag: "updated_simple_button",
+          padding:
+              SystemWindowPadding(left: 10, right: 10, bottom: 10, top: 10),
+          width: 0,
+          height: SystemWindowButton.WRAP_CONTENT,
+          decoration: SystemWindowDecoration(
+              startColor: Colors.white,
+              endColor: Colors.white,
+              borderWidth: 0,
+              borderRadius: 0.0),
+        ),
+      ],
+      padding: SystemWindowPadding(left: 16, right: 16, bottom: 12),
+      decoration: SystemWindowDecoration(startColor: Colors.white),
+      buttonsPosition: ButtonPosition.CENTER);
+  SystemAlertWindow.updateSystemWindow(
+      height: 230,
+      header: header,
+      body: body,
+      footer: footer,
+      margin: SystemWindowMargin(left: 8, right: 8, top: 200, bottom: 0),
+      gravity: SystemWindowGravity.TOP,
+      notificationTitle: "Moneypro",
+      notificationBody: "",
+      prefMode: SystemWindowPrefMode.OVERLAY);
 }
