@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 
 class StateContainer extends StatefulWidget {
   final Widget child;
@@ -7,7 +8,11 @@ class StateContainer extends StatefulWidget {
   final String welBalc;
 
   const StateContainer(
-      {Key? key, required this.child, this.mpBalc = '', this.qrBalc = '', this.welBalc = ''})
+      {Key? key,
+      required this.child,
+      this.mpBalc = '',
+      this.qrBalc = '',
+      this.welBalc = ''})
       : super(key: key);
   static final navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -60,6 +65,18 @@ class _StateContainerState extends State<StateContainer> {
         welBalc = value;
       });
     }
+  }
+
+  Future<void> _requestPermissions() async {
+    await SystemAlertWindow.requestPermissions(
+        prefMode: SystemWindowPrefMode.OVERLAY);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _requestPermissions();
   }
 
   @override

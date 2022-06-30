@@ -675,6 +675,7 @@ class _AEPSLandingState extends State<AEPSLanding> {
         "aadhaarNo": "$aadhaarNo",
         "bank_name": "$bankName",
         // "txnCode": "$txnCode",
+        "txn_mode": "$txn_type",
         "txnCode": "$aepsStatusCode",
         "rrn": "$rrn",
         "bankIIN": "$bankIIN",

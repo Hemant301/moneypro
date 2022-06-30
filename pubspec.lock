@@ -709,6 +709,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2"
+  otp_autofill:
+    dependency: "direct main"
+    description:
+      name: otp_autofill
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   path:
     dependency: transitive
     description:
@@ -1057,6 +1064,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "20.1.50"
+  system_alert_window:
+    dependency: "direct main"
+    description:
+      name: system_alert_window
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   term_glyph:
     dependency: transitive
     description:
@@ -1148,6 +1162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  uuid:
+    dependency: "direct main"
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.6"
   vector_math:
     dependency: transitive
     description:

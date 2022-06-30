@@ -18,7 +18,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 
 class Splash extends StatefulWidget {
@@ -78,60 +77,60 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-            child: Scaffold(
-              body: Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: FittedBox(
-                        fit: BoxFit.fill, child: Image.asset("assets/splash.png")),
-                  ),
-                  Center(
-                    child: Image.asset(
-                      'assets/app_splash_logo.png',
-                      width: animation.value * 250,
-                      height: animation.value * 250,
-                    ),
-                  ),
-                  Positioned(
-                      bottom: 10,
-                      child: Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 25.0, right: 25),
-                              child: Divider(
-                                color: dividerSplash,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Image.asset(
-                                      'assets/pci.png',
-                                      height: 24,
-                                    )),
-                                Expanded(
-                                    child: Image.asset(
-                                      'assets/upi.png',
-                                      height: 20,
-                                    )),
-                                Expanded(
-                                    child: Image.asset(
-                                      'assets/iso.png',
-                                      height: 30,
-                                    )),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: FittedBox(
+                  fit: BoxFit.fill, child: Image.asset("assets/splash.png")),
+            ),
+            Center(
+              child: Image.asset(
+                'assets/app_splash_logo.png',
+                width: animation.value * 250,
+                height: animation.value * 250,
               ),
             ),
+            Positioned(
+                bottom: 10,
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0, right: 25),
+                        child: Divider(
+                          color: dividerSplash,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Image.asset(
+                            'assets/pci.png',
+                            height: 24,
+                          )),
+                          Expanded(
+                              child: Image.asset(
+                            'assets/upi.png',
+                            height: 20,
+                          )),
+                          Expanded(
+                              child: Image.asset(
+                            'assets/iso.png',
+                            height: 30,
+                          )),
+                        ],
+                      ),
+                    ],
+                  ),
+                ))
+          ],
+        ),
+      ),
     );
   }
 
@@ -187,14 +186,16 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
         printMessage(screen, "Info is : ${_updateInfo}");
 
-        printMessage(screen, "Info updateAvailable : ${UpdateAvailability.updateAvailable}");
-        printMessage(screen, "Info updateAvailability : ${_updateInfo?.updateAvailability}");
+        printMessage(screen,
+            "Info updateAvailable : ${UpdateAvailability.updateAvailable}");
+        printMessage(screen,
+            "Info updateAvailability : ${_updateInfo?.updateAvailability}");
 
-        if(_updateInfo?.updateAvailability ==
-            UpdateAvailability.updateAvailable){
+        if (_updateInfo?.updateAvailability ==
+            UpdateAvailability.updateAvailable) {
           InAppUpdate.performImmediateUpdate()
-              .catchError((e) => printMessage(screen,"${e.toString()}"));
-        }else{
+              .catchError((e) => printMessage(screen, "${e.toString()}"));
+        } else {
           showDialog(
               barrierDismissible: false,
               context: context,
@@ -204,7 +205,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
         }
       });
     }).catchError((e) {
-      printMessage(screen,"${e.toString()}");
+      printMessage(screen, "${e.toString()}");
     });
   }
 
@@ -215,9 +216,9 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     printMessage(screen, "Checked : $checked\nMobile : $mobile");
 
     if (checked) {
-      if(mobile.toString()=="7742526633"){
+      if (mobile.toString() == "7742526633") {
         Navigator.pop(context);
-        openPerspective(context,false);
+        openPerspective(context, false);
         return;
       }
 

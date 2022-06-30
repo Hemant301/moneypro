@@ -27,8 +27,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-List<QrResponse> qrResponse = [];
-
 class TransactionHistory extends StatefulWidget {
   final String fromDate;
   final String toDate;
@@ -75,6 +73,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
 
   List<BBPSTransaction> othersTransactions = [];
   List<BBPSTransaction> othersFiltersTransactions = [];
+  List<QrResponse> qrResponse = [];
 
   List<WalletList> walletList = [];
 
@@ -108,9 +107,11 @@ class _TransactionHistoryState extends State<TransactionHistory>
   var branchCreate = "";
 
   var totalAmt;
-
+  DateTime currentFromDate = DateTime.now();
+  DateTime currentToDate = DateTime.now();
   bool isBranchReload = false;
   int pageBranch = 1;
+  int qrPage = 1;
   int pageSort = 1;
   int BranchTotalPage = 0;
   late ScrollController scrollBranchController;
@@ -210,10 +211,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   void _scrollEvent() {
-    print('jst litening');
+    // print('jst litening');
     if (scrollsortController.position.pixels ==
         scrollsortController.position.maxScrollExtent) {
-      print('scroll ho rha');
+      // print('scroll ho rha');
     }
   }
 
@@ -247,11 +248,36 @@ class _TransactionHistoryState extends State<TransactionHistory>
     }
   }
 
+  bool qrSort = false;
   void _scrollBranchListener() {
+    print('scrolling');
+
+    if (branchCreate.toString() != "1") {
+      if (qrSort == true) {
+        if (scrollBranchController.position.pixels ==
+            scrollBranchController.position.maxScrollExtent) {
+          setState(() {
+            qrPage = qrPage + 1;
+            getQRTodayTransactions(qrPage);
+            print('inkwell');
+          });
+        }
+      } else {
+        if (scrollBranchController.position.pixels ==
+            scrollBranchController.position.maxScrollExtent) {
+          setState(() {
+            qrPage = qrPage + 1;
+            getQRTransactions(qrPage);
+            print('inkwell');
+          });
+        }
+      }
+    }
     if (isSort == true) {
       if (scrollBranchController.position.pixels ==
           scrollBranchController.position.maxScrollExtent) {
         setState(() {
+          print('branchwala');
           pageSort = pageSort + 1;
           getSortedDateTransactions(widget.fromDate, widget.toDate, pageSort);
         });
@@ -366,7 +392,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                             getBranchTransactions();
                           }
                         } else {
-                          getQRTransactions();
+                          getQRTransactions(qrPage);
                         }
                       } else if (val == 2) {
                         // M ATM response here
@@ -2188,7 +2214,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
                     if (branchTransHistories.length == 0)
                       getBranchTransactions();
                   } else {
-                    if (qrResponse.length == 0) getQRTransactions();
+                    if (qrResponse.length == 0) getQRTransactions(qrPage);
                   }
                 });
               },
@@ -2265,7 +2291,26 @@ class _TransactionHistoryState extends State<TransactionHistory>
                     color: lightBlue,
                   ),
                 )
-              : Container(),
+              : GestureDetector(
+                  onTapDown: (TapDownDetails details) {
+                    showPopupMenuQR(details.globalPosition);
+                  },
+                  child: Image.asset(
+                    'assets/filter_opt.png',
+                    height: 20.h,
+                    color: lightBlue,
+                  ),
+                ),
+          // InkWell(
+          //     onTap: () {
+          //       Navigator.pushNamed(context, '/filtertransaction');
+          //     },
+          //     child: Image.asset(
+          //       'assets/filter_opt.png',
+          //       height: 20.h,
+          //       color: lightBlue,
+          //     ),
+          //   ),
           SizedBox(
             width: 15.w,
           ),
@@ -2284,7 +2329,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20, top: 0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print('branch0');
+            },
             child: Container(
               margin: EdgeInsets.only(top: 10),
               width: MediaQuery.of(context).size.width,
@@ -3362,10 +3409,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
     }
   }
 
-  Future getQRTransactions() async {
-    setState(() {
-      loading2 = true;
-    });
+  Future getQRTransactions(qrPage) async {
+    // setState(() {
+    //   loading2 = true;
+    // });
 
     var token = await getToken();
 
@@ -3374,9 +3421,7 @@ class _TransactionHistoryState extends State<TransactionHistory>
       "Authorization": "$authHeader",
     };
 
-    final body = {
-      "token": token,
-    };
+    final body = {"token": token, 'page': "$qrPage"};
 
     printMessage(screen, "body : $body");
 
@@ -3393,9 +3438,61 @@ class _TransactionHistoryState extends State<TransactionHistory>
         if (data['status'].toString() == "1") {
           var result =
               History.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-          qrResponse = result.qrResponse;
+          qrResponse.addAll(result.qrResponse);
+          // qrResponse.sort((a, b) => b.date.compareTo(a.date));
+          printMessage(screen, "QR Size : ${qrResponse.length}");
+        } else {
+          // showToastMessage(data['message'].toString());
+        }
+      });
+    } else {
+      setState(() {
+        loading2 = false;
+      });
+      showToastMessage(status500);
+    }
+  }
 
-          qrResponse.sort((a, b) => b.date.compareTo(a.date));
+  Future getQRTodayTransactions(qrPage) async {
+    var userToken = await getToken();
+    DateTime fromDate = DateTime.now();
+    DateTime toDate = DateTime.now();
+
+    // setState(() {
+    //   loading2 = true;
+    // });
+
+    var token = await getToken();
+
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": "$authHeader",
+    };
+
+    final body = {
+      "token": "$userToken",
+      "start_date": '${(currentFromDate).toString().substring(0, 10)}',
+      "end_date": '${(currentToDate).toString().substring(0, 10)}',
+      "page": "$qrPage"
+    };
+
+    printMessage(screen, "body : $body");
+
+    final response = await http.post(Uri.parse(qrSearchByDateAPI),
+        body: jsonEncode(body), headers: headers);
+
+    int statusCode = response.statusCode;
+
+    if (statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+      print(data);
+      setState(() {
+        loading2 = false;
+        if (data['status'].toString() == "1") {
+          var result =
+              History.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+          qrResponse.addAll(result.qrResponse);
+          // qrResponse.sort((a, b) => b.date.compareTo(a.date));
           printMessage(screen, "QR Size : ${qrResponse.length}");
         } else {
           // showToastMessage(data['message'].toString());
@@ -4499,6 +4596,203 @@ class _TransactionHistoryState extends State<TransactionHistory>
         getTodayTransactions();
       } else if (itemSelected == "2") {
         openSwitchDates(context, 1, "", "", "");
+      }
+    });
+  }
+
+  showPopupMenuQR(Offset globalPosition) {
+    double left = globalPosition.dx;
+    double top = globalPosition.dy;
+    showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(left, top, 0, 0),
+      items: [
+        PopupMenuItem<String>(
+            child: Row(
+              children: [
+                //Icon(Icons.history_rounded),
+                SizedBox(
+                  width: 4,
+                ),
+                Text("Today")
+              ],
+            ),
+            value: '1'),
+        PopupMenuItem<String>(
+            child: Row(
+              children: [
+                //Icon(Icons.edit),
+                SizedBox(
+                  width: 4,
+                ),
+                Text("By Date")
+              ],
+            ),
+            value: '2'),
+      ],
+      elevation: 8.0,
+    ).then<void>((itemSelected) {
+      if (itemSelected == null) return;
+
+      if (itemSelected == "1") {
+        setState(() {
+          qrPage = 1;
+          qrSort = true;
+          qrResponse.clear();
+        });
+        getQRTodayTransactions(qrPage);
+      } else if (itemSelected == "2") {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(builder: (BuildContext context,
+                  StateSetter setStates /*You can rename this!*/) {
+                return Container(
+                    color: Colors.white,
+                    height: 200,
+                    child: Column(children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 15),
+                        child: Text(
+                          "Search transaction by Date",
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, bottom: 0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+                                  Future<void> _selectDate(
+                                      BuildContext context) async {
+                                    final DateTime? picked =
+                                        await showDatePicker(
+                                            context: context,
+                                            initialDate: currentFromDate,
+                                            firstDate: DateTime(2015, 8),
+                                            lastDate: DateTime(2101));
+                                    if (picked != null &&
+                                        picked != currentFromDate) {
+                                      setState(() {
+                                        currentFromDate = picked;
+                                      });
+                                      setStates(() {});
+                                    }
+                                  }
+
+                                  _selectDate(context);
+                                  // _selectFromDate(context);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: editBg,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      '${(currentFromDate).toString().substring(0, 10)}',
+                                      style: TextStyle(
+                                          color: black, fontSize: font14.sp),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+                                  Future<void> _selectToDate(
+                                      BuildContext context) async {
+                                    final DateTime? picked =
+                                        await showDatePicker(
+                                            context: context,
+                                            initialDate: currentToDate,
+                                            firstDate: DateTime(2015, 8),
+                                            lastDate: DateTime(2101));
+                                    if (picked != null &&
+                                        picked != currentToDate) {
+                                      setState(() {
+                                        currentToDate = picked;
+                                      });
+                                      setStates(() {});
+                                    }
+                                  }
+
+                                  _selectToDate(context);
+                                  // _selectToDate(context);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: editBg,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      '${(currentToDate).toString().substring(0, 10)}',
+                                      style: TextStyle(
+                                          color: black, fontSize: font14.sp),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            qrPage = 1;
+
+                            qrSort = true;
+                            qrResponse.clear();
+
+                            getQRTodayTransactions(qrPage);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 0, left: 0, right: 0, bottom: 10),
+                            decoration: BoxDecoration(
+                              color: lightBlue,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  submit.toUpperCase(),
+                                  style:
+                                      TextStyle(fontSize: font15, color: white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]));
+              });
+            });
       }
     });
   }

@@ -114,9 +114,21 @@ class _WithdrwalState extends State<Withdrwal> {
   fetchBankList() async {
     Map data = await homeapi.fetchBankList();
     print(data);
-    setState(() {
-      bankData = data;
-    });
+    if (data['status'].toString() == "1") {
+      setState(() {
+        bankData = data;
+      });
+    } else {
+      setState(() async {
+        selectLabel = await getAccountNumber();
+        accountNo = await getAccountNumber();
+        branchName = await getBranchCity();
+        bankName = await getBankName();
+        bankIfsc = await getIFSC();
+        is_selected = 1;
+      });
+    }
+    ;
   }
 
   String selectLabel = "Select Bank Account";
@@ -176,6 +188,9 @@ class _WithdrwalState extends State<Withdrwal> {
                         children: [
                           InkWell(
                             onTap: () {
+                              if (bankData.isEmpty) {
+                                return;
+                              }
                               if (dropdownIndex == false) {
                                 setState(() {
                                   dropdownIndex = true;
@@ -197,7 +212,11 @@ class _WithdrwalState extends State<Withdrwal> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('$selectLabel'),
-                                    Icon(Icons.arrow_downward)
+                                    bankData.isEmpty
+                                        ? Container()
+                                        : Icon(dropdownIndex == true
+                                            ? Icons.arrow_upward
+                                            : Icons.arrow_downward)
                                   ]),
                             ),
                           ),
@@ -206,6 +225,8 @@ class _WithdrwalState extends State<Withdrwal> {
                           ),
                           dropdownIndex == false
                               ? Container()
+                              // : bankData['accounts'].length == 0
+                              //     ? Text('No data found')
                               : Column(
                                   children: List.generate(
                                   bankData['accounts'].length,
@@ -221,7 +242,7 @@ class _WithdrwalState extends State<Withdrwal> {
                                                     [index]['account']
                                                 .toString();
                                             branchName = bankData['accounts']
-                                                    [index]['bank_name']
+                                                    [index]['branch']
                                                 .toString();
                                             bankName = bankData['accounts']
                                                     [index]['bank_name']
@@ -262,7 +283,59 @@ class _WithdrwalState extends State<Withdrwal> {
                                               )),
                                         ),
                                       )),
-                                ))
+                                )),
+                          is_selected == 1
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                      color: invBoxBg,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Account No',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Branch Name',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Bank Name',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Bank Ifsc',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('$accountNo'),
+                                          Text('$branchName'),
+                                          Text("$bankName"),
+                                          Text('$bankIfsc'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                     ),
