@@ -298,8 +298,10 @@ String upiIdCheckingAPI = "$baseUrl/moneypay/api/upi-id-checking";
 String upiAddAPI = "$baseUrl/moneypay/api/upi-add";
 
 String hlrCheckAPI = "$baseUrl/moneypay/api/hlr-check";
+String fetchOperatorAPI = "$baseUrl/csp/api/operator-circle-fetch";
 
 String browsPlanAPI = "$baseUrl/moneypay/api/brows-plan";
+String fetchPlanAPI = "$baseUrl/csp/api/prepaid-plan-fetch";
 
 String operatorListPrepaidAPI = "$baseUrl/moneypay/api/operator-list-prepaid";
 
