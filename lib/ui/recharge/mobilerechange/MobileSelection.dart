@@ -797,6 +797,7 @@ class _MobileSelectionState extends State<MobileSelection> {
                   circle: circle,
                   billerImg: billerImg,
                   number: number,
+                  spKey: spKey,
                   operatorId: operatorId),
             ));
   }
@@ -1508,7 +1509,7 @@ class _MobileSelectionState extends State<MobileSelection> {
           }
         } else if (data['status'].toString() == "2") {
           closeCurrentPage(context);
-          openPayUMobilePlans(context, mobile, _contacts);
+          openPayUMobilePlans(context, mobile, _contacts, spKey);
         } else {
           showToastMessage(somethingWrong);
         }
@@ -1747,7 +1748,8 @@ class _MobileSelectionState extends State<MobileSelection> {
                           "circleName": "$circleName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "$spKey"
                         };
 
                         printMessage(screen, "1 : Map :${map.toString()}");
@@ -1881,7 +1883,8 @@ class _MobileSelectionState extends State<MobileSelection> {
                           "circleName": "$circleName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "$spKey",
                         };
 
                         printMessage(screen, "2 : Map :${map.toString()}");
@@ -1947,11 +1950,16 @@ class _MobileSelectionState extends State<MobileSelection> {
       return;
     }
 
-    mobilePlans.forEach((userDetail) {
-      if (userDetail.rs.toString() == text) {
-        mobilePlansFiltered.add(userDetail);
+    for (var i = 0; i < mobilePlans.length; i++) {
+      if (mobilePlans[i].rs.toString() == text) {
+        mobilePlansFiltered.add(mobilePlans[i]);
       }
-    });
+    }
+    // mobilePlans.forEach((userDetail) {
+    //   if (userDetail.rs.toString() == text) {
+    //     mobilePlansFiltered.add(userDetail);
+    //   }
+    // });
 
     setState(() {
       if (mobilePlansFiltered.length != 0) {
@@ -2059,6 +2067,7 @@ class showPlanDetail extends StatelessWidget {
       circle,
       billerImg,
       number,
+      spKey,
       operatorId;
 
   const showPlanDetail(
@@ -2070,6 +2079,7 @@ class showPlanDetail extends StatelessWidget {
       required this.operator,
       required this.circle,
       required this.billerImg,
+      required this.spKey,
       required this.number,
       required this.operatorId})
       : super(key: key);
@@ -2266,7 +2276,8 @@ class showPlanDetail extends StatelessWidget {
                             "circleName": "$circle",
                             "billerImg": "$billerImg",
                             "mobileNo": "$number",
-                            "operatorId": "$operatorId"
+                            "operatorId": "$operatorId",
+                            "spKey": "$spKey",
                           };
                           printMessage("screen", "3 : Map :${map.toString()}");
                           openMobilePaymentNew(context, map);

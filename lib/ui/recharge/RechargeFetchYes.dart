@@ -15,7 +15,6 @@ import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:moneypro_new/utils/StateContainer.dart';
 
 class RechargeFetchYes extends StatefulWidget {
@@ -62,7 +61,6 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
   String bbpsToken = "";
 
-
   var requestTimeStamp;
 
   var accountHolderName;
@@ -99,7 +97,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
   var inputNo;
 
-  double welcomeCharge = 5.0;
+  double welcomeCharge = 1.20;
   var welcomeAMT = "";
   var isWelcomeOffer = false;
   var showBal = "";
@@ -118,7 +116,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
   var currentYear = "";
   var timeH = "";
   var cDate = "";
-  var finalString  = "";
+  var finalString = "";
 
   int paramCount = 1;
 
@@ -187,7 +185,6 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
     });
 
     setState(() {
-
       currentYear = yearFormat.format(currentDate);
       timeH = timeFormat.format(currentDate);
       cDate = dateFormat.format(currentDate);
@@ -201,7 +198,6 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
 
   @override
   void dispose() {
@@ -268,7 +264,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       welcomeAMT = walBalc;
       var x = double.parse(moneyProBalc) + double.parse(welcomeAMT);
       moneyProBalc = "$moneyProBalc";
-     // showBal = "$x";
+      // showBal = "$x";
       showBal = formatDecimal2Digit.format(x);
     });
   }
@@ -277,650 +273,747 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-      backgroundColor: white,
-      appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
-      body: (loading)
-          ? Center(child: circularProgressLoading(40.0))
-          : SingleChildScrollView(
-              child: Column(
-              children: [
-                appSelectedBanner(context, "recharge_banner.png", 150.0.h),
-                //_buildInputFields(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30.0, left: 25, right: 25),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        child: Image.network(
-                          "$billerIconUrl${icon}",
-                          width: 24.w,
-                        ),
-                        width: 30.w,
-                        height: 30.h,
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "$billerName".trim(),
-                              style: TextStyle(
-                                  color: black,
-                                  fontSize: font16.sp,
-                                  fontWeight: FontWeight.bold),
-
-                            ),
-                            Text(
-                              state,
-                              style: TextStyle(color: lightBlue, fontSize: font13.sp),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: padding,
-                    left: padding,
-                    right: padding,
-                  ),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 12, bottom: 12),
-                    child: Row(
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
+              body: (loading)
+                  ? Center(child: circularProgressLoading(40.0))
+                  : SingleChildScrollView(
+                      child: Column(
                       children: [
-                        Image.asset(
-                          'assets/invoice.png',
-                          height: 20.h,
-                        ),
-                        SizedBox(
-                          width: 4.w,
-                        ),
-                        Text(
-                          "Sample Bill",
-                          style: TextStyle(color: black, fontSize: font14.sp),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: padding,
-                    left: padding,
-                    right: padding,
-                  ),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      style: TextStyle(
-                          color: black,
-                          fontSize: inputFont.sp,
-                          fontWeight: FontWeight.bold),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.characters,
-                      controller: paramNameController,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("${paramName}"),
-                      ),
-                      maxLength: 80,
-                    ),
-                  ),
-                ),
-                (paramName_1.toString() == "")
-                    ? Container()
-                    : Container(
-                  margin: EdgeInsets.only(
-                      top: padding, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      style: TextStyle(color: black, fontSize: inputFont.sp),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.characters,
-                      controller: param1Controller,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("${paramName_1}"),
-                      ),
-                      maxLength: 80,
-                    ),
-                  ),
-                ),
-                (paramName_2.toString() == "")
-                    ? Container()
-                    : Container(
-                  margin: EdgeInsets.only(
-                      top: padding, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.characters,
-                      style: TextStyle(color: black, fontSize: inputFont.sp),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      controller: param2Controller,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("${paramName_2}"),
-                      ),
-                      maxLength: 80,
-                    ),
-                  ),
-                ),
-                (paramName_3.toString() == "")
-                    ? Container()
-                    : Container(
-                  margin: EdgeInsets.only(
-                      top: padding, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      style: TextStyle(color: black, fontSize: inputFont.sp),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.characters,
-                      controller: param3Controller,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("${paramName_3}"),
-                      ),
-                      maxLength: 80,
-                    ),
-                  ),
-                ),
-                (paramName_4.toString() == "")
-                    ? Container()
-                    : Container(
-                  margin: EdgeInsets.only(
-                      top: padding, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      style: TextStyle(color: black, fontSize: inputFont.sp),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      controller: param4Controller,
-                      textCapitalization: TextCapitalization.characters,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("${paramName_4}"),
-                      ),
-                      maxLength: 80,
-                    ),
-                  ),
-                ),
-                (showDetails)
-                    ? Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 30.0, right: 30, left: 30),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Due Amount",
-                            style: TextStyle(
-                                color: lightBlack, fontSize: font13.sp),
-                          ),
-                          Spacer(),
-                          Text(
-                            "$rupeeSymbol $actualRechargeAmount",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font13.sp,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    (dueDate.toString() == "" ||
-                        dueDate.toString() == "null")
-                        ? Container()
-                        : Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20.0, right: 30, left: 30),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Due Date",
-                            style: TextStyle(
-                                color: lightBlack, fontSize: font13.sp),
-                          ),
-                          Spacer(),
-                          Text(
-                            "$dueDate",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font13.sp,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20.0, right: 30, left: 30),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              "Customer Name",
-                              style: TextStyle(
-                                  color: lightBlack, fontSize: font13.sp),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              "$accountHolderName",
-                              style: TextStyle(
-                                  color: black,
-                                  fontSize: font13.sp,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.right,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    (getBillDate.toString() == "" ||
-                        getBillDate.toString() == "null")
-                        ? Container()
-                        : Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20.0, right: 30, left: 30, bottom: 15),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Bill Date", //wb26k2153
-                            style: TextStyle(
-                                color: lightBlack, fontSize: font13.sp),
-                          ),
-                          Spacer(),
-                          Text(
-                            "$getBillDate",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font13.sp,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: keyPairList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
+                        appSelectedBanner(
+                            context, "recharge_banner.png", 150.0.h),
+                        //_buildInputFields(),
+                        Padding(
                           padding: const EdgeInsets.only(
-                              top: 15.0, right: 30, left: 30),
-                          child: (keyPairList[index]
-                              .value
-                              .toString()
-                              .toLowerCase() ==
-                              "na" ||
-                              keyPairList[index].key.toString() ==
-                                  "Consumer Address")
-                              ? Container()
-                              : Row(
+                              top: 30.0, left: 25, right: 25),
+                          child: Row(
                             children: [
-                              Text(
-                                "${keyPairList[index].key}",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font13.sp),
+                              SizedBox(
+                                child: Image.network(
+                                  "$billerIconUrl${icon}",
+                                  width: 24.w,
+                                ),
+                                width: 30.w,
+                                height: 30.h,
                               ),
                               SizedBox(
                                 width: 10.w,
                               ),
                               Expanded(
                                 flex: 1,
-                                child: Text(
-                                  "${keyPairList[index].value}",
-                                  style: TextStyle(
-                                      color: black,
-                                      fontSize: font13.sp,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.end,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "$billerName".trim(),
+                                      style: TextStyle(
+                                          color: black,
+                                          fontSize: font16.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      state,
+                                      style: TextStyle(
+                                          color: lightBlue,
+                                          fontSize: font13.sp),
+                                    ),
+                                  ],
                                 ),
                               )
                             ],
                           ),
-                        );
-                      },
-                    ),
-                    Divider(),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 10.0, right: 30, left: 30),
-                      child: Text(
-                        billMsg,
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
-                      ),
-                    ),
-                    (isAdhoc.toString() == "1")
-                        ? Container(
-                      margin: EdgeInsets.only(
-                          top: padding, left: padding, right: padding),
-                      decoration: BoxDecoration(
-                        color: editBg,
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 10, bottom: 10),
-                        child: TextFormField(
-                          style: TextStyle(
-                              color: black, fontSize: inputFont.sp),
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          controller: param3Controller,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: new InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 10),
-                            counterText: "",
-                            label: Text("${paramName_3}"),
-                          ),
-                          maxLength: 80,
                         ),
-                      ),
-                    )
-                        : Container(),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            debitFrom,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font14.sp,
-                                fontWeight: FontWeight.w400),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: padding,
+                            left: padding,
+                            right: padding,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                  value: checkedValue,
-                                  onChanged: (val) async {
-                                    var mpBalc = await getWalletBalance();
-
-                                    setState(() {
-                                      double walletValue = 0;
-                                      double rechargeValue = 0;
-
-                                      printMessage(screen, "Welcome offer : $isWelcomeOffer");
-
-                                      setState(() {
-                                        if (mpBalc.toString() == "") {
-                                          walletValue = 0;
-                                        } else {
-                                          walletValue = double.parse(mpBalc);
-                                        }
-
-                                        if (actualRechargeAmount.toString() == "") {
-                                          rechargeValue = 0;
-                                        } else {
-                                          rechargeValue = double.parse(actualRechargeAmount);
-                                        }
-                                      });
-
-                                      if(isWelcomeOffer){
-                                        setState(() {
-                                          remainAmt = rechargeValue;
-                                          remainAmt = remainAmt - welcomeCharge;
-                                          printMessage(screen, "1. remainAmt : $remainAmt");
-                                        });
-                                      }
-
-                                      if(walletValue<rechargeValue){
-                                        setState(() {
-                                          isAmtMore = false;
-                                        });
-                                        setState(() {
-                                          remainAmt = remainAmt-walletValue;
-                                        });
-                                      }else{
-                                        setState(() {
-                                          isAmtMore = true;
-                                        });
-                                        remainAmt = walletValue-remainAmt;
-                                        if(remainAmt<1){
-                                          remainAmt = 0;
-                                        }
-                                      }
-
-                                      if (walletValue < 0) {
-                                        closeKeyBoard(context);
-                                        showToastMessage(
-                                            "Your wallet does not have enough balance");
-                                      } else {
-                                        closeKeyBoard(context);
-                                        checkedValue = val!;
-                                      }
-                                    });
-                                  }),
-                              Text(
-                                "$wallet",
-                                style:
-                                TextStyle(fontSize: font14.sp, color: black),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 12, bottom: 12),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/invoice.png',
+                                  height: 20.h,
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Text(
+                                  "Sample Bill",
+                                  style: TextStyle(
+                                      color: black, fontSize: font14.sp),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: padding,
+                            left: padding,
+                            right: padding,
+                          ),
+                          decoration: BoxDecoration(
+                            color: editBg,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 10, bottom: 10),
+                            child: TextFormField(
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: inputFont.sp,
+                                  fontWeight: FontWeight.bold),
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
+                              textCapitalization: TextCapitalization.characters,
+                              controller: paramNameController,
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 10),
+                                counterText: "",
+                                label: Text("${paramName}"),
                               ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(10),
+                              maxLength: 80,
+                            ),
+                          ),
+                        ),
+                        (paramName_1.toString() == "")
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(
+                                    top: padding,
+                                    left: padding,
+                                    right: padding),
                                 decoration: BoxDecoration(
-                                    color: walletBg,
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(color: walletBg)),
+                                  color: editBg,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 8.0, top: 5, bottom: 5),
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Image.asset(
-                                        "assets/wallet.png",
-                                        height: 24.h,
-                                      ),
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 5),
-                                          child: Text(
-                                            "$showBal",
-                                            style: TextStyle(
-                                                color: white, fontSize: font15.sp),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                      left: 15.0,
+                                      right: 15,
+                                      top: 10,
+                                      bottom: 10),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                        color: black, fontSize: inputFont.sp),
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    controller: param1Controller,
+                                    decoration: new InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(left: 10),
+                                      counterText: "",
+                                      label: Text("${paramName_1}"),
+                                    ),
+                                    maxLength: 80,
                                   ),
                                 ),
+                              ),
+                        (paramName_2.toString() == "")
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(
+                                    top: padding,
+                                    left: padding,
+                                    right: padding),
+                                decoration: BoxDecoration(
+                                  color: editBg,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15,
+                                      top: 10,
+                                      bottom: 10),
+                                  child: TextFormField(
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    style: TextStyle(
+                                        color: black, fontSize: inputFont.sp),
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    controller: param2Controller,
+                                    decoration: new InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(left: 10),
+                                      counterText: "",
+                                      label: Text("${paramName_2}"),
+                                    ),
+                                    maxLength: 80,
+                                  ),
+                                ),
+                              ),
+                        (paramName_3.toString() == "")
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(
+                                    top: padding,
+                                    left: padding,
+                                    right: padding),
+                                decoration: BoxDecoration(
+                                  color: editBg,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15,
+                                      top: 10,
+                                      bottom: 10),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                        color: black, fontSize: inputFont.sp),
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    controller: param3Controller,
+                                    decoration: new InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(left: 10),
+                                      counterText: "",
+                                      label: Text("${paramName_3}"),
+                                    ),
+                                    maxLength: 80,
+                                  ),
+                                ),
+                              ),
+                        (paramName_4.toString() == "")
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(
+                                    top: padding,
+                                    left: padding,
+                                    right: padding),
+                                decoration: BoxDecoration(
+                                  color: editBg,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15,
+                                      top: 10,
+                                      bottom: 10),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                        color: black, fontSize: inputFont.sp),
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    controller: param4Controller,
+                                    textCapitalization:
+                                        TextCapitalization.characters,
+                                    decoration: new InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(left: 10),
+                                      counterText: "",
+                                      label: Text("${paramName_4}"),
+                                    ),
+                                    maxLength: 80,
+                                  ),
+                                ),
+                              ),
+                        (showDetails)
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 30.0, right: 30, left: 30),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Due Amount",
+                                          style: TextStyle(
+                                              color: lightBlack,
+                                              fontSize: font13.sp),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "$rupeeSymbol $actualRechargeAmount",
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font13.sp,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  (dueDate.toString() == "" ||
+                                          dueDate.toString() == "null")
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0, right: 30, left: 30),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Due Date",
+                                                style: TextStyle(
+                                                    color: lightBlack,
+                                                    fontSize: font13.sp),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                "$dueDate",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font13.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0, right: 30, left: 30),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            "Customer Name",
+                                            style: TextStyle(
+                                                color: lightBlack,
+                                                fontSize: font13.sp),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            "$accountHolderName",
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: font13.sp,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  (getBillDate.toString() == "" ||
+                                          getBillDate.toString() == "null")
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0,
+                                              right: 30,
+                                              left: 30,
+                                              bottom: 15),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Bill Date", //wb26k2153
+                                                style: TextStyle(
+                                                    color: lightBlack,
+                                                    fontSize: font13.sp),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                "$getBillDate",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font13.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: keyPairList.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 15.0, right: 30, left: 30),
+                                        child: (keyPairList[index]
+                                                        .value
+                                                        .toString()
+                                                        .toLowerCase() ==
+                                                    "na" ||
+                                                keyPairList[index]
+                                                        .key
+                                                        .toString() ==
+                                                    "Consumer Address")
+                                            ? Container()
+                                            : Row(
+                                                children: [
+                                                  Text(
+                                                    "${keyPairList[index].key}",
+                                                    style: TextStyle(
+                                                        color: lightBlack,
+                                                        fontSize: font13.sp),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      "${keyPairList[index].value}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font13.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign: TextAlign.end,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                      );
+                                    },
+                                  ),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, right: 30, left: 30),
+                                    child: Text(
+                                      billMsg,
+                                      style: TextStyle(
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
+                                    ),
+                                  ),
+                                  (isAdhoc.toString() == "1")
+                                      ? Container(
+                                          margin: EdgeInsets.only(
+                                              top: padding,
+                                              left: padding,
+                                              right: padding),
+                                          decoration: BoxDecoration(
+                                            color: editBg,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15.0,
+                                                right: 15,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: TextFormField(
+                                              style: TextStyle(
+                                                  color: black,
+                                                  fontSize: inputFont.sp),
+                                              keyboardType: TextInputType.text,
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              controller: param3Controller,
+                                              textCapitalization:
+                                                  TextCapitalization.characters,
+                                              decoration: new InputDecoration(
+                                                isDense: true,
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    EdgeInsets.only(left: 10),
+                                                counterText: "",
+                                                label: Text("${paramName_3}"),
+                                              ),
+                                              maxLength: 80,
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 15.0, right: 30, left: 30),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          debitFrom,
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font14.sp,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Checkbox(
+                                                value: checkedValue,
+                                                onChanged: (val) async {
+                                                  var mpBalc =
+                                                      await getWalletBalance();
+
+                                                  setState(() {
+                                                    double walletValue = 0;
+                                                    double rechargeValue = 0;
+
+                                                    printMessage(screen,
+                                                        "Welcome offer : $isWelcomeOffer");
+
+                                                    setState(() {
+                                                      if (mpBalc.toString() ==
+                                                          "") {
+                                                        walletValue = 0;
+                                                      } else {
+                                                        walletValue =
+                                                            double.parse(
+                                                                mpBalc);
+                                                      }
+
+                                                      if (actualRechargeAmount
+                                                              .toString() ==
+                                                          "") {
+                                                        rechargeValue = 0;
+                                                      } else {
+                                                        rechargeValue =
+                                                            double.parse(
+                                                                actualRechargeAmount);
+                                                      }
+                                                    });
+
+                                                    if (isWelcomeOffer) {
+                                                      setState(() {
+                                                        remainAmt =
+                                                            rechargeValue;
+                                                        remainAmt = remainAmt -
+                                                            welcomeCharge;
+                                                        printMessage(screen,
+                                                            "1. remainAmt : $remainAmt");
+                                                      });
+                                                    }
+
+                                                    if (walletValue <
+                                                        rechargeValue) {
+                                                      setState(() {
+                                                        isAmtMore = false;
+                                                      });
+                                                      setState(() {
+                                                        remainAmt = remainAmt -
+                                                            walletValue;
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        isAmtMore = true;
+                                                      });
+                                                      remainAmt = walletValue -
+                                                          remainAmt;
+                                                      if (remainAmt < 1) {
+                                                        remainAmt = 0;
+                                                      }
+                                                    }
+
+                                                    if (walletValue < 0) {
+                                                      closeKeyBoard(context);
+                                                      showToastMessage(
+                                                          "Your wallet does not have enough balance");
+                                                    } else {
+                                                      closeKeyBoard(context);
+                                                      checkedValue = val!;
+                                                    }
+                                                  });
+                                                }),
+                                            Text(
+                                              "$wallet",
+                                              style: TextStyle(
+                                                  fontSize: font14.sp,
+                                                  color: black),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              margin: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  color: walletBg,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                  border: Border.all(
+                                                      color: walletBg)),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    top: 5,
+                                                    bottom: 5),
+                                                child: Wrap(
+                                                  direction: Axis.horizontal,
+                                                  children: [
+                                                    Image.asset(
+                                                      "assets/wallet.png",
+                                                      height: 24.h,
+                                                    ),
+                                                    Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 8.0,
+                                                                right: 8,
+                                                                top: 5),
+                                                        child: Text(
+                                                          "$showBal",
+                                                          style: TextStyle(
+                                                              color: white,
+                                                              fontSize:
+                                                                  font15.sp),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        (!isAmtMore &&
+                                                remainAmt != 0 &&
+                                                checkedValue)
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: Text(
+                                                  "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                                  style: TextStyle(
+                                                      color: black,
+                                                      fontSize: font14.sp),
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                  (isWelcomeOffer)
+                                      ? _buildOfferRwo()
+                                      : Container(),
+                                ],
                               )
-                            ],
-                          ),
-                          (!isAmtMore && remainAmt != 0 && checkedValue)
-                              ? Padding(
-                            padding: const EdgeInsets.only(left: 15.0),
-                            child: Text(
-                              "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                              style: TextStyle(
-                                  color: black, fontSize: font14.sp),
+                            : Container(),
+                        Divider(),
+                        (showDetails)
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 15.0, left: 25, right: 25),
+                                    child: Text(
+                                      selectPayOptions,
+                                      style: TextStyle(
+                                          color: black,
+                                          fontSize: font15.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  _buildUPISection(),
+                                  _buildCardSection(),
+                                ],
+                              )
+                            : Container(),
+                      ],
+                    )),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: (showDetails)
+                    ? _buildButtonSection()
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: 40.h,
+                            margin: EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 0),
+                            decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                border: Border.all(color: lightBlue)),
+                            child: InkWell(
+                              onTap: () {
+                                paramMain = paramNameController.text.toString();
+
+                                if (paramMain.toString().length == 0) {
+                                  showToastMessage("Enter the $paramName");
+                                  return;
+                                }
+
+                                if (paramName_1.toString().length != 0) {
+                                  paramFirst = param1Controller.text.toString();
+                                  if (paramFirst.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_1");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_2.toString().length != 0) {
+                                  paramSecond =
+                                      param2Controller.text.toString();
+                                  if (paramSecond.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_2");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_3.toString().length != 0) {
+                                  paramThird = param3Controller.text.toString();
+                                  if (paramThird.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_3");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_4.toString().length != 0) {
+                                  paramFourth =
+                                      param4Controller.text.toString();
+                                  if (paramFourth.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_4");
+                                    return;
+                                  }
+                                }
+
+                                if (bbpsToken.toString() == "") {
+                                  showToastMessage(somethingWrong);
+                                  return;
+                                }
+                                closeKeyBoard(context);
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                getBillerDetails();
+                              },
+                              child: Center(
+                                child: Text(
+                                  "$search",
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: font14.sp,
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
-                              : Container(),
+                          ),
                         ],
                       ),
-                    ),
-                    (isWelcomeOffer) ? _buildOfferRwo() : Container(),
-                  ],
-                )
-                    : Container(),
-                Divider(),
-                (showDetails)
-                    ? Column(
-                  children: [
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 15.0, left: 25, right: 25),
-                      child: Text(
-                        selectPayOptions,
-                        style: TextStyle(
-                            color: black,
-                            fontSize: font15.sp,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _buildUPISection(),
-                    _buildCardSection(),
-                  ],
-                )
-                    : Container(),
-              ],
-            )),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: (showDetails)
-            ? _buildButtonSection()
-            : Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: 40.h,
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        border: Border.all(color: lightBlue)),
-                    child: InkWell(
-                      onTap: () {
-                        paramMain = paramNameController.text.toString();
-
-                        if (paramMain.toString().length == 0) {
-                          showToastMessage("Enter the $paramName");
-                          return;
-                        }
-
-                        if (paramName_1.toString().length != 0) {
-                          paramFirst = param1Controller.text.toString();
-                          if (paramFirst.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_1");
-                            return;
-                          }
-                        }
-
-                        if (paramName_2.toString().length != 0) {
-                          paramSecond = param2Controller.text.toString();
-                          if (paramSecond.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_2");
-                            return;
-                          }
-                        }
-
-                        if (paramName_3.toString().length != 0) {
-                          paramThird = param3Controller.text.toString();
-                          if (paramThird.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_3");
-                            return;
-                          }
-                        }
-
-                        if (paramName_4.toString().length != 0) {
-                          paramFourth = param4Controller.text.toString();
-                          if (paramFourth.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_4");
-                            return;
-                          }
-                        }
-
-                        if (bbpsToken.toString() == "") {
-                          showToastMessage(somethingWrong);
-                          return;
-                        }
-                        closeKeyBoard(context);
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        getBillerDetails();
-                      },
-                      child: Center(
-                        child: Text(
-                          "$search",
-                          style: TextStyle(
-                            color: white,
-                            fontSize: font14.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
-      ),
-    )));
+            )));
   }
 
   _buildInputFields() {
@@ -969,7 +1062,6 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                             color: black,
                             fontSize: font16.sp,
                             fontWeight: FontWeight.bold),
-
                       ),
                       Text(
                         state,
@@ -1164,8 +1256,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
               ? Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 30.0, right: 30, left: 30),
+                      padding:
+                          const EdgeInsets.only(top: 30.0, right: 30, left: 30),
                       child: Row(
                         children: [
                           Text(
@@ -1184,8 +1276,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                         ],
                       ),
                     ),
-                    (dueDate.toString() == "" ||
-                            dueDate.toString() == "null")
+                    (dueDate.toString() == "" || dueDate.toString() == "null")
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -1209,8 +1300,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                             ),
                           ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20.0, right: 30, left: 30),
+                      padding:
+                          const EdgeInsets.only(top: 20.0, right: 30, left: 30),
                       child: Row(
                         children: [
                           Expanded(
@@ -1307,7 +1398,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                           const EdgeInsets.only(top: 10.0, right: 30, left: 30),
                       child: Text(
                         billMsg,
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
                     (isAdhoc.toString() == "1")
@@ -1328,7 +1420,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.done,
                                 controller: param3Controller,
-                                textCapitalization: TextCapitalization.characters,
+                                textCapitalization:
+                                    TextCapitalization.characters,
                                 decoration: new InputDecoration(
                                   isDense: true,
                                   border: InputBorder.none,
@@ -1341,135 +1434,153 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                             ),
                           )
                         : Container(),
-                    (mainWallet.toString()=="0" || mainWallet.toString()=="0.0"|| mainWallet.toString()=="null")?Container(): Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            debitFrom,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font14.sp,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                  value: checkedValue,
-                                  onChanged: (val) async {
-                                    var mpBalc = await getWalletBalance();
+                    (mainWallet.toString() == "0" ||
+                            mainWallet.toString() == "0.0" ||
+                            mainWallet.toString() == "null")
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, right: 30, left: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  debitFrom,
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font14.sp,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                        value: checkedValue,
+                                        onChanged: (val) async {
+                                          var mpBalc = await getWalletBalance();
 
-                                    setState(() {
-                                      double walletValue = 0;
-                                      double rechargeValue = 0;
+                                          setState(() {
+                                            double walletValue = 0;
+                                            double rechargeValue = 0;
 
-                                      printMessage(screen, "Welcome offer : $isWelcomeOffer");
+                                            printMessage(screen,
+                                                "Welcome offer : $isWelcomeOffer");
 
-                                      setState(() {
-                                        if (mpBalc.toString() == "") {
-                                          walletValue = 0;
-                                        } else {
-                                          walletValue = double.parse(mpBalc);
-                                        }
+                                            setState(() {
+                                              if (mpBalc.toString() == "") {
+                                                walletValue = 0;
+                                              } else {
+                                                walletValue =
+                                                    double.parse(mpBalc);
+                                              }
 
-                                        if (actualRechargeAmount.toString() == "") {
-                                          rechargeValue = 0;
-                                        } else {
-                                          rechargeValue = double.parse(actualRechargeAmount);
-                                        }
-                                      });
+                                              if (actualRechargeAmount
+                                                      .toString() ==
+                                                  "") {
+                                                rechargeValue = 0;
+                                              } else {
+                                                rechargeValue = double.parse(
+                                                    actualRechargeAmount);
+                                              }
+                                            });
 
-                                      if(isWelcomeOffer){
-                                        setState(() {
-                                          remainAmt = rechargeValue;
-                                          remainAmt = remainAmt - welcomeCharge;
-                                          printMessage(screen, "1. remainAmt : $remainAmt");
-                                        });
-                                      }
+                                            if (isWelcomeOffer) {
+                                              setState(() {
+                                                remainAmt = rechargeValue;
+                                                remainAmt =
+                                                    remainAmt - welcomeCharge;
+                                                printMessage(screen,
+                                                    "1. remainAmt : $remainAmt");
+                                              });
+                                            }
 
-                                     if(walletValue<rechargeValue){
-                                       setState(() {
-                                         isAmtMore = false;
-                                       });
-                                       setState(() {
-                                         remainAmt = remainAmt-walletValue;
-                                       });
-                                     }else{
-                                       setState(() {
-                                         isAmtMore = true;
-                                       });
-                                       remainAmt = walletValue-remainAmt;
-                                       if(remainAmt<1){
-                                         remainAmt = 0;
-                                       }
-                                     }
+                                            if (walletValue < rechargeValue) {
+                                              setState(() {
+                                                isAmtMore = false;
+                                              });
+                                              setState(() {
+                                                remainAmt =
+                                                    remainAmt - walletValue;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                isAmtMore = true;
+                                              });
+                                              remainAmt =
+                                                  walletValue - remainAmt;
+                                              if (remainAmt < 1) {
+                                                remainAmt = 0;
+                                              }
+                                            }
 
-                                      if (walletValue < 0) {
-                                        closeKeyBoard(context);
-                                        showToastMessage(
-                                            "Your wallet does not have enough balance");
-                                      } else {
-                                        closeKeyBoard(context);
-                                        checkedValue = val!;
-                                      }
-                                    });
-                                  }),
-                              Text(
-                                "$wallet",
-                                style:
-                                    TextStyle(fontSize: font14.sp, color: black),
-                              ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: walletBg,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(color: walletBg)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, top: 5, bottom: 5),
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Image.asset(
-                                        "assets/wallet.png",
-                                        height: 24.h,
-                                      ),
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 5),
-                                          child: Text(
-                                            "$showBal",
-                                            style: TextStyle(
-                                                color: white, fontSize: font15.sp),
-                                          ),
+                                            if (walletValue < 0) {
+                                              closeKeyBoard(context);
+                                              showToastMessage(
+                                                  "Your wallet does not have enough balance");
+                                            } else {
+                                              closeKeyBoard(context);
+                                              checkedValue = val!;
+                                            }
+                                          });
+                                        }),
+                                    Text(
+                                      "$wallet",
+                                      style: TextStyle(
+                                          fontSize: font14.sp, color: black),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          color: walletBg,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          border: Border.all(color: walletBg)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 5, bottom: 5),
+                                        child: Wrap(
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Image.asset(
+                                              "assets/wallet.png",
+                                              height: 24.h,
+                                            ),
+                                            Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 5),
+                                                child: Text(
+                                                  "$showBal",
+                                                  style: TextStyle(
+                                                      color: white,
+                                                      fontSize: font15.sp),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                                (!isAmtMore && remainAmt != 0 && checkedValue)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: Text(
+                                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font14.sp),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
                           ),
-                          (!isAmtMore && remainAmt != 0 && checkedValue)
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                                    style: TextStyle(
-                                        color: black, fontSize: font14.sp),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
                     (isWelcomeOffer) ? _buildOfferRwo() : Container(),
                   ],
                 )
@@ -1499,25 +1610,25 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
     );
   }
 
-  getParamCount(){
-    if(paramName_1.toString() != ""){
+  getParamCount() {
+    if (paramName_1.toString() != "") {
       setState(() {
-        paramCount=2;
+        paramCount = 2;
       });
     }
-    if(paramName_2.toString() != ""){
+    if (paramName_2.toString() != "") {
       setState(() {
-        paramCount=3;
+        paramCount = 3;
       });
     }
-    if(paramName_3.toString() != ""){
+    if (paramName_3.toString() != "") {
       setState(() {
-        paramCount=4;
+        paramCount = 4;
       });
     }
-    if(paramName_4.toString() != ""){
+    if (paramName_4.toString() != "") {
       setState(() {
-        paramCount=5;
+        paramCount = 5;
       });
     }
 
@@ -1539,7 +1650,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "TOKEN : ${data}");
@@ -1553,14 +1664,12 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           showToastMessage(somethingWrong);
         }
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
       showToastMessage(status500);
     }
-
-
   }
 
   Future getBillerDetails() async {
@@ -1575,8 +1684,6 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
     });
 
     var userToken = await getToken();
-
-
 
     var headers = {
       "Content-Type": "application/json",
@@ -1597,8 +1704,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       "val_4": "$paramThird",
       "param_5": "$paramName_4",
       "val_5": "$paramFourth",
-      "refId":"$finalString",
-      "param_count":"$paramCount"
+      "refId": "$finalString",
+      "param_count": "$paramCount"
     };
 
     printMessage(screen, "body : $body");
@@ -1608,7 +1715,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "data : ${data}");
@@ -1623,15 +1730,16 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
               setState(() {
                 showDetails = true;
               });
-              requestTimeStamp =
-                  data['fetch_details']['payload']['requestTimeStamp'].toString();
+              requestTimeStamp = data['fetch_details']['payload']
+                      ['requestTimeStamp']
+                  .toString();
 
               refId = data['fetch_details']['payload']['refId'].toString();
 
               actualRechargeAmount =
                   data['fetch_details']['payload']['amount'].toString();
               accountHolderName = data['fetch_details']['payload']
-              ['accountHolderName']
+                      ['accountHolderName']
                   .toString();
               dueDate = data['fetch_details']['payload']['dueDate'].toString();
               getBillDate =
@@ -1639,12 +1747,12 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
               if (billerName.toString() == "Bharat Gas (BPCL)") {
                 distributName = data['fetch_details']['payload']
-                ['additionalParams']['Distributor Name']
+                        ['additionalParams']['Distributor Name']
                     .toString();
               }
 
               var additional =
-              data['fetch_details']['payload']['additionalParams'];
+                  data['fetch_details']['payload']['additionalParams'];
 
               printMessage(screen, "Additionl : ${additional.length}");
 
@@ -1670,7 +1778,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
             } else {
               setState(() {
                 var reason =
-                data['fetch_details']['payload']['errors'][0]['reason'];
+                    data['fetch_details']['payload']['errors'][0]['reason'];
                 showToastMessage(reason.toString());
                 showDetails = false;
               });
@@ -1688,16 +1796,13 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           });
         }
       });
-    }else{
+    } else {
       setState(() {
         showDetails = false;
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
-
   }
 
   _buildCardSection() {
@@ -1786,7 +1891,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -1820,7 +1926,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -1862,7 +1969,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -1890,7 +1998,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -1924,7 +2033,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -2024,8 +2134,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                 isWallMore = true;
               });
               var id = DateTime.now().millisecondsSinceEpoch;
-              if(isWelcomeOffer){
-                rechargeValue = rechargeValue -welcomeCharge;
+              if (isWelcomeOffer) {
+                rechargeValue = rechargeValue - welcomeCharge;
               }
               paymentByWallet(id, rechargeValue);
             } else {
@@ -2033,19 +2143,17 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                 isWallMore = false;
               });
 
-
               setState(() {
-
                 printMessage(screen, "walletValue : $walletValue");
 
                 /*if (isWelcomeOffer) {
                   remainAmt = remainAmt - welcomeCharge;
                 }*/
-               // remainAmt = remainAmt - walletValue;
+                // remainAmt = remainAmt - walletValue;
               });
               var id = DateTime.now().millisecondsSinceEpoch;
 
-              createOrderForUPI(id,remainAmt);
+              createOrderForUPI(id, remainAmt);
             }
           } else {
             setState(() {
@@ -2167,8 +2275,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                     isWallMore = true;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  if(isWelcomeOffer){
-                    rechargeValue = rechargeValue -welcomeCharge;
+                  if (isWelcomeOffer) {
+                    rechargeValue = rechargeValue - welcomeCharge;
                   }
 
                   printMessage(screen, "rechargeValue : $rechargeValue");
@@ -2379,7 +2487,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
             ),
             Spacer(),
             Text(
-              "$rupeeSymbol 5.00",
+              "$rupeeSymbol 1.20",
               style: TextStyle(color: green, fontSize: font14.sp),
             ),
             SizedBox(
@@ -2409,9 +2517,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
     };
 
     var xx = 0.0;
-    if(isWelcomeOffer){
-      xx= double.parse(actualRechargeAmount) - welcomeCharge;
-    }else {
+    if (isWelcomeOffer) {
+      xx = double.parse(actualRechargeAmount) - welcomeCharge;
+    } else {
       xx = double.parse(actualRechargeAmount);
     }
 
@@ -2443,7 +2551,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       "referenceId": "",
       "welcome_amount":
           (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
-      "param_count":"$paramCount"
+      "param_count": "$paramCount"
     };
 
     printMessage(screen, "body : $body");
@@ -2453,28 +2561,29 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Pay Wallet Response : $data");
 
       setState(() {
         Navigator.pop(context);
-        if(data['status'].toString()=="1" || data['status'].toString().toUpperCase()=="SUCCESS"){
+        if (data['status'].toString() == "1" ||
+            data['status'].toString().toUpperCase() == "SUCCESS") {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
             var status = data['transction']['status'];
             var requestTimeStamp =
-            data['transction']['payload']['requestTimeStamp'];
+                data['transction']['payload']['requestTimeStamp'];
             var paidAmount = data['transction']['payload']['paidAmount'];
             var refId = data['transction']['payload']['refId'];
             var message = data['transction']['payload']['message'];
             var billerId = data['transction']['payload']['billerId'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
             var billerReferenceNumber = data['transction']['payload']
-            ['additionalParams']['billerReferenceNumber'];
+                ['additionalParams']['billerReferenceNumber'];
 
             Map map = {
               "txStatus": "$status",
@@ -2489,16 +2598,16 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
               "commission": "$commission"
             };
             openPaymentSuccess(context, map, true);
-          }
-          else {
+          } else {
             var status = data['status'];
             var reason = data['transction']['payload']['errors'][0]['reason'];
-            var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+            var errorCode =
+                data['transction']['payload']['errors'][0]['errorCode'];
             var refId = data['transction']['payload']['refId'];
             var type = data['transction']['payload']['type'];
             var message = data['transction']['payload']['message'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
 
             Map map = {
               "txStatus": "$status",
@@ -2514,22 +2623,19 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
             openPaymentFailure(context, map);
           }
-        }else{
+        } else {
           showToastMessage(data['message'].toString());
         }
-
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
-  createOrderForUPI(id,rechargeValue) async {
+  createOrderForUPI(id, rechargeValue) async {
     setState(() {
       showDialog(
           barrierDismissible: false,
@@ -2664,9 +2770,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2770,18 +2876,17 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       "referenceId": "$referenceId",
       "welcome_amount":
           (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
-      "param_count":"$paramCount"
+      "param_count": "$paramCount"
     };
 
     printMessage(screen, "Response Body : $body");
-
 
     final response = await http.post(Uri.parse(billPayAPI),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Payment By UPI Response : $data");
@@ -2793,15 +2898,15 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           var commission = data['commission'];
           var status = data['transction']['status'];
           var requestTimeStamp =
-          data['transction']['payload']['requestTimeStamp'];
+              data['transction']['payload']['requestTimeStamp'];
           var paidAmount = data['transction']['payload']['paidAmount'];
           var refId = data['transction']['payload']['refId'];
           var message = data['transction']['payload']['message'];
           var billerId = data['transction']['payload']['billerId'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
           var billerReferenceNumber = data['transction']['payload']
-          ['additionalParams']['billerReferenceNumber'];
+              ['additionalParams']['billerReferenceNumber'];
 
           Map map = {
             "txStatus": "$status",
@@ -2819,12 +2924,13 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
         } else {
           var status = data['status'];
           var reason = data['transction']['payload']['errors'][0]['reason'];
-          var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+          var errorCode =
+              data['transction']['payload']['errors'][0]['errorCode'];
           var refId = data['transction']['payload']['refId'];
           var type = data['transction']['payload']['type'];
           var message = data['transction']['payload']['message'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
 
           Map map = {
             "txStatus": "$status",
@@ -2840,14 +2946,12 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           openPaymentFailure(context, map);
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   createOrderForUPIOnly(id, pgAmt) async {
@@ -2970,9 +3074,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -3103,9 +3207,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -3207,7 +3311,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       "referenceId": "$referenceId",
       "welcome_amount":
           (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
-      "param_count":"$paramCount"
+      "param_count": "$paramCount"
     };
 
     printMessage(screen, "body : $body");
@@ -3217,7 +3321,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "paymentByCard Response : $data");
@@ -3229,15 +3333,15 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           var commission = data['commission'];
           var status = data['transction']['status'];
           var requestTimeStamp =
-          data['transction']['payload']['requestTimeStamp'];
+              data['transction']['payload']['requestTimeStamp'];
           var paidAmount = data['transction']['payload']['paidAmount'];
           var refId = data['transction']['payload']['refId'];
           var message = data['transction']['payload']['message'];
           var billerId = data['transction']['payload']['billerId'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
           var billerReferenceNumber = data['transction']['payload']
-          ['additionalParams']['billerReferenceNumber'];
+              ['additionalParams']['billerReferenceNumber'];
 
           Map map = {
             "txStatus": "$status",
@@ -3255,12 +3359,13 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
         } else {
           var status = data['status'];
           var reason = data['transction']['payload']['errors'][0]['reason'];
-          var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+          var errorCode =
+              data['transction']['payload']['errors'][0]['errorCode'];
           var refId = data['transction']['payload']['refId'];
           var type = data['transction']['payload']['type'];
           var message = data['transction']['payload']['message'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
 
           Map map = {
             "txStatus": "$status",
@@ -3276,14 +3381,12 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           openPaymentFailure(context, map);
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   createOrderForFullCard(id, pgAmt) async {
@@ -3391,9 +3494,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByFullCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -3497,7 +3600,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
       "referenceId": "$referenceId",
       "welcome_amount":
           (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
-      "param_count":"$paramCount"
+      "param_count": "$paramCount"
     };
 
     printMessage(screen, "body : $body");
@@ -3507,7 +3610,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "FullCardPayment Response : $data");
@@ -3519,15 +3622,15 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           var commission = data['commission'];
           var status = data['transction']['status'];
           var requestTimeStamp =
-          data['transction']['payload']['requestTimeStamp'];
+              data['transction']['payload']['requestTimeStamp'];
           var paidAmount = data['transction']['payload']['paidAmount'];
           var refId = data['transction']['payload']['refId'];
           var message = data['transction']['payload']['message'];
           var billerId = data['transction']['payload']['billerId'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
           var billerReferenceNumber = data['transction']['payload']
-          ['additionalParams']['billerReferenceNumber'];
+              ['additionalParams']['billerReferenceNumber'];
 
           Map map = {
             "txStatus": "$status",
@@ -3545,12 +3648,13 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
         } else {
           var status = data['status'];
           var reason = data['transction']['payload']['errors'][0]['reason'];
-          var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+          var errorCode =
+              data['transction']['payload']['errors'][0]['errorCode'];
           var refId = data['transction']['payload']['refId'];
           var type = data['transction']['payload']['type'];
           var message = data['transction']['payload']['message'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
 
           Map map = {
             "txStatus": "$status",
@@ -3566,13 +3670,11 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
           openPaymentFailure(context, map);
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 }

@@ -28,6 +28,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 31
+    ndkVersion '21.3.6528147'
 
     buildFeatures {
         viewBinding true

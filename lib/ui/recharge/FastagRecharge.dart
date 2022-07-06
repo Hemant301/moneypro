@@ -16,7 +16,6 @@ import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:moneypro_new/utils/StateContainer.dart';
 
 class FastagRecharge extends StatefulWidget {
@@ -311,99 +310,104 @@ class _FastagRechargeState extends State<FastagRecharge> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-      backgroundColor: white,
-      appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
-      body: (loading)
-          ? Center(child: circularProgressLoading(40.0))
-          : SingleChildScrollView(
-              child: Column(
-              children: [
-                appSelectedBanner(context, "recharge_banner.png", 150.0.h),
-                _buildInputFields(),
-              ],
-            )),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: (showDetails)
-            ? _buildButtonSection()
-            : Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: 40.h,
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        border: Border.all(color: lightBlue)),
-                    child: InkWell(
-                      onTap: () {
-                        paramMain = paramNameController.text.toString();
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
+              body: (loading)
+                  ? Center(child: circularProgressLoading(40.0))
+                  : SingleChildScrollView(
+                      child: Column(
+                      children: [
+                        appSelectedBanner(
+                            context, "recharge_banner.png", 150.0.h),
+                        _buildInputFields(),
+                      ],
+                    )),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: (showDetails)
+                    ? _buildButtonSection()
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: 40.h,
+                            margin: EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 0),
+                            decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                border: Border.all(color: lightBlue)),
+                            child: InkWell(
+                              onTap: () {
+                                paramMain = paramNameController.text.toString();
 
-                        if (paramMain.toString().length == 0) {
-                          showToastMessage("Enter the $paramName");
-                          return;
-                        }
+                                if (paramMain.toString().length == 0) {
+                                  showToastMessage("Enter the $paramName");
+                                  return;
+                                }
 
-                        if (paramName_1.toString().length != 0) {
-                          paramFirst = param1Controller.text.toString();
-                          if (paramFirst.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_1");
-                            return;
-                          }
-                        }
+                                if (paramName_1.toString().length != 0) {
+                                  paramFirst = param1Controller.text.toString();
+                                  if (paramFirst.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_1");
+                                    return;
+                                  }
+                                }
 
-                        if (paramName_2.toString().length != 0) {
-                          paramSecond = param2Controller.text.toString();
-                          if (paramSecond.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_2");
-                            return;
-                          }
-                        }
+                                if (paramName_2.toString().length != 0) {
+                                  paramSecond =
+                                      param2Controller.text.toString();
+                                  if (paramSecond.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_2");
+                                    return;
+                                  }
+                                }
 
-                        if (paramName_3.toString().length != 0) {
-                          paramThird = param3Controller.text.toString();
-                          if (paramThird.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_3");
-                            return;
-                          }
-                        }
+                                if (paramName_3.toString().length != 0) {
+                                  paramThird = param3Controller.text.toString();
+                                  if (paramThird.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_3");
+                                    return;
+                                  }
+                                }
 
-                        if (paramName_4.toString().length != 0) {
-                          paramFourth = param4Controller.text.toString();
-                          if (paramFourth.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_4");
-                            return;
-                          }
-                        }
+                                if (paramName_4.toString().length != 0) {
+                                  paramFourth =
+                                      param4Controller.text.toString();
+                                  if (paramFourth.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_4");
+                                    return;
+                                  }
+                                }
 
-                        if (bbpsToken.toString() == "") {
-                          showToastMessage(somethingWrong);
-                          return;
-                        }
-                        closeKeyBoard(context);
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        getBillerDetails();
-                      },
-                      child: Center(
-                        child: Text(
-                          "$search",
-                          style: TextStyle(
-                            color: white,
-                            fontSize: font14.sp,
+                                if (bbpsToken.toString() == "") {
+                                  showToastMessage(somethingWrong);
+                                  return;
+                                }
+                                closeKeyBoard(context);
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                getBillerDetails();
+                              },
+                              child: Center(
+                                child: Text(
+                                  "$search",
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: font14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ),
-                ],
               ),
-      ),
-    )));
+            )));
   }
 
   _buildInputFields() {
@@ -671,6 +675,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
                       ),
                     ),
                     ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: keyPairList.length,
                       itemBuilder: (context, index) {
@@ -708,7 +713,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                         padding: const EdgeInsets.only(
                             left: 15.0, right: 15, top: 10, bottom: 10),
                         child: TextFormField(
-                          style: TextStyle(color: black, fontSize: inputFont.sp),
+                          style:
+                              TextStyle(color: black, fontSize: inputFont.sp),
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           textCapitalization: TextCapitalization.characters,
@@ -725,16 +731,19 @@ class _FastagRechargeState extends State<FastagRecharge> {
                             if (val.length != 0) {
                               enableWelcomeOffer(val.toString());
                               calculateCharge(val.toString());
+                              calculatewelcomeCharge(val.toString());
                             }
                           },
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 30.0, right: 30, top: 5),
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 5),
                       child: Text(
                         "Min recharge amount is $rupeeSymbol $minLimit and Max recharge amount is $rupeeSymbol ${widget.map['maxLimit']}",
-                        style: TextStyle(color: lightBlack, fontSize: font12.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font12.sp),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -745,136 +754,151 @@ class _FastagRechargeState extends State<FastagRecharge> {
                           const EdgeInsets.only(top: 10.0, right: 30, left: 30),
                       child: Text(
                         billMsg,
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
-                    (mainWallet.toString()=="0" || mainWallet.toString()=="0.0"|| mainWallet.toString()=="null")?Container():  Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            debitFrom,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font14.sp,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                  value: checkedValue,
-                                  onChanged: (val) async {
-                                    double walletValue = 0;
-                                    double rechargeValue = 0;
-                                   // double remainAmt = 0;
-                                    var mpBalc = await getWalletBalance();
+                    (mainWallet.toString() == "0" ||
+                            mainWallet.toString() == "0.0" ||
+                            mainWallet.toString() == "null")
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, right: 30, left: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  debitFrom,
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font14.sp,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                        value: checkedValue,
+                                        onChanged: (val) async {
+                                          double walletValue = 0;
+                                          double rechargeValue = 0;
+                                          // double remainAmt = 0;
+                                          var mpBalc = await getWalletBalance();
 
-                                    setState(() {
-                                      if (mpBalc.toString() == "") {
-                                        walletValue = 0;
-                                      } else {
-                                        walletValue = double.parse(mpBalc);
-                                      }
-                                      var amt =
-                                          partialAmtController.text.toString();
+                                          setState(() {
+                                            if (mpBalc.toString() == "") {
+                                              walletValue = 0;
+                                            } else {
+                                              walletValue =
+                                                  double.parse(mpBalc);
+                                            }
+                                            var amt = partialAmtController.text
+                                                .toString();
 
-                                      if (amt.toString() == "") {
-                                        showToastMessage("enter the amount");
-                                        return;
-                                      } else {
-                                        checkedValue = val!;
-                                        rechargeValue = double.parse(amt);
-                                      }
-                                    });
+                                            if (amt.toString() == "") {
+                                              showToastMessage(
+                                                  "enter the amount");
+                                              return;
+                                            } else {
+                                              checkedValue = val!;
+                                              rechargeValue = double.parse(amt);
+                                            }
+                                          });
 
-                                    if(isWelcomeOffer){
-                                      setState(() {
-                                        remainAmt = rechargeValue;
-                                        remainAmt = remainAmt - welcomeCharge;
+                                          if (isWelcomeOffer) {
+                                            setState(() {
+                                              remainAmt = rechargeValue;
+                                              remainAmt =
+                                                  remainAmt - welcomeCharge;
+                                            });
+                                          }
 
-                                      });
-                                    }
+                                          printMessage(screen,
+                                              "walletValue $walletValue");
+                                          printMessage(screen,
+                                              "rechargeValue $rechargeValue");
+                                          printMessage(
+                                              screen, "remainAmt $remainAmt");
 
-                                    printMessage(screen, "walletValue $walletValue");
-                                    printMessage(screen, "rechargeValue $rechargeValue");
-                                    printMessage(screen, "remainAmt $remainAmt");
-
-                                    if(walletValue<remainAmt){
-                                      setState(() {
-                                        isAmtMore = false;
-                                      });
-                                      printMessage(screen, "Case 1");
-                                      remainAmt = remainAmt-walletValue;
-                                    }else{
-                                      printMessage(screen, "Case 2");
-                                      setState(() {
-                                        isAmtMore = true;
-                                      });
-                                      remainAmt = walletValue-remainAmt;
-                                      if(remainAmt<1){
-                                        remainAmt = 0;
-                                      }
-                                    }
-                                    printMessage(screen, "final remainAmt $remainAmt");
-
-                                  }),
-                              Text(
-                                "$wallet",
-                                style:
-                                    TextStyle(fontSize: font14.sp, color: black),
-                              ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: walletBg,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(color: walletBg)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, top: 5, bottom: 5),
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Image.asset(
-                                        "assets/wallet.png",
-                                        height: 24.h,
-                                      ),
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 5),
-                                          child: Text(
-                                            //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
-                                            "$moneyProBalc",
-                                            style: TextStyle(
-                                                color: white, fontSize: font15.sp),
-                                          ),
+                                          if (walletValue < remainAmt) {
+                                            setState(() {
+                                              isAmtMore = false;
+                                            });
+                                            printMessage(screen, "Case 1");
+                                            remainAmt = remainAmt - walletValue;
+                                          } else {
+                                            printMessage(screen, "Case 2");
+                                            setState(() {
+                                              isAmtMore = true;
+                                            });
+                                            remainAmt = walletValue - remainAmt;
+                                            if (remainAmt < 1) {
+                                              remainAmt = 0;
+                                            }
+                                          }
+                                          printMessage(screen,
+                                              "final remainAmt $remainAmt");
+                                        }),
+                                    Text(
+                                      "$wallet",
+                                      style: TextStyle(
+                                          fontSize: font14.sp, color: black),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          color: walletBg,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          border: Border.all(color: walletBg)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 5, bottom: 5),
+                                        child: Wrap(
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Image.asset(
+                                              "assets/wallet.png",
+                                              height: 24.h,
+                                            ),
+                                            Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 5),
+                                                child: Text(
+                                                  //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
+                                                  "$moneyProBalc",
+                                                  style: TextStyle(
+                                                      color: white,
+                                                      fontSize: font15.sp),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                                (!isAmtMore && remainAmt != 0 && checkedValue)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: Text(
+                                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font14.sp),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
                           ),
-                          (!isAmtMore &&remainAmt != 0 && checkedValue)
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                                    style: TextStyle(
-                                        color: black, fontSize: font14.sp),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
                   ],
                 )
               : Container(),
@@ -919,7 +943,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "TOKEN : ${data}");
@@ -933,14 +957,12 @@ class _FastagRechargeState extends State<FastagRecharge> {
           showToastMessage(somethingWrong);
         }
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
       showToastMessage(status500);
     }
-
-
   }
 
   Future getBillerDetails() async {
@@ -986,7 +1008,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "data : ${data}");
@@ -1002,11 +1024,12 @@ class _FastagRechargeState extends State<FastagRecharge> {
                 showDetails = true;
               });
               refId = data['fetch_details']['payload']['refId'].toString();
-              requestTimeStamp =
-                  data['fetch_details']['payload']['requestTimeStamp'].toString();
+              requestTimeStamp = data['fetch_details']['payload']
+                      ['requestTimeStamp']
+                  .toString();
               recmmAmt = data['fetch_details']['payload']['amount'].toString();
               accountHolderName = data['fetch_details']['payload']
-              ['accountHolderName']
+                      ['accountHolderName']
                   .toString();
               dueDate = data['fetch_details']['payload']['dueDate'].toString();
               getBillDate =
@@ -1020,18 +1043,16 @@ class _FastagRechargeState extends State<FastagRecharge> {
               });
 
               fastTagBalance = data['fetch_details']['payload']
-              ['additionalParams']['Fast Tag Balance']
+                      ['additionalParams']['Fast Tag Balance']
                   .toString();
-              vehicleModel = data['fetch_details']['payload']['additionalParams']
-              ['Vehicle Model']
+              vehicleModel = data['fetch_details']['payload']
+                      ['additionalParams']['Vehicle Model']
                   .toString();
               printMessage(screen, "keyPairList : ${keyPairList.length}");
-
-
             } else {
               setState(() {
                 var reason =
-                data['fetch_details']['payload']['errors'][0]['reason'];
+                    data['fetch_details']['payload']['errors'][0]['reason'];
                 showToastMessage(reason.toString());
                 showDetails = false;
               });
@@ -1049,30 +1070,27 @@ class _FastagRechargeState extends State<FastagRecharge> {
           });
         }
       });
-    }else{
+    } else {
       setState(() {
         showDetails = false;
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
-  enableWelcomeOffer(amount){
+  enableWelcomeOffer(amount) {
     setState(() {
       if (welcomeAMT.toString() == "null" ||
           welcomeAMT.toString() == "0" ||
           welcomeAMT.toString() == "") {
         isWelcomeOffer = false;
       } else {
-
         var x = double.parse(amount.toString());
 
-        if(x>99){
+        if (x > 99) {
           isWelcomeOffer = true;
-        }else{
+        } else {
           isWelcomeOffer = false;
         }
       }
@@ -1123,8 +1141,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
             if (minLimit.toString() != "null" && minLimit.toString() != "") {
               double minDb = double.parse(minLimit);
               if (actualAmt < minDb) {
-                showToastMessage(
-                    "Minimum recharge is $rupeeSymbol $minLimit");
+                showToastMessage("Minimum recharge is $rupeeSymbol $minLimit");
                 return;
               }
             }
@@ -1139,7 +1156,6 @@ class _FastagRechargeState extends State<FastagRecharge> {
             }
 
             if (checkedValue) {
-
               if (isWelcomeOffer) {
                 actualAmt = actualAmt - welcomeCharge;
               }
@@ -1318,7 +1334,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -1352,7 +1369,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -1394,7 +1412,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -1422,7 +1441,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -1456,7 +1476,8 @@ class _FastagRechargeState extends State<FastagRecharge> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -1561,10 +1582,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
                 actualRechargeAmount = amt;
 
-
-
                 if (checkedValue) {
-
                   if (isWelcomeOffer) {
                     actualAmt = actualAmt - welcomeCharge;
                   }
@@ -1603,7 +1621,6 @@ class _FastagRechargeState extends State<FastagRecharge> {
                         showToastMessage("Enter card cvv");
                         return;
                       }
-
 
                       if (isWelcomeOffer) {
                         remainAmt = actualAmt - welcomeCharge;
@@ -1733,6 +1750,24 @@ class _FastagRechargeState extends State<FastagRecharge> {
     printMessage(screen, "cardCharge : ${formatNow.format(cardCharge)}");
   }
 
+  calculatewelcomeCharge(amount) {
+    double v1 = 0.25;
+    double v2 = double.parse(amount);
+    double v3 = 100;
+
+    double v4 = (v2 / v3) * v1;
+
+    // if (v4 > 20) {
+    //   welcomeCharge = 20.0;
+    // } else {
+    //   welcomeCharge = v4;
+    // }
+    welcomeCharge = v4;
+
+    printMessage(screen, "v4 : ${formatNow.format(v4)}");
+    printMessage(screen, "welcomecharge : ${formatNow.format(cardCharge)}");
+  }
+
   calculateCardCheckCharge(amount) {
     double v1 = 0.9;
     double v3 = 100;
@@ -1836,14 +1871,12 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     printMessage(screen, "body : $body");
 
-
     final response = await http.post(Uri.parse(billPayAPI),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
-
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Pay Wallet Response : $data");
@@ -1851,23 +1884,23 @@ class _FastagRechargeState extends State<FastagRecharge> {
       setState(() {
         Navigator.pop(context);
 
-        if(data['status'].toString()=="0"){
+        if (data['status'].toString() == "0") {
           showToastMessage(data['message'].toString());
-        }else{
+        } else {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
             var status = data['transction']['status'];
             var requestTimeStamp =
-            data['transction']['payload']['requestTimeStamp'];
+                data['transction']['payload']['requestTimeStamp'];
             var paidAmount = data['transction']['payload']['paidAmount'];
             var refId = data['transction']['payload']['refId'];
             var message = data['transction']['payload']['message'];
             var billerId = data['transction']['payload']['billerId'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
             var billerReferenceNumber = data['transction']['payload']
-            ['additionalParams']['billerReferenceNumber'];
+                ['additionalParams']['billerReferenceNumber'];
 
             Map map = {
               "txStatus": "$status",
@@ -1882,16 +1915,16 @@ class _FastagRechargeState extends State<FastagRecharge> {
               "commission": "$commission"
             };
             openPaymentSuccess(context, map, true);
-          }
-          else {
+          } else {
             var status = data['status'];
             var reason = data['transction']['payload']['errors'][0]['reason'];
-            var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+            var errorCode =
+                data['transction']['payload']['errors'][0]['errorCode'];
             var refId = data['transction']['payload']['refId'];
             var type = data['transction']['payload']['type'];
             var message = data['transction']['payload']['message'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
 
             Map map = {
               "txStatus": "$status",
@@ -1908,16 +1941,13 @@ class _FastagRechargeState extends State<FastagRecharge> {
             openPaymentFailure(context, map);
           }
         }
-
-
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
   }
 
   createOrderForUPI(id) async {
@@ -1937,14 +1967,11 @@ class _FastagRechargeState extends State<FastagRecharge> {
       "x-client-secret": "$cashFreeSecretKey"
     };
 
-
-
     var body = {
       "orderId": "$id",
       "orderAmount": "$remainAmt",
       "orderCurrency": "INR"
     };
-
 
     final response = await http.post(Uri.parse(cashFreeTokenAPI),
         body: json.encode(body), headers: headers);
@@ -2056,9 +2083,9 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2174,7 +2201,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Payment By UPI Response : $data");
@@ -2182,23 +2209,23 @@ class _FastagRechargeState extends State<FastagRecharge> {
       setState(() {
         Navigator.pop(context);
 
-        if(data['status'].toString()=="0"){
+        if (data['status'].toString() == "0") {
           showToastMessage(data['message'].toString());
-        }else{
+        } else {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
             var status = data['transction']['status'];
             var requestTimeStamp =
-            data['transction']['payload']['requestTimeStamp'];
+                data['transction']['payload']['requestTimeStamp'];
             var paidAmount = data['transction']['payload']['paidAmount'];
             var refId = data['transction']['payload']['refId'];
             var message = data['transction']['payload']['message'];
             var billerId = data['transction']['payload']['billerId'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
             var billerReferenceNumber = data['transction']['payload']
-            ['additionalParams']['billerReferenceNumber'];
+                ['additionalParams']['billerReferenceNumber'];
 
             Map map = {
               "txStatus": "$status",
@@ -2216,12 +2243,13 @@ class _FastagRechargeState extends State<FastagRecharge> {
           } else {
             var status = data['status'];
             var reason = data['transction']['payload']['errors'][0]['reason'];
-            var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+            var errorCode =
+                data['transction']['payload']['errors'][0]['errorCode'];
             var refId = data['transction']['payload']['refId'];
             var type = data['transction']['payload']['type'];
             var message = data['transction']['payload']['message'];
-            var txnReferenceId =
-            data['transction']['payload']['additionalParams']['txnReferenceId'];
+            var txnReferenceId = data['transction']['payload']
+                ['additionalParams']['txnReferenceId'];
 
             Map map = {
               "txStatus": "$status",
@@ -2237,17 +2265,13 @@ class _FastagRechargeState extends State<FastagRecharge> {
             openPaymentFailure(context, map);
           }
         }
-
-
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   createOrderForUPIOnly(id, pgAmt) async {
@@ -2369,9 +2393,9 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2502,9 +2526,9 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2618,7 +2642,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "paymentByCard Response : $data");
@@ -2631,15 +2655,15 @@ class _FastagRechargeState extends State<FastagRecharge> {
           var commission = data['commission'];
           var status = data['transction']['status'];
           var requestTimeStamp =
-          data['transction']['payload']['requestTimeStamp'];
+              data['transction']['payload']['requestTimeStamp'];
           var paidAmount = data['transction']['payload']['paidAmount'];
           var refId = data['transction']['payload']['refId'];
           var message = data['transction']['payload']['message'];
           var billerId = data['transction']['payload']['billerId'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
           var billerReferenceNumber = data['transction']['payload']
-          ['additionalParams']['billerReferenceNumber'];
+              ['additionalParams']['billerReferenceNumber'];
 
           Map map = {
             "txStatus": "$status",
@@ -2657,12 +2681,13 @@ class _FastagRechargeState extends State<FastagRecharge> {
         } else {
           var status = data['status'];
           var reason = data['transction']['payload']['errors'][0]['reason'];
-          var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+          var errorCode =
+              data['transction']['payload']['errors'][0]['errorCode'];
           var refId = data['transction']['payload']['refId'];
           var type = data['transction']['payload']['type'];
           var message = data['transction']['payload']['message'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
 
           Map map = {
             "txStatus": "$status",
@@ -2678,14 +2703,12 @@ class _FastagRechargeState extends State<FastagRecharge> {
           openPaymentFailure(context, map);
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   createOrderForFullCard(id, pgAmt) async {
@@ -2793,9 +2816,9 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByFullCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2911,7 +2934,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "FullCardPayment Response : $data");
@@ -2923,15 +2946,15 @@ class _FastagRechargeState extends State<FastagRecharge> {
           var commission = data['commission'];
           var status = data['transction']['status'];
           var requestTimeStamp =
-          data['transction']['payload']['requestTimeStamp'];
+              data['transction']['payload']['requestTimeStamp'];
           var paidAmount = data['transction']['payload']['paidAmount'];
           var refId = data['transction']['payload']['refId'];
           var message = data['transction']['payload']['message'];
           var billerId = data['transction']['payload']['billerId'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
           var billerReferenceNumber = data['transction']['payload']
-          ['additionalParams']['billerReferenceNumber'];
+              ['additionalParams']['billerReferenceNumber'];
 
           Map map = {
             "txStatus": "$status",
@@ -2949,12 +2972,13 @@ class _FastagRechargeState extends State<FastagRecharge> {
         } else {
           var status = data['status'];
           var reason = data['transction']['payload']['errors'][0]['reason'];
-          var errorCode = data['transction']['payload']['errors'][0]['errorCode'];
+          var errorCode =
+              data['transction']['payload']['errors'][0]['errorCode'];
           var refId = data['transction']['payload']['refId'];
           var type = data['transction']['payload']['type'];
           var message = data['transction']['payload']['message'];
-          var txnReferenceId =
-          data['transction']['payload']['additionalParams']['txnReferenceId'];
+          var txnReferenceId = data['transction']['payload']['additionalParams']
+              ['txnReferenceId'];
 
           Map map = {
             "txStatus": "$status",
@@ -2970,13 +2994,11 @@ class _FastagRechargeState extends State<FastagRecharge> {
           openPaymentFailure(context, map);
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 }

@@ -300,12 +300,15 @@ String upiAddAPI = "$baseUrl/moneypay/api/upi-add";
 String hlrCheckAPI = "$baseUrl/moneypay/api/hlr-check";
 String fetchOperatorAPI = "$baseUrl/csp/api/operator-circle-fetch";
 
-String browsPlanAPI = "$baseUrl/moneypay/api/brows-plan";
+// String browsPlanAPI = "$baseUrl/moneypay/api/brows-plan";
+
 String fetchPlanAPI = "$baseUrl/csp/api/prepaid-plan-fetch";
 
 String operatorListPrepaidAPI = "$baseUrl/moneypay/api/operator-list-prepaid";
+String fetchoperatorListPrepaidAPI = "$baseUrl/csp/api/dth-biller-list";
 
 String doRechargePrepaidAPI = "$baseUrl/moneypay/api/do-recharge-prepaid";
+String doRechargeinstantPay = "$baseUrl/csp/api/bill-pay-instantpay";
 
 String statusEnqueryAPI = "$baseUrl/moneypay/api/status-enquery";
 

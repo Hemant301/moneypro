@@ -15,7 +15,6 @@ import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:moneypro_new/utils/StateContainer.dart';
 
 class RechargeFetchNo extends StatefulWidget {
@@ -100,7 +99,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
   var distributName = "";
 
   String welcomeAMT = "";
-  double welcomeCharge = 5.0;
+  double welcomeCharge = 1.20;
   var isWelcomeOffer = false;
 
   var actualRechargeAmount = "";
@@ -292,106 +291,111 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-      backgroundColor: white,
-      appBar: appBarHome(context, "assets/bbps_2.png", 24.0),
-      body: (loading)
-          ? Center(child: circularProgressLoading(40.0))
-          : SingleChildScrollView(
-              child: Stack(
-              children: [
-                appSelectedBanner(context, "recharge_banner.png", 150.0),
-                SizedBox(
-                  height: 40.h,
-                ),
-                _buildInputFields(),
-              ],
-            )),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: (showDetails)
-            ? _buildButtonSection()
-            : Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: 40.h,
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        border: Border.all(color: lightBlue)),
-                    child: InkWell(
-                      onTap: () {
-                        paramMain = paramNameController.text.toString();
-
-                        if (paramMain.toString().length == 0) {
-                          showToastMessage("Enter the $paramName");
-                          return;
-                        }
-
-                        if (paramName_1.toString().length != 0) {
-                          paramFirst = param1Controller.text.toString();
-                          if (paramFirst.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_1");
-                            return;
-                          }
-                        }
-
-                        if (paramName_2.toString().length != 0) {
-                          paramSecond = param2Controller.text.toString();
-                          if (paramSecond.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_2");
-                            return;
-                          }
-                        }
-
-                        if (paramName_3.toString().length != 0) {
-                          paramThird = param3Controller.text.toString();
-                          if (paramThird.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_3");
-                            return;
-                          }
-                        }
-
-                        if (paramName_4.toString().length != 0) {
-                          paramFourth = param4Controller.text.toString();
-                          if (paramFourth.toString().length == 0) {
-                            showToastMessage("Enter the $paramName_4");
-                            return;
-                          }
-                        }
-
-                        if (bbpsToken.toString() == "") {
-                          showToastMessage(somethingWrong);
-                          return;
-                        }
-                        closeKeyBoard(context);
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        //getBillerDetails();
-
-                        setState(() {
-                          showDetails = true;
-                        });
-                      },
-                      child: Center(
-                        child: Text(
-                          "$search",
-                          style: TextStyle(
-                            color: white,
-                            fontSize: font14.sp,
-                          ),
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: appBarHome(context, "assets/bbps_2.png", 24.0),
+              body: (loading)
+                  ? Center(child: circularProgressLoading(40.0))
+                  : SingleChildScrollView(
+                      child: Stack(
+                      children: [
+                        appSelectedBanner(
+                            context, "recharge_banner.png", 150.0),
+                        SizedBox(
+                          height: 40.h,
                         ),
+                        _buildInputFields(),
+                      ],
+                    )),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: (showDetails)
+                    ? _buildButtonSection()
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: 40.h,
+                            margin: EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 0),
+                            decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                border: Border.all(color: lightBlue)),
+                            child: InkWell(
+                              onTap: () {
+                                paramMain = paramNameController.text.toString();
+
+                                if (paramMain.toString().length == 0) {
+                                  showToastMessage("Enter the $paramName");
+                                  return;
+                                }
+
+                                if (paramName_1.toString().length != 0) {
+                                  paramFirst = param1Controller.text.toString();
+                                  if (paramFirst.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_1");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_2.toString().length != 0) {
+                                  paramSecond =
+                                      param2Controller.text.toString();
+                                  if (paramSecond.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_2");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_3.toString().length != 0) {
+                                  paramThird = param3Controller.text.toString();
+                                  if (paramThird.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_3");
+                                    return;
+                                  }
+                                }
+
+                                if (paramName_4.toString().length != 0) {
+                                  paramFourth =
+                                      param4Controller.text.toString();
+                                  if (paramFourth.toString().length == 0) {
+                                    showToastMessage("Enter the $paramName_4");
+                                    return;
+                                  }
+                                }
+
+                                if (bbpsToken.toString() == "") {
+                                  showToastMessage(somethingWrong);
+                                  return;
+                                }
+                                closeKeyBoard(context);
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                //getBillerDetails();
+
+                                setState(() {
+                                  showDetails = true;
+                                });
+                              },
+                              child: Center(
+                                child: Text(
+                                  "$search",
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: font14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ],
               ),
-      ),
-    )));
+            )));
   }
 
   _buildInputFields() {
@@ -637,127 +641,143 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                           const EdgeInsets.only(top: 10.0, right: 30, left: 30),
                       child: Text(
                         billMsg,
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
-                    (mainWallet.toString()=="0" || mainWallet.toString()=="0.0"|| mainWallet.toString()=="null")?Container(): Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            debitFrom,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font14.sp,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                  value: checkedValue,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      double walletValue = 0;
-                                      double rechargeValue = 0;
+                    (mainWallet.toString() == "0" ||
+                            mainWallet.toString() == "0.0" ||
+                            mainWallet.toString() == "null")
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, right: 30, left: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  debitFrom,
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font14.sp,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                        value: checkedValue,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            double walletValue = 0;
+                                            double rechargeValue = 0;
 
-                                      setState(() {
-                                        if (moneyProBalc.toString() == "") {
-                                          walletValue = 0;
-                                        } else {
-                                          walletValue =
-                                              double.parse(moneyProBalc);
-                                        }
+                                            setState(() {
+                                              if (moneyProBalc.toString() ==
+                                                  "") {
+                                                walletValue = 0;
+                                              } else {
+                                                walletValue =
+                                                    double.parse(moneyProBalc);
+                                              }
 
-                                        var rechargeAmount =
-                                            param1Controller.text.toString();
+                                              var rechargeAmount =
+                                                  param1Controller.text
+                                                      .toString();
 
-                                        if (rechargeAmount.toString() == "") {
-                                          rechargeValue = 0;
-                                        } else {
-                                          rechargeValue =
-                                              double.parse(rechargeAmount);
-                                        }
-                                      });
+                                              if (rechargeAmount.toString() ==
+                                                  "") {
+                                                rechargeValue = 0;
+                                              } else {
+                                                rechargeValue = double.parse(
+                                                    rechargeAmount);
+                                              }
+                                            });
 
-                                      if (walletValue < rechargeValue) {
-                                        setState(() {
-                                          remainAmt =
-                                              rechargeValue - walletValue;
-                                        });
-                                      }
+                                            if (walletValue < rechargeValue) {
+                                              setState(() {
+                                                remainAmt =
+                                                    rechargeValue - walletValue;
+                                              });
+                                            }
 
-                                      if (isWelcomeOffer) {
-                                        remainAmt = remainAmt - welcomeCharge;
-                                      }
+                                            if (isWelcomeOffer) {
+                                              remainAmt =
+                                                  remainAmt - welcomeCharge;
+                                            }
 
-                                      if (walletValue < 0) {
-                                        closeKeyBoard(context);
-                                        showToastMessage(
-                                            "Your wallet does not have enough balance");
-                                      } else {
-                                        closeKeyBoard(context);
-                                        checkedValue = val!;
-                                      }
-                                    });
-                                  }),
-                              Text(
-                                "$wallet",
-                                style:
-                                    TextStyle(fontSize: font14.sp, color: black),
-                              ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: walletBg,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(color: walletBg)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, top: 5, bottom: 5),
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Image.asset(
-                                        "assets/wallet.png",
-                                        height: 24.h,
-                                      ),
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 5),
-                                          child: Text(
-                                            //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
-                                            "$moneyProBalc",
-                                            style: TextStyle(
-                                                color: white, fontSize: font15.sp),
-                                          ),
+                                            if (walletValue < 0) {
+                                              closeKeyBoard(context);
+                                              showToastMessage(
+                                                  "Your wallet does not have enough balance");
+                                            } else {
+                                              closeKeyBoard(context);
+                                              checkedValue = val!;
+                                            }
+                                          });
+                                        }),
+                                    Text(
+                                      "$wallet",
+                                      style: TextStyle(
+                                          fontSize: font14.sp, color: black),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          color: walletBg,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          border: Border.all(color: walletBg)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 5, bottom: 5),
+                                        child: Wrap(
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Image.asset(
+                                              "assets/wallet.png",
+                                              height: 24.h,
+                                            ),
+                                            Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 5),
+                                                child: Text(
+                                                  //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
+                                                  "$moneyProBalc",
+                                                  style: TextStyle(
+                                                      color: white,
+                                                      fontSize: font15.sp),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                                (remainAmt != 0 && checkedValue)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: Text(
+                                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font14.sp),
+                                        ),
+                                      )
+                                    : Container(),
+                                (isWelcomeOffer)
+                                    ? _buildOfferRwo()
+                                    : Container(),
+                              ],
+                            ),
                           ),
-                          (remainAmt != 0 && checkedValue)
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                                    style: TextStyle(
-                                        color: black, fontSize: font14.sp),
-                                  ),
-                                )
-                              : Container(),
-                          (isWelcomeOffer) ? _buildOfferRwo() : Container(),
-                        ],
-                      ),
-                    ),
                   ],
                 )
               : Container(),
@@ -1157,7 +1177,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -1191,7 +1212,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -1233,7 +1255,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -1261,7 +1284,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -1295,7 +1319,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -1571,7 +1596,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
             ),
             Spacer(),
             Text(
-              "$rupeeSymbol 5.00",
+              "$rupeeSymbol 1.20",
               style: TextStyle(color: green, fontSize: font14.sp),
             ),
             SizedBox(
@@ -1644,7 +1669,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
       if (statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         printMessage(screen, "Pay Wallet Response : $data");
-        if (data['status'].toString() == "1" || data['status'].toString().toUpperCase()=="SUCCESS") {
+        if (data['status'].toString() == "1" ||
+            data['status'].toString().toUpperCase() == "SUCCESS") {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
@@ -1839,9 +1865,9 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -1963,7 +1989,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
 
         printMessage(screen, "Payment By UPI Response : $data");
-        if (data['status'].toString() == "1"|| data['status'].toString().toUpperCase()=="SUCCESS") {
+        if (data['status'].toString() == "1" ||
+            data['status'].toString().toUpperCase() == "SUCCESS") {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
@@ -2144,9 +2171,9 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByUPI(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2277,9 +2304,9 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2398,7 +2425,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
 
         printMessage(screen, "paymentByCard Response : $data");
-        if (data['status'].toString() == "1"|| data['status'].toString().toUpperCase()=="SUCCESS") {
+        if (data['status'].toString() == "1" ||
+            data['status'].toString().toUpperCase() == "SUCCESS") {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
@@ -2565,9 +2593,9 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentByFullCard(orderAmount, orderId, paymentMode, txTime, signature,
@@ -2688,7 +2716,8 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
 
         printMessage(screen, "FullCardPayment Response : $data");
-        if (data['status'].toString() == "1"|| data['status'].toString().toUpperCase()=="SUCCESS") {
+        if (data['status'].toString() == "1" ||
+            data['status'].toString().toUpperCase() == "SUCCESS") {
           var code = data['transction']['code'];
           if (code.toString() == "200") {
             var commission = data['commission'];
