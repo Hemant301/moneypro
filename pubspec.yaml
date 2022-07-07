@@ -73,7 +73,7 @@ dependencies:
   # bubble tab indicator
   bubble_tab_indicator: ^0.1.6
   # to get continuse location
-  location: ^4.3.0
+  location: ^4.4.0
   # pick images
   image_picker: ^0.8.4+4
   flutter_native_image: ^0.0.6+1
