@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 class MoreCategories extends StatefulWidget {
   final double lat, lng;
 
@@ -49,7 +48,6 @@ class _MoreCategoriesState extends State<MoreCategories>
     _animationController.repeat(reverse: true);
 
     setState(() {
-
       updateLat = widget.lat;
       updateLng = widget.lng;
     });
@@ -192,7 +190,7 @@ class _MoreCategoriesState extends State<MoreCategories>
                             height: 15.h,
                           ),
                           Expanded(
-                            flex:1,
+                            flex: 1,
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -201,8 +199,8 @@ class _MoreCategoriesState extends State<MoreCategories>
                                   (role == "3")
                                       ? _buildFinancialServices()
                                       : (role == "2")
-                                      ? _buildFinancialEmpServices()
-                                      : _buildFinancialUserServices(),
+                                          ? _buildFinancialEmpServices()
+                                          : _buildFinancialUserServices(),
                                   _buildCardPurchage(),
                                   _buildRentFees(),
                                   _buildTaxServices(),
@@ -214,7 +212,6 @@ class _MoreCategoriesState extends State<MoreCategories>
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
                     ))
@@ -457,7 +454,7 @@ class _MoreCategoriesState extends State<MoreCategories>
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: ColoredBox(
-                  color: Colors.blueAccent.withOpacity(0.45),
+                  color: Colors.blueAccent.withOpacity(1),
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 20.0, right: 20, top: 6, bottom: 6),
@@ -487,16 +484,15 @@ class _MoreCategoriesState extends State<MoreCategories>
 
   _buildBillPayment() {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top:20),
+        margin: EdgeInsets.only(left: 15, right: 15, top: 20),
         decoration: BoxDecoration(
             color: white,
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(color: bankBox)),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, top: 20),
                 child: Text(
@@ -830,7 +826,7 @@ class _MoreCategoriesState extends State<MoreCategories>
                                 child: Text(
                                   "Zero Surcharge",
                                   style: TextStyle(
-                                      color: black, fontSize: font12.sp),
+                                      color: black, fontSize: font10.sp),
                                   maxLines: 1,
                                 ),
                               ),
@@ -870,1717 +866,1714 @@ class _MoreCategoriesState extends State<MoreCategories>
                       )),
                 ],
               ),
-                  InkWell(
-                    onTap: () {
-                      //openAllOffers(context);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: ColoredBox(
-                        color: Colors.blueAccent.withOpacity(0.45),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 20, top: 6, bottom: 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "$rechTag",
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(color: white, fontSize: font12.sp),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: white,
-                                size: 12,
-                              )
-                            ],
+              InkWell(
+                onTap: () {
+                  //openAllOffers(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ColoredBox(
+                    color: Colors.blueAccent.withOpacity(1),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$rechTag",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: white, fontSize: font12.sp),
                           ),
-                        ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: white,
+                            size: 12,
+                          )
+                        ],
                       ),
                     ),
-                  )
+                  ),
+                ),
+              )
             ])));
   }
 
   _buildFinancialServices() {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top:20),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child:Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-      Padding(
-        padding:
-        const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
-        child: Text(
-          "Financial Services",
-          style: TextStyle(
-              color: black,
-              fontSize: font15.sp,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openLICDetails(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+        margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
+                child: Text(
+                  "Financial Services",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openLICDetails(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
+                          Container(
+                            color: Colors.yellow,
                             child: Padding(
-                              padding: const EdgeInsets.all(13.0),
-                              child: Image.asset(
-                                'assets/lic_new.png',
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
                               ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "LIC",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Image.asset(
+                                    'assets/lic_new.png',
+                                  ),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "LIC",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "INSURANCE", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "INSURANCE", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/insurancenew.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Insurance",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/insurancenew.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Insurance",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    if (role.toString() == "3") {
-                      openPancardLanding(context);
-                    } else {
-                      showToastMessage("$youNotAuthorize");
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        if (role.toString() == "3") {
+                          openPancardLanding(context);
+                        } else {
+                          showToastMessage("$youNotAuthorize");
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
+                          Container(
+                            color: Colors.yellow,
                             child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Image.asset(
-                                'assets/pancard.png',
-                                color: lightBlue,
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
                               ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "PAN card",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "LOAN", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/applyloan.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Loan Repayment",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15.h,
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    showToastMessage(comingSoon);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Image.asset(
+                                    'assets/pancard.png',
+                                    color: lightBlue,
+                                  ),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "PAN card",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/applyloan.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              applyLoan,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    showToastMessage(comingSoon);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "LOAN", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/giftcard.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              giftCard,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                            )),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/applyloan.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Loan Repayment",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        showToastMessage(comingSoon);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/applyloan.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  applyLoan,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        showToastMessage(comingSoon);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/giftcard.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  giftCard,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              InkWell(
+                onTap: () {
+                  //openAllOffers(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ColoredBox(
+                    color: Colors.blueAccent.withOpacity(1),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$fintag",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: white, fontSize: font12.sp),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: white,
+                            size: 12,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15.h,
-          ),
-          InkWell(
-            onTap: () {
-              //openAllOffers(context);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: ColoredBox(
-                color: Colors.blueAccent.withOpacity(0.45),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20.0, right: 20, top: 6, bottom: 6),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "$fintag",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: white, fontSize: font12.sp),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: white,
-                        size: 12,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ])));
+              )
+            ])));
   }
 
   _buildFinancialUserServices() {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top:20),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child:Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-      Padding(
-        padding:
-        const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
-        child: Text(
-          "Financial Services",
-          style: TextStyle(
-              color: black,
-              fontSize: font15.sp,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openLICDetails(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+        margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
+                child: Text(
+                  "Financial Services",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openLICDetails(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
+                          Container(
+                            color: Colors.yellow,
                             child: Padding(
-                              padding: const EdgeInsets.all(13.0),
-                              child: Image.asset(
-                                'assets/lic_new.png',
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
                               ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "LIC",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "INSURANCE", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/insurancenew.png',
-                              color: lightBlue,
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Image.asset(
+                                    'assets/lic_new.png',
+                                  ),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "LIC",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "INSURANCE", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/insurancenew.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Insurance",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "LOAN", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/applyloan.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Loan Repayment",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openAxisBankLanding(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                            color: Colors.yellow,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
+                              ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Insurance",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "LOAN", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/applyloan.png',
-                              color: lightBlue,
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/axis_logo.png',
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Axis Bank",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openUpStoxLanding(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                            color: Colors.yellow,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
+                              ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Loan Repayment",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/upstox_logo.png',
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Upstox Lead",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              InkWell(
+                onTap: () {
+                  //openAllOffers(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ColoredBox(
+                    color: Colors.blueAccent.withOpacity(1),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$fintag",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: white, fontSize: font12.sp),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: white,
+                            size: 12,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openAxisBankLanding(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/axis_logo.png',
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Axis Bank",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openUpStoxLanding(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/upstox_logo.png',
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Upstox Lead",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15.h,
-          ),
-          InkWell(
-            onTap: () {
-              //openAllOffers(context);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: ColoredBox(
-                color: Colors.blueAccent.withOpacity(0.45),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20.0, right: 20, top: 6, bottom: 6),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "$fintag",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: white, fontSize: font12.sp),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: white,
-                        size: 12,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ])));
+              )
+            ])));
   }
 
   _buildFinancialEmpServices() {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top:20),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-      Padding(
-        padding:
-        const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
-        child: Text(
-          "Financial Services",
-          style: TextStyle(
-              color: black,
-              fontSize: font15.sp,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openLICDetails(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+        margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
+                child: Text(
+                  "Financial Services",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openLICDetails(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
+                          Container(
+                            color: Colors.yellow,
                             child: Padding(
-                              padding: const EdgeInsets.all(13.0),
-                              child: Image.asset(
-                                'assets/lic_new.png',
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
                               ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "LIC",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Image.asset(
+                                    'assets/lic_new.png',
+                                  ),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "LIC",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "INSURANCE", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "INSURANCE", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/insurancenew.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Insurance",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/insurancenew.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Insurance",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    if (role.toString() == "3") {
-                      openPancardLanding(context);
-                    } else {
-                      showToastMessage("$youNotAuthorize");
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        if (role.toString() == "3") {
+                          openPancardLanding(context);
+                        } else {
+                          showToastMessage("$youNotAuthorize");
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
+                          Container(
+                            color: Colors.yellow,
                             child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Image.asset(
-                                'assets/pancard.png',
-                                color: lightBlue,
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
                               ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "PAN card",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "LOAN", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/applyloan.png',
-                              color: lightBlue,
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Image.asset(
+                                    'assets/pancard.png',
+                                    color: lightBlue,
+                                  ),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "PAN card",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "LOAN", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/applyloan.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Loan Repayment",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openAxisBankLanding(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Container(
+                            color: Colors.yellow,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
+                              ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Loan Repayment",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          ),
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/axis_logo.png',
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Axis Bank",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openAxisBankLanding(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openUpStoxLanding(context);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5.h,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/axis_logo.png',
+                          Container(
+                            color: Colors.yellow,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                              child: Text(
+                                "New",
+                                style: TextStyle(
+                                    color: black, fontSize: font12.sp),
+                                maxLines: 1,
+                              ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Axis Bank",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openUpStoxLanding(context);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Container(
-                        color: Colors.yellow,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "New",
-                            style: TextStyle(
-                                color: black, fontSize: font12.sp),
-                            maxLines: 1,
                           ),
-                        ),
-                      ),
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/upstox_logo.png',
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Upstox Lead",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/upstox_logo.png',
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Upstox Lead",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              InkWell(
+                onTap: () {
+                  //openAllOffers(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ColoredBox(
+                    color: Colors.blueAccent.withOpacity(1),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "$fintag",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: white, fontSize: font12.sp),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: white,
+                            size: 12,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-            ],
-          ),
-          SizedBox(height: 15.h,),
-          InkWell(
-            onTap: () {
-              //openAllOffers(context);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: ColoredBox(
-                color: Colors.blueAccent.withOpacity(0.45),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20.0, right: 20, top: 6, bottom: 6),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "$fintag",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: white, fontSize: font12.sp),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: white,
-                        size: 12,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ])));
+              )
+            ])));
   }
 
   _buildCardPurchage() {
     return Container(
         margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-      Padding(
-        padding:
-        const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
-        child: Text(
-          "Cards & Purchase",
-          style: TextStyle(
-              color: black,
-              fontSize: font15.sp,
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    showToastMessage(comingSoon);
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/gift_card.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Moneypro Gift Card",
-                          style: TextStyle(color: black, fontSize: font11.sp),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
+                child: Text(
+                  "Cards & Purchase",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    showToastMessage(somethingWrong);
-                    // checkCardStatus();
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/debitcard.png',
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        showToastMessage(comingSoon);
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/gift_card.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "My Card",
+                              "Moneypro Gift Card",
                               style:
                                   TextStyle(color: black, fontSize: font11.sp),
                               textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "SUBSCRIPTION", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/subscribe.png',
-                              color: lightBlue,
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Subscriptions",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        showToastMessage(somethingWrong);
+                        // checkCardStatus();
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/debitcard.png',
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "My Card",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "SUBSCRIPTION", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/subscribe.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Subscriptions",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 1,
-                child: Container(),
+              SizedBox(
+                height: 15.h,
               ),
-            ],
-          ),
-          SizedBox(height: 15.h,),
-        ])));
+            ])));
   }
 
   _buildRentFees() {
     return Container(
         margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.only(left: 20.0, top: 20, bottom: 20),
-            child: Text(
-              "Rent & Fees",
-              style: TextStyle(
-                  color: black,
-                  fontSize: font15.sp,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "EDUCATION", "board", "Board");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/education.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              education,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 20),
+                child: Text(
+                  "Rent & Fees",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "HOUSING SOCIETY", "soecity", "Soecity");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "EDUCATION", "board", "Board");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/education.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  education,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/housing.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              housingSociety,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(context, "CLUBS AND ASSOCIATIONS",
-                        "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "HOUSING SOCIETY", "soecity", "Soecity");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/housing.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  housingSociety,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/night_club.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              club,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "APARTMENT", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(context, "CLUBS AND ASSOCIATIONS",
+                            "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/night_club.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  club,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/apartment.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Apartments",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "APARTMENT", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/apartment.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Apartments",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 15.h,),
-        ])));
+              SizedBox(
+                height: 15.h,
+              ),
+            ])));
   }
 
   _buildTaxServices() {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top:15),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child:Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.only(left: 30.0, top: 20, bottom: 10),
-            child: Text(
-              "Taxes & Others",
-              style: TextStyle(
-                  color: black,
-                  fontSize: font15.sp,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "MUNICIPAL SERVICES", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/muncipl_services.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              muncipalServices,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
+        margin: EdgeInsets.only(left: 15, right: 15, top: 15),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 20, bottom: 10),
+                child: Text(
+                  "Taxes & Others",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "MUNICIPAL TAXES", "board", "Board");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(context, "MUNICIPAL SERVICES",
+                            "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/muncipl_services.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  muncipalServices,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/munciple.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              muncipleTax,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "HOSPITAL", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "MUNICIPAL TAXES", "board", "Board");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/munciple.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  muncipleTax,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/hospital.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              hospital,
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "HOSPITAL", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/hospital.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  hospital,
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(),
+                    flex: 1,
+                  ),
+                ],
               ),
-              Expanded(
-                child: Container(),
-                flex: 1,
+              SizedBox(
+                height: 15.h,
               ),
-            ],
-          ),
-          SizedBox(height: 15.h,),
-        ])));
+            ])));
   }
 
   _buildTravelServices() {
     return Container(
         margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-    decoration: BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    border: Border.all(color: bankBox)),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(20.0),
-    child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
-            child: Text(
-              "Travel",
-              style: TextStyle(
-                  color: black,
-                  fontSize: font15.sp,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    //openRechargeSelection(context, "MUNICIPAL SERVICES", "Company", "Company");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/brandvoucher.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Mumbai Metro",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
-                      ),
-                    ],
-                  ),
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(color: bankBox)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 20, bottom: 10),
+                child: Text(
+                  "Travel",
+                  style: TextStyle(
+                      color: black,
+                      fontSize: font15.sp,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "TRAVEL-SUB", "board", "Board");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        //openRechargeSelection(context, "MUNICIPAL SERVICES", "Company", "Company");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/brandvoucher.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Mumbai Metro",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/munciple.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Travel Sub",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    openRechargeSelection(
-                        context, "TRANSIT CARD", "board", "Board");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 55.h,
-                          width: 55.w,
-                          decoration: BoxDecoration(
-                            color: boxBg, // border color
-                            shape: BoxShape.circle,
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "TRAVEL-SUB", "board", "Board");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/munciple.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Travel Sub",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Image.asset(
-                              'assets/munciple.png',
-                              color: lightBlue,
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(
-                              "Transit Cards",
-                              style:
-                                  TextStyle(color: black, fontSize: font11.sp),
-                              textAlign: TextAlign.center,
-                            )),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        openRechargeSelection(
+                            context, "TRANSIT CARD", "board", "Board");
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                color: boxBg, // border color
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(
+                                  'assets/munciple.png',
+                                  color: lightBlue,
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  "Transit Cards",
+                                  style: TextStyle(
+                                      color: black, fontSize: font11.sp),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(),
+                    flex: 1,
+                  ),
+                ],
               ),
-              Expanded(
-                child: Container(),
-                flex: 1,
+              SizedBox(
+                height: 15.h,
               ),
-            ],
-          ),
-          SizedBox(height: 15.h,),
-        ])));
+            ])));
   }
 
   _buildOtherServices() {

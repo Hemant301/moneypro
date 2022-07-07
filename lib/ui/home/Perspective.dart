@@ -1094,11 +1094,11 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                             color: Colors.yellow,
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 3.0, right: 3, top: 1, bottom: 1),
+                                  left: 3.0, right: 1, top: 1, bottom: 1),
                               child: Text(
-                                "10% Cashback",
+                                "Earn Cashback",
                                 style: TextStyle(
-                                    color: black, fontSize: font12.sp),
+                                    color: black, fontSize: font10.sp),
                                 maxLines: 1,
                               ),
                             ),
@@ -1476,7 +1476,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: ColoredBox(
-                  color: Colors.blueAccent.withOpacity(0.45),
+                  color: Colors.blueAccent.withOpacity(1),
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 20.0, right: 20, top: 6, bottom: 6),
@@ -2154,7 +2154,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             Container(
               width: MediaQuery.of(context).size.width,
               child: ColoredBox(
-                color: Colors.blueAccent.withOpacity(0.45),
+                color: Colors.blueAccent.withOpacity(1),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 20.0, right: 20, top: 6, bottom: 6),
