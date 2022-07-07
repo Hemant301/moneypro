@@ -14,17 +14,18 @@ import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:moneypro_new/utils/StateContainer.dart';
 
 class DTHSelectNew extends StatefulWidget {
   final String category;
   final String searchBy;
   final String selectBy;
-  const DTHSelectNew({Key? key,
-    required this.category,
-    required this.searchBy,
-    required this.selectBy}) : super(key: key);
+  const DTHSelectNew(
+      {Key? key,
+      required this.category,
+      required this.searchBy,
+      required this.selectBy})
+      : super(key: key);
 
   @override
   _DTHSelectNewState createState() => _DTHSelectNewState();
@@ -41,11 +42,10 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
 
   List<ResentList> resentList = [];
 
-  List<OperatorNames> operatorsNameList=[];
-  List<OperatorNames> operatorsNameFiltered=[];
+  List<OperatorNames> operatorsNameList = [];
+  List<OperatorNames> operatorsNameFiltered = [];
 
   var localState = "";
-
 
   @override
   void initState() {
@@ -110,33 +110,33 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-            backgroundColor: white,
-            appBar: appBarHome(context, "assets/bbps_2.png", 24.0),
-            body: (loading)
-                ? Center(child: circularProgressLoading(40.0))
-                : SingleChildScrollView(
-              child: Column(
-                children: [
-                  (operatorsNameList.length == 0)
-                      ? Container()
-                      : _searchByBoard(),
-                  (showSearchResult)
-                      ? (operatorsNameFiltered.length == 0)
-                      ? NoDataFound(text: "No result found")
-                      : _buildFilteredtList()
-                      : (operatorsNameList.length == 0)
-                      ? NoDataFound(text: "No result found")
-                      : _buildDefaultList(),
-                ],
-              ),
-            ))));
+        builder: () => SafeArea(
+            child: Scaffold(
+                backgroundColor: white,
+                appBar: appBarHome(context, "assets/bbps_2.png", 24.0),
+                body: (loading)
+                    ? Center(child: circularProgressLoading(40.0))
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            (operatorsNameList.length == 0)
+                                ? Container()
+                                : _searchByBoard(),
+                            (showSearchResult)
+                                ? (operatorsNameFiltered.length == 0)
+                                    ? NoDataFound(text: "No result found")
+                                    : _buildFilteredtList()
+                                : (operatorsNameList.length == 0)
+                                    ? NoDataFound(text: "No result found")
+                                    : _buildDefaultList(),
+                          ],
+                        ),
+                      ))));
   }
 
   Future generateJWTToken() async {
     setState(() {
-     loading = true;
+      loading = true;
     });
 
     var headers = {
@@ -180,62 +180,62 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
       "Authorization": "$authHeader",
     };
 
-    final body = {"user_token": "$userToken", "token": "$token"};
+    final body = {"user_token": "$userToken"};
 
-    final response = await http.post(Uri.parse(operatorListPrepaidAPI),
+    final response = await http.post(Uri.parse(fetchoperatorListPrepaidAPI),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       setState(() {
         loading = false;
         printMessage(screen, "Operator Ids : $data");
 
-        var icons="";
+        var icons = "";
 
-        for (int i = 0; i < data['data']['data'].length; i++) {
-          var catName = data['data']['data'][i]['category'];
-          if (catName.toString().toLowerCase()=="dth") {
-            var billerName  = data['data']['data'][i]['name'];
-            var operatorCode = data['data']['data'][i]['id'];
-            var category = data['data']['data'][i]['category'];
+        for (int i = 0; i < data['biller'].length; i++) {
+          // var catName = data['data']['data'][i]['category'];
+          // if (catName.toString().toLowerCase() == "dth") {
+          var billerName = data['biller'][i]['biller_name'];
+          var operatorCode = data['biller'][i]['biller_id'];
+          // var category = data['data']['data'][i]['category'];
 
-            if(billerName.toString().toLowerCase()=="Airtel Digital TV".toLowerCase()){
-              icons = "1637391607.png";
-            }else if(billerName.toString().toLowerCase()=="Dish TV".toLowerCase()){
-              icons = "1637390400.png";
-            }else if(billerName.toString().toLowerCase()=="Sun Direct".toLowerCase()){
-              icons = "1637390943.png";
-            }else if(billerName.toString().toLowerCase()=="Tata Sky".toLowerCase()){
-              icons = "1643363760.png";
-            }else if(billerName.toString().toLowerCase()=="Videocon D2H".toLowerCase()){
-              icons = "1637391403.png";
-            }
-
-            OperatorNames names  = new OperatorNames(
-                billerName:billerName,
-                operatorCode:operatorCode,
-                category:category,
-                icons:icons
-            );
-
-            operatorsNameList.add(names);
-
-
+          if (billerName.toString().toLowerCase() ==
+              "Airtel Digital TV".toLowerCase()) {
+            icons = "1637391607.png";
+          } else if (billerName.toString().toLowerCase() ==
+              "Dish TV".toLowerCase()) {
+            icons = "1637390400.png";
+          } else if (billerName.toString().toLowerCase() ==
+              "Sun Direct".toLowerCase()) {
+            icons = "1637390943.png";
+          } else if (billerName.toString().toLowerCase() ==
+              "Tata Play".toLowerCase()) {
+            icons = "1643363760.png";
+          } else if (billerName.toString().toLowerCase() ==
+              "D2H".toLowerCase()) {
+            icons = "1637391403.png";
           }
+
+          OperatorNames names = new OperatorNames(
+              billerName: billerName,
+              operatorCode: operatorCode,
+              category: "dth",
+              icons: icons);
+
+          operatorsNameList.add(names);
+          // }
         }
       });
-    }else{
+    } else {
       setState(() {
         loading = false;
       });
       showToastMessage(status500);
     }
-
-
   }
 
   _searchByBoard() {
@@ -250,7 +250,7 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
           ),
           child: Padding(
             padding:
-            const EdgeInsets.only(left: 15.0, right: 15, top: 0, bottom: 0),
+                const EdgeInsets.only(left: 15.0, right: 15, top: 0, bottom: 0),
             child: TextFormField(
               style: TextStyle(color: black, fontSize: inputFont.sp),
               keyboardType: TextInputType.text,
@@ -329,13 +329,13 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
               (resentList.length == 0)
                   ? Container()
                   : Padding(
-                padding: const EdgeInsets.only(left: 40.0, top: 20),
-                child: Text(
-                  "Recent Transactions",
-                  style: TextStyle(
-                      color: black, fontWeight: FontWeight.bold),
-                ),
-              ),
+                      padding: const EdgeInsets.only(left: 40.0, top: 20),
+                      child: Text(
+                        "Recent Transactions",
+                        style: TextStyle(
+                            color: black, fontWeight: FontWeight.bold),
+                      ),
+                    ),
               (resentList.length == 0) ? Container() : _buildRecentTrans(),
               Divider(),
               Padding(
@@ -360,7 +360,6 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
                               onTap: () {
                                 FocusScope.of(context)
                                     .requestFocus(new FocusNode());
-
 
                                 /*Map map1 = {
                                   "billerId": "${billerList[index].billerId}",
@@ -392,18 +391,24 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
                                   "inputNo":""
                                 };*/
 
-
                                 Map map = {
-                                  "billerId": "${operatorsNameList[index].operatorCode}",
-                                  "billerName": "${operatorsNameList[index].billerName}",
-                                  "category": "${operatorsNameList[index].category}",
-                                  "billerImg": "${operatorsNameList[index].icons}",
-                                  "inputNo":"",
-                                "stateName": "$localState",
-                                  "minLimit":"50"
+                                  "billerId":
+                                      "${operatorsNameList[index].operatorCode}",
+                                  "billerName":
+                                      "${operatorsNameList[index].billerName}",
+                                  "category":
+                                      "${operatorsNameList[index].category}",
+                                  "billerImg":
+                                      "${operatorsNameList[index].icons}",
+                                  "inputNo": "",
+                                  "stateName": "$localState",
+                                  "minLimit": "50",
+                                  "operatorName":
+                                      "${operatorsNameList[index].billerName}",
                                 };
 
-                                printMessage(screen, "Case 1 Map : ${map.toString()}");
+                                printMessage(
+                                    screen, "Case 1 Map : ${map.toString()}");
                                 openDTHRecharge(context, map);
                               },
                               child: Row(
@@ -483,16 +488,23 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
                                   .requestFocus(new FocusNode());
 
                               Map map = {
-                                "billerId": "${operatorsNameFiltered[index].operatorCode}",
-                                "billerName": "${operatorsNameFiltered[index].billerName}",
-                                "category": "${operatorsNameFiltered[index].category}",
-                                "billerImg": "${operatorsNameFiltered[index].icons}",
-                                "inputNo":"",
+                                "billerId":
+                                    "${operatorsNameFiltered[index].operatorCode}",
+                                "billerName":
+                                    "${operatorsNameFiltered[index].billerName}",
+                                "category":
+                                    "${operatorsNameFiltered[index].category}",
+                                "billerImg":
+                                    "${operatorsNameFiltered[index].icons}",
+                                "inputNo": "",
                                 "stateName": "$localState",
-                                "minLimit":"50"
+                                "minLimit": "50",
+                                "operatorName":
+                                    "${operatorsNameList[index].billerName}",
                               };
 
-                              printMessage(screen, "Case 2 Map : ${map.toString()}");
+                              printMessage(
+                                  screen, "Case 2 Map : ${map.toString()}");
                               openDTHRecharge(context, map);
                             },
                             child: Row(
@@ -622,15 +634,15 @@ class _DTHSelectNewState extends State<DTHSelectNew> {
                   printMessage(screen, "Oprator biName : $biName");
 
                   if (opName.toLowerCase() == biName.toLowerCase()) {
-
                     Map map = {
                       "billerId": "${operatorsNameList[k].operatorCode}",
                       "billerName": "${operatorsNameList[k].billerName}",
                       "category": "${operatorsNameList[k].category}",
                       "billerImg": "${operatorsNameList[k].icons}",
-                      "inputNo":"$inputNo",
+                      "inputNo": "$inputNo",
                       "stateName": "$localState",
-                      "minLimit":"50"
+                      "minLimit": "50",
+                      "operatorName": "${operatorsNameList[k].billerName}",
                     };
                     printMessage(screen, "Case 3 Map : ${map.toString()}");
                     openDTHRecharge(context, map);

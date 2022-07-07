@@ -21,13 +21,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:permission_handler/permission_handler.dart';
 
 class PayUMobilePlans extends StatefulWidget {
   final String mobileNo;
   final List<Contact> contacts;
-  const PayUMobilePlans({Key? key, required this.mobileNo, required this.contacts}) : super(key: key);
+  final String spKey;
+  const PayUMobilePlans(
+      {Key? key,
+      required this.mobileNo,
+      required this.contacts,
+      required this.spKey})
+      : super(key: key);
 
   @override
   _PayUMobilePlansState createState() => _PayUMobilePlansState();
@@ -52,7 +57,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
   String circleFirstName = "";
   String circleFirstefID = "";
 
-  String operatorId ="";
+  String operatorId = "";
 
   List<String> rechargeTypes = [];
 
@@ -95,7 +100,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
   var isPlanVisible = false;
 
   //double mainWallet = 0.0;
-  String mainWallet ="";
+  String mainWallet = "";
 
   @override
   void initState() {
@@ -104,7 +109,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
     updateATMStatus(context);
     fetchUserAccountBalance();
     updateWalletBalances();
-  //  _askContactPermissions();
+    //  _askContactPermissions();
 
     setState(() {
       _contacts = widget.contacts;
@@ -157,7 +162,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
       mX = double.parse(mpBalc);
     }
     setState(() {
-     var  mWlet = wX + mX;
+      var mWlet = wX + mX;
       mainWallet = formatDecimal2Digit.format(mWlet);
     });
   }
@@ -166,336 +171,98 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-            backgroundColor: white,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              backgroundColor: white,
-              brightness: Brightness.light,
-              leading: InkWell(
-                onTap: () {
-                  closeKeyBoard(context);
-                  closeCurrentPage(context);
-                },
-                child: Container(
-                  height: 60.h,
-                  width: 60.w,
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/back_arrow_bg.png',
-                        height: 60.h,
-                      ),
-                      Positioned(
-                        top: 16,
-                        left: 12,
-                        child: Image.asset(
-                          'assets/back_arrow.png',
-                          height: 16.h,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              titleSpacing: 0,
-              title: appLogo(),
-              actions: [
-                Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: walletBg,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: walletBg)),
-                  child: Padding(
-                    padding:
-                    const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      children: [
-                        Image.asset(
-                          "assets/wallet.png",
-                          height: 20.h,
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10.0, right: 10, top: 5),
-                            child: Text(
-                              //"${formatDecimal2Digit.format(mainWallet)}",
-                              "$mainWallet",
-                              style: TextStyle(color: white, fontSize: font15.sp),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                )
-              ],
-            ),
-            body: (loading)
-                ? Center(
-              child: circularProgressLoading(40.0),
-            )
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      top: padding, left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
-                            style: TextStyle(
-                                color: black,
-                                fontSize: inputFont.sp,
-                                fontWeight: FontWeight.bold),
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.done,
-                            controller: phoneController,
-                            decoration: new InputDecoration(
-                              isDense: true,
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 10),
-                              counterText: "",
-                              label: Text("Phone number"),
-                            ),
-                            maxLength: 10,
-                            onChanged: (val) {
-                              if (val.length == 10) {
-                                closeKeyBoard(context);
-                                rechargeTypes.clear();
-                                mobilePlans.clear();
-                                mobilePlansFiltered.clear();
-                                getMobileDetails(val.toString());
-                              }
-                            },
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (_contacts.length == 0) {
-                              showToastMessage(
-                                  "Please wait, while we are loading your contacts");
-                            } else {
-                              _showContactList();
-                            }
-                          },
-                          child: Image.asset(
-                            'assets/phonebook.png',
-                            height: 20.h,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                (stateName == "")
-                    ? Container()
-                    : Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20.0, top: 15, right: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: editBg,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(20)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  _showOperatorList();
-                                },
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Select Operator",
-                                      style: TextStyle(
-                                          color: lightBlack,
-                                          fontSize: font13.sp),
-                                    ),
-                                    SizedBox(
-                                      height: 2.h,
-                                    ),
-                                    Row(
-                                      children: [
-                                        (billerImg == "")
-                                            ? Container()
-                                            : SizedBox(
-                                          height: 16.h,
-                                          child:
-                                          Image.network(
-                                            "$imageSubAPI${billerImg}",
-                                          ),
-                                        ),
-                                        (billerImg == "")
-                                            ? Container()
-                                            : SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            operatorSecName,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font15.sp),
-                                            maxLines: 1,
-                                            overflow:
-                                            TextOverflow.fade,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Icon(
-                                          // Add this
-                                          Icons
-                                              .keyboard_arrow_down, // Add this
-                                          color:
-                                          lightBlue, // Add this
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: editBg,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(20)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  _showStateList();
-                                },
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Select State",
-                                      style: TextStyle(
-                                          color: lightBlack,
-                                          fontSize: font13.sp),
-                                    ),
-                                    SizedBox(
-                                      height: 2.h,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            stateName,
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font15.sp),
-                                            overflow:
-                                            TextOverflow.fade,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Icon(
-                                          // Add this
-                                          Icons
-                                              .keyboard_arrow_down, // Add this
-                                          color:
-                                          lightBlue, // Add this
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
-                ),
-                (stateName == "")
-                    ? Container()
-                    : Expanded(
-                    flex: 1,
+        builder: () => SafeArea(
+            child: Scaffold(
+                backgroundColor: white,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  brightness: Brightness.light,
+                  leading: InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      closeCurrentPage(context);
+                    },
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(top: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(50.0)),
-                        color: white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 10,
-                            blurRadius: 10,
-                            offset: Offset(
-                                0, 1), // changes position of shadow
+                      height: 60.h,
+                      width: 60.w,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/back_arrow_bg.png',
+                            height: 60.h,
                           ),
+                          Positioned(
+                            top: 16,
+                            left: 12,
+                            child: Image.asset(
+                              'assets/back_arrow.png',
+                              height: 16.h,
+                            ),
+                          )
                         ],
                       ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Center(
-                            child: Container(
-                              color: gray,
-                              width: 50.w,
-                              height: 5.h,
+                    ),
+                  ),
+                  titleSpacing: 0,
+                  title: appLogo(),
+                  actions: [
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: walletBg,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(color: walletBg)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, top: 5, bottom: 5),
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: [
+                            Image.asset(
+                              "assets/wallet.png",
+                              height: 20.h,
                             ),
-                          ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10, top: 5),
+                                child: Text(
+                                  //"${formatDecimal2Digit.format(mainWallet)}",
+                                  "$mainWallet",
+                                  style: TextStyle(
+                                      color: white, fontSize: font15.sp),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    )
+                  ],
+                ),
+                body: (loading)
+                    ? Center(
+                        child: circularProgressLoading(40.0),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Container(
                             margin: EdgeInsets.only(
-                                top: padding,
-                                left: padding,
-                                right: padding),
+                                top: padding, left: padding, right: padding),
                             decoration: BoxDecoration(
                               color: editBg,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(20)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 15.0,
-                                  right: 15,
-                                  top: 10,
-                                  bottom: 10),
+                                  left: 15.0, right: 15, top: 10, bottom: 10),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -504,49 +271,43 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                                       style: TextStyle(
                                           color: black,
                                           fontSize: inputFont.sp,
-                                          fontWeight:
-                                          FontWeight.bold),
-                                      keyboardType:
-                                      TextInputType.phone,
-                                      textInputAction:
-                                      TextInputAction.done,
-                                      controller: searchAmount,
+                                          fontWeight: FontWeight.bold),
+                                      keyboardType: TextInputType.phone,
+                                      textInputAction: TextInputAction.done,
+                                      controller: phoneController,
                                       decoration: new InputDecoration(
                                         isDense: true,
                                         border: InputBorder.none,
                                         contentPadding:
-                                        EdgeInsets.only(left: 10),
+                                            EdgeInsets.only(left: 10),
                                         counterText: "",
-                                        label: Text(
-                                            "Search plan by amount"),
+                                        label: Text("Phone number"),
                                       ),
-                                      maxLength: 5,
-                                      onFieldSubmitted: (val) {
-                                        if (val.toString().length ==
-                                            0) {
-                                          showToastMessage(
-                                              "enter the amount");
-                                          return;
+                                      maxLength: 10,
+                                      onChanged: (val) {
+                                        if (val.length == 10) {
+                                          closeKeyBoard(context);
+                                          rechargeTypes.clear();
+                                          mobilePlans.clear();
+                                          mobilePlansFiltered.clear();
+                                          getMobileDetails(val.toString());
                                         }
-                                        onSearchTextChanged(
-                                            val.toString());
                                       },
                                     ),
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      var res = searchAmount.text
-                                          .toString();
-                                      if (res.toString().length ==
-                                          0) {
+                                      if (_contacts.length == 0) {
                                         showToastMessage(
-                                            "enter the amount");
-                                        return;
+                                            "Please wait, while we are loading your contacts");
+                                      } else {
+                                        _showContactList();
                                       }
-                                      onSearchTextChanged(
-                                          res.toString());
                                     },
-                                    child: Icon(Icons.search),
+                                    child: Image.asset(
+                                      'assets/phonebook.png',
+                                      height: 20.h,
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 10.w,
@@ -555,24 +316,283 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                               ),
                             ),
                           ),
-                          _buildPlanTabs(),
-                          Divider(),
-                          Expanded(
-                            child: (showSearchResult)
-                                ? (mobilePlansFiltered.length == 0)
-                                ? Center(
-                              child: Text("No plan found"),
-                            )
-                                : _buildPlanFilterList()
-                                : (mobilePlans.length == 0)
-                                ? Container()
-                                : _buildPlanDetail(),
-                          )
+                          (stateName == "")
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, top: 15, right: 20),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: editBg,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  _showOperatorList();
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Select Operator",
+                                                      style: TextStyle(
+                                                          color: lightBlack,
+                                                          fontSize: font13.sp),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 2.h,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        (billerImg == "")
+                                                            ? Container()
+                                                            : SizedBox(
+                                                                height: 16.h,
+                                                                child: Image
+                                                                    .network(
+                                                                  "$imageSubAPI${billerImg}",
+                                                                ),
+                                                              ),
+                                                        (billerImg == "")
+                                                            ? Container()
+                                                            : SizedBox(
+                                                                width: 10.w,
+                                                              ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            operatorSecName,
+                                                            style: TextStyle(
+                                                                color: black,
+                                                                fontSize:
+                                                                    font15.sp),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          ),
+                                                        ),
+                                                        Spacer(),
+                                                        Icon(
+                                                          // Add this
+                                                          Icons
+                                                              .keyboard_arrow_down, // Add this
+                                                          color:
+                                                              lightBlue, // Add this
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: editBg,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  _showStateList();
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Select State",
+                                                      style: TextStyle(
+                                                          color: lightBlack,
+                                                          fontSize: font13.sp),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 2.h,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            stateName,
+                                                            style: TextStyle(
+                                                                color: black,
+                                                                fontSize:
+                                                                    font15.sp),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            maxLines: 1,
+                                                          ),
+                                                        ),
+                                                        Spacer(),
+                                                        Icon(
+                                                          // Add this
+                                                          Icons
+                                                              .keyboard_arrow_down, // Add this
+                                                          color:
+                                                              lightBlue, // Add this
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                          (stateName == "")
+                              ? Container()
+                              : Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: EdgeInsets.only(top: 20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(50.0)),
+                                      color: white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 10,
+                                          blurRadius: 10,
+                                          offset: Offset(0,
+                                              1), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            color: gray,
+                                            width: 50.w,
+                                            height: 5.h,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: padding,
+                                              left: padding,
+                                              right: padding),
+                                          decoration: BoxDecoration(
+                                            color: editBg,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15.0,
+                                                right: 15,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: TextFormField(
+                                                    style: TextStyle(
+                                                        color: black,
+                                                        fontSize: inputFont.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    keyboardType:
+                                                        TextInputType.phone,
+                                                    textInputAction:
+                                                        TextInputAction.done,
+                                                    controller: searchAmount,
+                                                    decoration:
+                                                        new InputDecoration(
+                                                      isDense: true,
+                                                      border: InputBorder.none,
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 10),
+                                                      counterText: "",
+                                                      label: Text(
+                                                          "Search plan by amount"),
+                                                    ),
+                                                    maxLength: 5,
+                                                    onFieldSubmitted: (val) {
+                                                      if (val
+                                                              .toString()
+                                                              .length ==
+                                                          0) {
+                                                        showToastMessage(
+                                                            "enter the amount");
+                                                        return;
+                                                      }
+                                                      onSearchTextChanged(
+                                                          val.toString());
+                                                    },
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    var res = searchAmount.text
+                                                        .toString();
+                                                    if (res.toString().length ==
+                                                        0) {
+                                                      showToastMessage(
+                                                          "enter the amount");
+                                                      return;
+                                                    }
+                                                    onSearchTextChanged(
+                                                        res.toString());
+                                                  },
+                                                  child: Icon(Icons.search),
+                                                ),
+                                                SizedBox(
+                                                  width: 10.w,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        _buildPlanTabs(),
+                                        Divider(),
+                                        Expanded(
+                                          child: (showSearchResult)
+                                              ? (mobilePlansFiltered.length ==
+                                                      0)
+                                                  ? Center(
+                                                      child:
+                                                          Text("No plan found"),
+                                                    )
+                                                  : _buildPlanFilterList()
+                                              : (mobilePlans.length == 0)
+                                                  ? Container()
+                                                  : _buildPlanDetail(),
+                                        )
+                                      ],
+                                    ),
+                                  ))
                         ],
-                      ),
-                    ))
-              ],
-            ))));
+                      ))));
   }
 
   Future getBBPSToken() async {
@@ -586,7 +606,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
     };
 
     final response =
-    await http.post(Uri.parse(generateTokenBbpsAPI), headers: headers);
+        await http.post(Uri.parse(generateTokenBbpsAPI), headers: headers);
 
     int statusCode = response.statusCode;
 
@@ -735,7 +755,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
             var code = data['plan_list']['code'];
             if (code.toString() == "200") {
               var plans = data['plan_list']['payload'][0]['circleWisePlanLists']
-              [0]['plansInfo'];
+                  [0]['plansInfo'];
 
               if (data['planType'].length != 0) {
                 for (int i = 0; i < data['planType'].length; i++) {
@@ -752,9 +772,9 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                   var validity = plans[i]['validity'].toString();
                   var talkTime = plans[i]['talkTime'].toString();
                   var validityDescription =
-                  plans[i]['validityDescription'].toString();
+                      plans[i]['validityDescription'].toString();
                   var packageDescription =
-                  plans[i]['packageDescription'].toString();
+                      plans[i]['packageDescription'].toString();
                   var planType = plans[i]['planType'].toString();
 
                   MobilePlan mobPlan = new MobilePlan(
@@ -820,15 +840,15 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
               },
               child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15),
-                    child: Text(
-                      rechargeTypes[index].toString().toUpperCase(),
-                      style: TextStyle(
-                          color: (typeIndex == index) ? lightBlue : black,
-                          fontSize: font14.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                  )),
+                padding: const EdgeInsets.only(left: 15.0, right: 15),
+                child: Text(
+                  rechargeTypes[index].toString().toUpperCase(),
+                  style: TextStyle(
+                      color: (typeIndex == index) ? lightBlue : black,
+                      fontSize: font14.sp),
+                  textAlign: TextAlign.center,
+                ),
+              )),
             );
           }),
     );
@@ -849,7 +869,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                 border: Border.all(color: gray)),
             child: Padding(
               padding:
-              const EdgeInsets.only(left: 0.0, top: 5, bottom: 5, right: 0),
+                  const EdgeInsets.only(left: 0.0, top: 5, bottom: 5, right: 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -864,11 +884,13 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                       children: [
                         Text(
                           "$plan",
-                          style: TextStyle(color: lightBlack, fontSize: font11.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font11.sp),
                         ),
                         Text(
                           "$rupeeSymbol ${mobilePlans[index].price}",
-                          style: TextStyle(color: dotColor, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: dotColor, fontSize: font14.sp),
                         ),
                       ],
                     ),
@@ -880,7 +902,8 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                       children: [
                         Text(
                           "$validity",
-                          style: TextStyle(color: lightBlack, fontSize: font12.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font12.sp),
                         ),
                         Text(
                           "${mobilePlans[index].validity}",
@@ -906,8 +929,15 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
                       var mobileNo = phoneController.text.toString();
 
-                      _showPlan(planName, price, validity, packageDescription,
-                          operatorFirstName, circleFirstName, mobileNo, operatorId);
+                      _showPlan(
+                          planName,
+                          price,
+                          validity,
+                          packageDescription,
+                          operatorFirstName,
+                          circleFirstName,
+                          mobileNo,
+                          operatorId);
                     },
                     child: Text(
                       "$viewDeatil",
@@ -919,7 +949,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                   ),
                   Container(
                     margin:
-                    EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                        EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
                     decoration: BoxDecoration(
                         color: lightBlue,
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -938,27 +968,36 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
                         var mobileNo = phoneController.text.toString();
 
-
                         var opN = operatorFirstName.toString();
 
                         printMessage(screen, "OpN Name : $opN");
 
                         var opNameToPass = "";
 
-                        if(opN.toString().toLowerCase()=="Airtel".toLowerCase()){
+                        if (opN.toString().toLowerCase() ==
+                            "Airtel".toLowerCase()) {
                           opNameToPass = "Airtel";
-                        }else if(opN.toString().toLowerCase()=="BSNL Recharge/Validity (RCV)".toLowerCase()
-                        || opN.toString().toLowerCase()=="BSNL".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                                "BSNL Recharge/Validity (RCV)".toLowerCase() ||
+                            opN.toString().toLowerCase() ==
+                                "BSNL".toLowerCase()) {
                           opNameToPass = "BSNL";
-                        }else if(opN.toString().toLowerCase()=="IdeaVodafone".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "IdeaVodafone".toLowerCase()) {
                           opNameToPass = "Idea";
-                        }else if(opN.toString().toLowerCase()=="Jio".toLowerCase() || opN.toString().toLowerCase()=="RELIANCE JIO".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                                "Jio".toLowerCase() ||
+                            opN.toString().toLowerCase() ==
+                                "RELIANCE JIO".toLowerCase()) {
                           opNameToPass = "JIO";
-                        }else if(opN.toString().toLowerCase()=="MTNL Delhi".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "MTNL Delhi".toLowerCase()) {
                           opNameToPass = "MTNL Delhi";
-                        }else if(opN.toString().toLowerCase()=="MTNL Mumbai".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "MTNL Mumbai".toLowerCase()) {
                           opNameToPass = "MTNL Mumbai";
-                        }else if(opN.toString().toLowerCase()=="Vodafone".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "Vodafone".toLowerCase()) {
                           opNameToPass = "Vodafone";
                         }
 
@@ -971,7 +1010,8 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                           "circleName": "$circleFirstName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "${widget.spKey}"
                         };
 
                         printMessage(screen, "Case 1 Pass : ${map.toString()}");
@@ -1018,7 +1058,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                 border: Border.all(color: gray)),
             child: Padding(
               padding:
-              const EdgeInsets.only(left: 0.0, top: 5, bottom: 5, right: 0),
+                  const EdgeInsets.only(left: 0.0, top: 5, bottom: 5, right: 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -1033,11 +1073,13 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                       children: [
                         Text(
                           "$plan",
-                          style: TextStyle(color: lightBlack, fontSize: font11.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font11.sp),
                         ),
                         Text(
                           "$rupeeSymbol ${mobilePlansFiltered[index].price}",
-                          style: TextStyle(color: dotColor, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: dotColor, fontSize: font14.sp),
                         ),
                       ],
                     ),
@@ -1049,7 +1091,8 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                       children: [
                         Text(
                           "$validity",
-                          style: TextStyle(color: lightBlack, fontSize: font12.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font12.sp),
                         ),
                         Text(
                           "${mobilePlansFiltered[index].validity}",
@@ -1075,8 +1118,15 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
                       var mobileNo = phoneController.text.toString();
 
-                      _showPlan(planName, price, validity, packageDescription,
-                          operatorFirstName, circleFirstName, mobileNo, operatorId);
+                      _showPlan(
+                          planName,
+                          price,
+                          validity,
+                          packageDescription,
+                          operatorFirstName,
+                          circleFirstName,
+                          mobileNo,
+                          operatorId);
                     },
                     child: Text(
                       "$viewDeatil",
@@ -1088,7 +1138,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                   ),
                   Container(
                     margin:
-                    EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                        EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
                     decoration: BoxDecoration(
                         color: lightBlue,
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -1113,20 +1163,30 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
                         var opNameToPass = "";
 
-                        if(opN.toString().toLowerCase()=="Airtel".toLowerCase()){
+                        if (opN.toString().toLowerCase() ==
+                            "Airtel".toLowerCase()) {
                           opNameToPass = "Airtel";
-                        }else if(opN.toString().toLowerCase()=="BSNL Recharge/Validity (RCV)".toLowerCase()
-                            || opN.toString().toLowerCase()=="BSNL".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                                "BSNL Recharge/Validity (RCV)".toLowerCase() ||
+                            opN.toString().toLowerCase() ==
+                                "BSNL".toLowerCase()) {
                           opNameToPass = "BSNL";
-                        }else if(opN.toString().toLowerCase()=="IdeaVodafone".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "IdeaVodafone".toLowerCase()) {
                           opNameToPass = "Idea";
-                        }else if(opN.toString().toLowerCase()=="Jio".toLowerCase() || opN.toString().toLowerCase()=="RELIANCE JIO".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                                "Jio".toLowerCase() ||
+                            opN.toString().toLowerCase() ==
+                                "RELIANCE JIO".toLowerCase()) {
                           opNameToPass = "JIO";
-                        }else if(opN.toString().toLowerCase()=="MTNL Delhi".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "MTNL Delhi".toLowerCase()) {
                           opNameToPass = "MTNL Delhi";
-                        }else if(opN.toString().toLowerCase()=="MTNL Mumbai".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "MTNL Mumbai".toLowerCase()) {
                           opNameToPass = "MTNL Mumbai";
-                        }else if(opN.toString().toLowerCase()=="Vodafone".toLowerCase()){
+                        } else if (opN.toString().toLowerCase() ==
+                            "Vodafone".toLowerCase()) {
                           opNameToPass = "Vodafone";
                         }
 
@@ -1139,7 +1199,8 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
                           "circleName": "$circleFirstName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "${widget.spKey}"
                         };
 
                         printMessage(screen, "Case 2 Pass : ${map.toString()}");
@@ -1218,18 +1279,19 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: showPlanDetail(
-              planType: planType,
-              price: price,
-              validity: validity,
-              discription: discription,
-              operator: operator,
-              circle: circle,
-              billerImg: billerImg,
-              number: number,
-              operatorId: operatorId),
-        ));
+              padding: MediaQuery.of(context).viewInsets,
+              child: showPlanDetail(
+                  planType: planType,
+                  price: price,
+                  validity: validity,
+                  discription: discription,
+                  operator: operator,
+                  circle: circle,
+                  billerImg: billerImg,
+                  number: number,
+                  spKey: widget.spKey,
+                  operatorId: operatorId),
+            ));
   }
 
   Future getOperatorsList() async {
@@ -1253,7 +1315,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
     if (statusCode == 200) {
       var data =
-      Operators.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+          Operators.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
 
       var xx = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -1279,9 +1341,9 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
               operatorSecName = "Vodafone";
               billerImg = "1629707063.webp";
               break;
-            }else if (operatorFirstName.toLowerCase() ==
-                "RELIANCE JIO".toLowerCase() || operatorFirstName.toLowerCase() ==
-                "Jio".toLowerCase()) {
+            } else if (operatorFirstName.toLowerCase() ==
+                    "RELIANCE JIO".toLowerCase() ||
+                operatorFirstName.toLowerCase() == "Jio".toLowerCase()) {
               operatorSecCode = "JIO";
               operatorSecName = "Jio";
               billerImg = "1629707102.png";
@@ -1356,116 +1418,117 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Wrap(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * .6,
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius:
-                BorderRadius.vertical(top: Radius.circular(50.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 10,
-                    blurRadius: 10,
-                    offset: Offset(0, 1), // changes position of shadow
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * .6,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(50.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 10,
+                        blurRadius: 10,
+                        offset: Offset(0, 1), // changes position of shadow
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Center(
-                    child: Container(
-                      color: gray,
-                      width: 50.w,
-                      height: 5.h,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0, top: 20),
-                    child: Text(
-                      "Select your Operator",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font16.sp,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Divider(
-                    color: gray,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                        itemCount: operatorNames.length,
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      planList.clear();
-                                      //rechargeTypes.clear();
-                                      operatorSecName = operatorNames[index]
-                                          .billerName
-                                          .toString();
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Center(
+                        child: Container(
+                          color: gray,
+                          width: 50.w,
+                          height: 5.h,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0, top: 20),
+                        child: Text(
+                          "Select your Operator",
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font16.sp,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ListView.builder(
+                            itemCount: operatorNames.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          planList.clear();
+                                          //rechargeTypes.clear();
+                                          operatorSecName = operatorNames[index]
+                                              .billerName
+                                              .toString();
 
-                                      operatorSecCode = operatorNames[index]
-                                          .operatorCode
-                                          .toString();
+                                          operatorSecCode = operatorNames[index]
+                                              .operatorCode
+                                              .toString();
 
-                                      billerImg = operatorNames[index]
-                                          .icons
-                                          .toString();
+                                          billerImg = operatorNames[index]
+                                              .icons
+                                              .toString();
 
-                                      Navigator.pop(context);
-                                      _showStateList();
-                                    });
-                                  },
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 10.w,
+                                          Navigator.pop(context);
+                                          _showStateList();
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          SizedBox(
+                                            width: 36.w,
+                                            height: 36.h,
+                                            child: Image.network(
+                                              "$imageSubAPI${operatorNames[index].icons}",
+                                              width: 36.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Text(
+                                            operatorNames[index].billerName,
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: font15.sp),
+                                          )
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: 36.w,
-                                        height: 36.h,
-                                        child: Image.network(
-                                          "$imageSubAPI${operatorNames[index].icons}",
-                                          width: 36.w,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Text(
-                                        operatorNames[index].billerName,
-                                        style: TextStyle(
-                                            color: black, fontSize: font15.sp),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Divider()
-                            ],
-                          );
-                        }),
+                                  Divider()
+                                ],
+                              );
+                            }),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          ],
-        ));
+                )
+              ],
+            ));
   }
 
   _showStateList() {
@@ -1474,95 +1537,96 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Wrap(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * .5,
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                color: Colors.white,
-                borderRadius:
-                BorderRadius.vertical(top: Radius.circular(50.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 10,
-                    blurRadius: 10,
-                    offset: Offset(0, 1), // changes position of shadow
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * .5,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(50.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 10,
+                        blurRadius: 10,
+                        offset: Offset(0, 1), // changes position of shadow
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Center(
-                    child: Container(
-                      color: gray,
-                      width: 50.w,
-                      height: 5.h,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0, top: 20),
-                    child: Text(
-                      "Select your Circle",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font16.sp,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Divider(
-                    color: gray,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                        itemCount: stateList.length,
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      stateName =
-                                          stateList[index].state.toString();
-                                      stateCode =
-                                          stateList[index].code.toString();
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Container(
-                                    width:
-                                    MediaQuery.of(context).size.width,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text(
-                                        stateList[index].state,
-                                        style: TextStyle(
-                                            color: black, fontSize: font15.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Center(
+                        child: Container(
+                          color: gray,
+                          width: 50.w,
+                          height: 5.h,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0, top: 20),
+                        child: Text(
+                          "Select your Circle",
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font16.sp,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ListView.builder(
+                            itemCount: stateList.length,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          stateName =
+                                              stateList[index].state.toString();
+                                          stateCode =
+                                              stateList[index].code.toString();
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            stateList[index].state,
+                                            style: TextStyle(
+                                                color: black,
+                                                fontSize: font15.sp),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    Divider(),
+                                  ],
                                 ),
-                                Divider(),
-                              ],
-                            ),
-                          );
-                        }),
+                              );
+                            }),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          ],
-        ));
+                )
+              ],
+            ));
   }
 
   Future<void> _askContactPermissions() async {
@@ -1579,7 +1643,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
   Future<void> refreshContacts() async {
     var contacts = (await ContactsService.getContacts(
-        withThumbnails: false, iOSLocalizedLabels: iOSLocalizedLabels))
+            withThumbnails: false, iOSLocalizedLabels: iOSLocalizedLabels))
         .toList();
     setState(() {
       _contacts.clear();
@@ -1608,7 +1672,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
       final snackBar =
-      SnackBar(content: Text('Contact data not available on device'));
+          SnackBar(content: Text('Contact data not available on device'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
@@ -1623,226 +1687,226 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Wrap(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * .9,
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                borderRadius:
-                BorderRadius.vertical(top: Radius.circular(50.0)),
-                color: white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 10,
-                    blurRadius: 10,
-                    offset: Offset(0, 1), // changes position of shadow
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * .9,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: new BoxDecoration(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(50.0)),
+                    color: white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 10,
+                        blurRadius: 10,
+                        offset: Offset(0, 1), // changes position of shadow
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 20.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Container(
+                        height: 4.h,
+                        width: 50.w,
+                        color: gray,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0, top: 15),
+                        child: Text(
+                          "Select your contact",
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font16.sp,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                      _searchContact(),
+                      (showFiltedContact)
+                          ? Expanded(
+                              flex: 1,
+                              child: ListView.builder(
+                                itemCount: _contactFilter.length,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return (_contactFilter[index]
+                                                  .displayName
+                                                  .toString() !=
+                                              "null" &&
+                                          _contactFilter[index]
+                                                  .phones
+                                                  ?.length !=
+                                              0)
+                                      ? ListTile(
+                                          onTap: () {
+                                            List<Item>? _items =
+                                                _contactFilter[index].phones;
+
+                                            if (_items?.length != 0) {
+                                              String? number =
+                                                  _items?[0].value.toString();
+
+                                              if (number
+                                                  .toString()
+                                                  .contains("-")) {
+                                                number =
+                                                    number?.replaceAll("-", "");
+                                              }
+
+                                              if (number
+                                                  .toString()
+                                                  .contains(" ")) {
+                                                number =
+                                                    number?.replaceAll(" ", "");
+                                              }
+
+                                              if (number
+                                                  .toString()
+                                                  .contains("+")) {
+                                                number = number
+                                                    .toString()
+                                                    .substring(
+                                                        3,
+                                                        number
+                                                            .toString()
+                                                            .length);
+                                              }
+
+                                              if (number.toString().length >
+                                                  10) {
+                                                number = number
+                                                    .toString()
+                                                    .substring(
+                                                        1,
+                                                        number
+                                                            .toString()
+                                                            .length);
+                                              }
+
+                                              setState(() {
+                                                phoneController =
+                                                    TextEditingController(
+                                                        text:
+                                                            "${number.toString()}");
+                                                if (number.toString().length ==
+                                                    10) {
+                                                  closeKeyBoard(context);
+                                                  getMobileDetails(
+                                                      number.toString());
+                                                }
+                                              });
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                          leading: CircleAvatar(
+                                              child: Text(_contactFilter[index]
+                                                  .initials())),
+                                          title: Text(_contactFilter[index]
+                                                  .displayName ??
+                                              ""),
+                                        )
+                                      : Container();
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              flex: 1,
+                              child: ListView.builder(
+                                itemCount: _contacts.length,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return (_contacts[index]
+                                                  .displayName
+                                                  .toString() !=
+                                              "null" &&
+                                          _contacts[index].phones?.length != 0)
+                                      ? ListTile(
+                                          onTap: () {
+                                            List<Item>? _items =
+                                                _contacts[index].phones;
+
+                                            if (_items?.length != 0) {
+                                              String? number =
+                                                  _items?[0].value.toString();
+
+                                              if (number
+                                                  .toString()
+                                                  .contains("-")) {
+                                                number =
+                                                    number?.replaceAll("-", "");
+                                              }
+
+                                              if (number
+                                                  .toString()
+                                                  .contains(" ")) {
+                                                number =
+                                                    number?.replaceAll(" ", "");
+                                              }
+
+                                              if (number
+                                                  .toString()
+                                                  .contains("+")) {
+                                                number = number
+                                                    .toString()
+                                                    .substring(
+                                                        3,
+                                                        number
+                                                            .toString()
+                                                            .length);
+                                              }
+
+                                              if (number.toString().length >
+                                                  10) {
+                                                number = number
+                                                    .toString()
+                                                    .substring(
+                                                        1,
+                                                        number
+                                                            .toString()
+                                                            .length);
+                                              }
+
+                                              setState(() {
+                                                phoneController =
+                                                    TextEditingController(
+                                                        text:
+                                                            "${number.toString()}");
+
+                                                if (number.toString().length ==
+                                                    10) {
+                                                  closeKeyBoard(context);
+                                                  getMobileDetails(
+                                                      number.toString());
+                                                }
+                                              });
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                          leading: CircleAvatar(
+                                              child: Text(
+                                                  _contacts[index].initials())),
+                                          title: Text(
+                                              _contacts[index].displayName ??
+                                                  ""),
+                                        )
+                                      : Container();
+                                },
+                              ),
+                            ),
+                    ],
                   ),
-                  Container(
-                    height: 4.h,
-                    width: 50.w,
-                    color: gray,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0, top: 15),
-                    child: Text(
-                      "Select your contact",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font16.sp,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Divider(
-                    color: gray,
-                  ),
-                  _searchContact(),
-                  (showFiltedContact)
-                      ? Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                      itemCount: _contactFilter.length,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return (_contactFilter[index]
-                            .displayName
-                            .toString() !=
-                            "null" &&
-                            _contactFilter[index]
-                                .phones
-                                ?.length !=
-                                0)
-                            ? ListTile(
-                          onTap: () {
-                            List<Item>? _items =
-                                _contactFilter[index].phones;
-
-                            if (_items?.length != 0) {
-                              String? number =
-                              _items?[0].value.toString();
-
-                              if (number
-                                  .toString()
-                                  .contains("-")) {
-                                number =
-                                    number?.replaceAll("-", "");
-                              }
-
-                              if (number
-                                  .toString()
-                                  .contains(" ")) {
-                                number =
-                                    number?.replaceAll(" ", "");
-                              }
-
-                              if (number
-                                  .toString()
-                                  .contains("+")) {
-                                number = number
-                                    .toString()
-                                    .substring(
-                                    3,
-                                    number
-                                        .toString()
-                                        .length);
-                              }
-
-                              if (number.toString().length >
-                                  10) {
-                                number = number
-                                    .toString()
-                                    .substring(
-                                    1,
-                                    number
-                                        .toString()
-                                        .length);
-                              }
-
-                              setState(() {
-                                phoneController =
-                                    TextEditingController(
-                                        text:
-                                        "${number.toString()}");
-                                if (number.toString().length ==
-                                    10) {
-                                  closeKeyBoard(context);
-                                  getMobileDetails(
-                                      number.toString());
-                                }
-                              });
-                            }
-                            Navigator.pop(context);
-                          },
-                          leading: CircleAvatar(
-                              child: Text(_contactFilter[index]
-                                  .initials())),
-                          title: Text(_contactFilter[index]
-                              .displayName ??
-                              ""),
-                        )
-                            : Container();
-                      },
-                    ),
-                  )
-                      : Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                      itemCount: _contacts.length,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return (_contacts[index]
-                            .displayName
-                            .toString() !=
-                            "null" &&
-                            _contacts[index].phones?.length != 0)
-                            ? ListTile(
-                          onTap: () {
-                            List<Item>? _items =
-                                _contacts[index].phones;
-
-                            if (_items?.length != 0) {
-                              String? number =
-                              _items?[0].value.toString();
-
-                              if (number
-                                  .toString()
-                                  .contains("-")) {
-                                number =
-                                    number?.replaceAll("-", "");
-                              }
-
-                              if (number
-                                  .toString()
-                                  .contains(" ")) {
-                                number =
-                                    number?.replaceAll(" ", "");
-                              }
-
-                              if (number
-                                  .toString()
-                                  .contains("+")) {
-                                number = number
-                                    .toString()
-                                    .substring(
-                                    3,
-                                    number
-                                        .toString()
-                                        .length);
-                              }
-
-                              if (number.toString().length >
-                                  10) {
-                                number = number
-                                    .toString()
-                                    .substring(
-                                    1,
-                                    number
-                                        .toString()
-                                        .length);
-                              }
-
-                              setState(() {
-                                phoneController =
-                                    TextEditingController(
-                                        text:
-                                        "${number.toString()}");
-
-                                if (number.toString().length ==
-                                    10) {
-                                  closeKeyBoard(context);
-                                  getMobileDetails(
-                                      number.toString());
-                                }
-                              });
-                            }
-                            Navigator.pop(context);
-                          },
-                          leading: CircleAvatar(
-                              child: Text(
-                                  _contacts[index].initials())),
-                          title: Text(
-                              _contacts[index].displayName ??
-                                  ""),
-                        )
-                            : Container();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ));
+                )
+              ],
+            ));
   }
 
   _searchContact() {
@@ -1988,7 +2052,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
       setState(() {
         if (data['status'].toString() == "1") {
           var result =
-          MpContacts.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+              MpContacts.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
           phoneListn = result.phoneList;
 
           for (int i = 0; i < phoneListn.length; i++) {
@@ -2040,7 +2104,6 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
   }
 
   Future generateJWTToken(operatorSecName) async {
-
     var headers = {
       "Content-Type": "application/json",
       "Authorization": "$authHeader",
@@ -2061,7 +2124,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
           var jwtToken = data['token'].toString();
-            getOperatorsIds(jwtToken,operatorSecName);
+          getOperatorsIds(jwtToken, operatorSecName);
         } else {
           showToastMessage(somethingWrong);
         }
@@ -2069,7 +2132,7 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
     });
   }
 
-  Future getOperatorsIds(token,operatorSecName) async {
+  Future getOperatorsIds(token, operatorSecName) async {
     setState(() {});
 
     var userToken = await getToken();
@@ -2086,33 +2149,35 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Data check : $data");
 
       setState(() {
+        var opN = operatorSecName.toString();
+        var opNameToPass = "";
 
-          var opN = operatorSecName.toString();
-          var opNameToPass ="";
-
-          if(opN.toString().toLowerCase()=="Airtel".toLowerCase()){
+        if (opN.toString().toLowerCase() == "Airtel".toLowerCase()) {
           opNameToPass = "Airtel";
-        }else if(opN.toString().toLowerCase()=="BSNL Recharge/Validity (RCV)".toLowerCase()
-            || opN.toString().toLowerCase()=="BSNL".toLowerCase()){
+        } else if (opN.toString().toLowerCase() ==
+                "BSNL Recharge/Validity (RCV)".toLowerCase() ||
+            opN.toString().toLowerCase() == "BSNL".toLowerCase()) {
           opNameToPass = "BSNL";
-        }else if(opN.toString().toLowerCase()=="IdeaVodafone".toLowerCase()){
+        } else if (opN.toString().toLowerCase() ==
+            "IdeaVodafone".toLowerCase()) {
           opNameToPass = "Idea";
-        }else if(opN.toString().toLowerCase()=="Jio".toLowerCase() || opN.toString().toLowerCase()=="RELIANCE JIO".toLowerCase()){
+        } else if (opN.toString().toLowerCase() == "Jio".toLowerCase() ||
+            opN.toString().toLowerCase() == "RELIANCE JIO".toLowerCase()) {
           opNameToPass = "JIO";
-        }else if(opN.toString().toLowerCase()=="MTNL Delhi".toLowerCase()){
+        } else if (opN.toString().toLowerCase() == "MTNL Delhi".toLowerCase()) {
           opNameToPass = "MTNL Delhi";
-        }else if(opN.toString().toLowerCase()=="MTNL Mumbai".toLowerCase()){
+        } else if (opN.toString().toLowerCase() ==
+            "MTNL Mumbai".toLowerCase()) {
           opNameToPass = "MTNL Mumbai";
-        }else if(opN.toString().toLowerCase()=="Vodafone".toLowerCase()){
+        } else if (opN.toString().toLowerCase() == "Vodafone".toLowerCase()) {
           opNameToPass = "Vodafone";
         }
-
 
         printMessage(screen, "Operator opNameToPass : $opNameToPass");
 
@@ -2126,16 +2191,11 @@ class _PayUMobilePlansState extends State<PayUMobilePlans> {
           }
         }
       });
-    }else{
-      setState(() {
-
-      });
+    } else {
+      setState(() {});
       showToastMessage(status500);
     }
-
-
   }
-
 }
 
 class showPlanDetail extends StatelessWidget {
@@ -2147,19 +2207,21 @@ class showPlanDetail extends StatelessWidget {
       circle,
       billerImg,
       number,
-      operatorId;
+      operatorId,
+      spKey;
 
   const showPlanDetail(
       {Key? key,
-        required this.planType,
-        required this.price,
-        required this.validity,
-        required this.discription,
-        required this.operator,
-        required this.circle,
-        required this.billerImg,
-        required this.number,
-        required this.operatorId})
+      required this.planType,
+      required this.price,
+      required this.validity,
+      required this.discription,
+      required this.operator,
+      required this.circle,
+      required this.billerImg,
+      required this.number,
+      required this.spKey,
+      required this.operatorId})
       : super(key: key);
 
   @override
@@ -2168,121 +2230,125 @@ class showPlanDetail extends StatelessWidget {
       children: [
         ScreenUtilInit(
             designSize: Size(deviceWidth, deviceHeight),
-            builder: () =>Container(
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(50.0)),
-                    color: planBg,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 10,
-                        blurRadius: 10,
-                        offset: Offset(0, 1), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30.0, right: 30, top: 20),
-                        child: Row(
-                          children: [
-                            Spacer(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Image.asset(
-                                'assets/cancel.png',
-                                height: 30.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "$rupeeSymbol ",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font26.sp,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "${price}",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: 48.sp,
-                                fontWeight: FontWeight.bold),
+            builder: () => Container(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(50.0)),
+                        color: planBg,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 10,
+                            blurRadius: 10,
+                            offset: Offset(0, 1), // changes position of shadow
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      /*Text(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30.0, right: 30, top: 20),
+                            child: Row(
+                              children: [
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                    'assets/cancel.png',
+                                    height: 30.h,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "$rupeeSymbol ",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: font26.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "${price}",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: 48.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          ),
+                          /*Text(
                         "2 GB/DAY PACK",
                         style: TextStyle(color: black, fontSize: font16),
                       ),*/
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(left: 30.0, right: 30, top: 40),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Plan Name",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$planType",
-                          style: TextStyle(color: black, fontSize: font16.sp),
-                          textAlign: TextAlign.end,
-                        ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 40),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Plan Name",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$planType",
+                              style:
+                                  TextStyle(color: black, fontSize: font16.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(left: 30.0, right: 30, top: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Validity",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Validity",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$validity",
+                              style:
+                                  TextStyle(color: black, fontSize: font16.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$validity",
-                          style: TextStyle(color: black, fontSize: font16.sp),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                /*Padding(
+                    ),
+                    /*Padding(
                   padding:
                       const EdgeInsets.only(left: 30.0, right: 30, top: 20),
                   child: Row(
@@ -2305,109 +2371,121 @@ class showPlanDetail extends StatelessWidget {
                     ],
                   ),
                 ),*/
-                Padding(
-                  padding:
-                  const EdgeInsets.only(left: 30.0, right: 30, top: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Description",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Description",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$discription",
+                              style:
+                                  TextStyle(color: black, fontSize: font15.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$discription",
-                          style: TextStyle(color: black, fontSize: font15.sp),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40.h,
-                  margin:
-                  EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 25),
-                  decoration: BoxDecoration(
-                      color: lightBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                      border: Border.all(color: lightBlue)),
-                  child: InkWell(
-                    onTap: () {
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40.h,
+                      margin: EdgeInsets.only(
+                          left: 20, right: 20, top: 25, bottom: 25),
+                      decoration: BoxDecoration(
+                          color: lightBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                          border: Border.all(color: lightBlue)),
+                      child: InkWell(
+                        onTap: () {
+                          var opN = operator.toString();
 
+                          printMessage("screen", "OpN Name : $opN");
 
-                      var opN = operator.toString();
+                          var opNameToPass = "";
 
-                      printMessage("screen", "OpN Name : $opN");
+                          if (opN.toString().toLowerCase() ==
+                              "Airtel".toLowerCase()) {
+                            opNameToPass = "Airtel";
+                          } else if (opN.toString().toLowerCase() ==
+                                  "BSNL Recharge/Validity (RCV)"
+                                      .toLowerCase() ||
+                              opN.toString().toLowerCase() ==
+                                  "BSNL".toLowerCase()) {
+                            opNameToPass = "BSNL";
+                          } else if (opN.toString().toLowerCase() ==
+                              "IdeaVodafone".toLowerCase()) {
+                            opNameToPass = "Idea";
+                          } else if (opN.toString().toLowerCase() ==
+                                  "Jio".toLowerCase() ||
+                              opN.toString().toLowerCase() ==
+                                  "RELIANCE JIO".toLowerCase()) {
+                            opNameToPass = "JIO";
+                          } else if (opN.toString().toLowerCase() ==
+                              "MTNL Delhi".toLowerCase()) {
+                            opNameToPass = "MTNL Delhi";
+                          } else if (opN.toString().toLowerCase() ==
+                              "MTNL Mumbai".toLowerCase()) {
+                            opNameToPass = "MTNL Mumbai";
+                          } else if (opN.toString().toLowerCase() ==
+                              "Vodafone".toLowerCase()) {
+                            opNameToPass = "Vodafone";
+                          }
 
+                          Map map = {
+                            "planName": "$planType",
+                            "price": "$price",
+                            "validity": "$validity",
+                            "packageDescription": "$discription",
+                            "operatorName": "$opNameToPass",
+                            "circleName": "$circle",
+                            "billerImg": "$billerImg",
+                            "mobileNo": "$number",
+                            "operatorId": "$operatorId",
+                            "spKey": "$spKey"
+                          };
 
-                      var opNameToPass = "";
+                          printMessage(
+                              "screen", "Case 3 Pass : ${map.toString()}");
 
-                      if(opN.toString().toLowerCase()=="Airtel".toLowerCase()){
-                        opNameToPass = "Airtel";
-                      }else if(opN.toString().toLowerCase()=="BSNL Recharge/Validity (RCV)".toLowerCase()
-                          || opN.toString().toLowerCase()=="BSNL".toLowerCase()){
-                        opNameToPass = "BSNL";
-                      }else if(opN.toString().toLowerCase()=="IdeaVodafone".toLowerCase()){
-                        opNameToPass = "Idea";
-                      }else if(opN.toString().toLowerCase()=="Jio".toLowerCase() || opN.toString().toLowerCase()=="RELIANCE JIO".toLowerCase()){
-                        opNameToPass = "JIO";
-                      }else if(opN.toString().toLowerCase()=="MTNL Delhi".toLowerCase()){
-                        opNameToPass = "MTNL Delhi";
-                      }else if(opN.toString().toLowerCase()=="MTNL Mumbai".toLowerCase()){
-                        opNameToPass = "MTNL Mumbai";
-                      }else if(opN.toString().toLowerCase()=="Vodafone".toLowerCase()){
-                        opNameToPass = "Vodafone";
-                      }
-
-
-                      Map map = {
-                        "planName": "$planType",
-                        "price": "$price",
-                        "validity": "$validity",
-                        "packageDescription": "$discription",
-                        "operatorName": "$opNameToPass",
-                        "circleName": "$circle",
-                        "billerImg": "$billerImg",
-                        "mobileNo": "$number",
-                        "operatorId": "$operatorId"
-                      };
-
-                      printMessage("screen", "Case 3 Pass : ${map.toString()}");
-
-                      openMobilePaymentNew(context, map);
-                    },
-                    child: Center(
-                      child: Text(
-                        "$buy",
-                        style: TextStyle(
-                          color: white,
-                          fontSize: font16.sp,
+                          openMobilePaymentNew(context, map);
+                        },
+                        child: Center(
+                          child: Text(
+                            "$buy",
+                            style: TextStyle(
+                              color: white,
+                              fontSize: font16.sp,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 10,
-                  blurRadius: 10,
-                  offset: Offset(0, 1), // changes position of shadow
-                ),
-              ],
-            ))),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(50.0)),
+                  color: white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 10,
+                      blurRadius: 10,
+                      offset: Offset(0, 1), // changes position of shadow
+                    ),
+                  ],
+                ))),
       ],
     );
   }

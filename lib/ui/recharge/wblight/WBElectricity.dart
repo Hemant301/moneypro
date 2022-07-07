@@ -98,7 +98,7 @@ class _WBElectricityState extends State<WBElectricity> {
 
   var inputNo;
 
-  double welcomeCharge = 5.0;
+  double welcomeCharge = 1.2;
   var welcomeAMT = "";
   var isWelcomeOffer = false;
   var showBal = "";
@@ -1808,7 +1808,7 @@ class _WBElectricityState extends State<WBElectricity> {
             ),
             Spacer(),
             Text(
-              "$rupeeSymbol 5.00",
+              "$rupeeSymbol 1.20",
               style: TextStyle(color: green, fontSize: font14.sp),
             ),
             SizedBox(

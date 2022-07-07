@@ -15,8 +15,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
-
 class DTHRechargeNew extends StatefulWidget {
   final Map map;
   const DTHRechargeNew({Key? key, required this.map}) : super(key: key);
@@ -59,9 +57,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
   double cardCharge = 0.0;
   double welcomeCharge = 0.0;
-  var welcomeAMT ="";
+  var welcomeAMT = "";
   var isWelcomeOffer = false;
-
 
   dynamic currentTime;
 
@@ -84,19 +81,19 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   var currentYear = "";
   var timeH = "";
   var cDate = "";
-  var finalString  = "";
+  var finalString = "";
 
-  var MonthlyRecharge ;
-  var Balance ;
+  var MonthlyRecharge;
+  var Balance;
   var customerName;
-  var status ;
+  var status;
   var NextRechargeDate;
   var lastrechargeamount;
-  var lastrechargedate ;
+  var lastrechargedate;
   var planname;
   var minLimit;
 
-  var jwtToken="";
+  var jwtToken = "";
   var mainWallet;
 
   @override
@@ -114,8 +111,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     });
 
     if (inputNo.toString() != "") {
-      mobileController =
-          TextEditingController(text: "${inputNo.toString()}");
+      mobileController = TextEditingController(text: "${inputNo.toString()}");
     }
 
     setState(() {
@@ -127,7 +123,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     });
 
     setState(() {
-      minLimit =  widget.map['minLimit'];
+      minLimit = widget.map['minLimit'];
       finalString = "${getRandomString(27)}$currentYear$cDate$timeH";
     });
 
@@ -137,15 +133,12 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
-
   updateWalletBalances() async {
     var mpBalc = await getWalletBalance();
     var qrBalc = await getQRBalance();
     var walBalc = await getWelcomeAmt();
-    double mX =0.0;
-    double wX=0.0;
-
-
+    double mX = 0.0;
+    double wX = 0.0;
 
     setState(() {
       moneyProBalc = mpBalc;
@@ -154,7 +147,6 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         moneyProBalc = "0.0";
       }
     });
-
 
     final inheritedWidget = StateContainer.of(context);
 
@@ -179,7 +171,6 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       inheritedWidget.updateWelBalc(value: walBalc);
     }
 
-
     if (walBalc != null || walBalc != 0) {
       wX = double.parse(walBalc);
     }
@@ -188,11 +179,11 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       mX = double.parse(mpBalc);
     }
     setState(() {
-      welcomeAMT =walBalc;
-      var x = double.parse(moneyProBalc) +double.parse(welcomeAMT);
-      moneyProBalc =formatDecimal2Digit.format(x);;
+      welcomeAMT = walBalc;
+      var x = double.parse(moneyProBalc) + double.parse(welcomeAMT);
+      moneyProBalc = formatDecimal2Digit.format(x);
+      ;
     });
-
   }
 
   @override
@@ -206,346 +197,362 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-          backgroundColor: white,
-          appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
-          body: (loading)
-              ? Center(child: circularProgressLoading(40.0))
-              : SingleChildScrollView(
-            child: Column(
-              children: [
-                appSelectedBanner(context, "recharge_banner.png", 150.0.h),
-                Padding(
-                  padding:
-                  const EdgeInsets.only(top: 30.0, left: 25, right: 25),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        child: Image.network(
-                          "$billerIconUrl${widget.map['billerImg']}",
-                          width: 24.w,
-                        ),
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${widget.map['billerName']}",
-                              style: TextStyle(
-                                  color: black,
-                                  fontSize: font16.sp,
-                                  fontWeight: FontWeight.bold),
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
+              body: (loading)
+                  ? Center(child: circularProgressLoading(40.0))
+                  : SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          appSelectedBanner(
+                              context, "recharge_banner.png", 150.0.h),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 30.0, left: 25, right: 25),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  child: Image.network(
+                                    "$billerIconUrl${widget.map['billerImg']}",
+                                    width: 24.w,
+                                  ),
+                                  width: 24.w,
+                                  height: 24.h,
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${widget.map['billerName']}",
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: font16.sp,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "${widget.map['stateName']}",
+                                        style: TextStyle(
+                                            color: lightBlue,
+                                            fontSize: font13.sp),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            Text(
-                              "${widget.map['stateName']}",
-                              style:
-                              TextStyle(color: lightBlue, fontSize: font13.sp),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: padding,
+                              left: padding,
+                              right: padding,
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: padding,
-                    left: padding,
-                    right: padding,
-                  ),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 12, bottom: 12),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15, top: 12, bottom: 12),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/invoice.png',
+                                    height: 20.h,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    "Sample Bill",
+                                    style: TextStyle(
+                                        color: black, fontSize: font14.sp),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              left: padding,
+                              right: padding,
+                            ),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15, top: 10, bottom: 10),
+                              child: TextFormField(
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: inputFont.sp,
+                                    fontWeight: FontWeight.bold),
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.done,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                controller: mobileController,
+                                decoration: new InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  counterText: "",
+                                  label: Text("DTH number "),
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                          ),
+                          (showDetails) ? _buildPayDetails() : Container()
+                        ],
+                      ),
+                    ),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: (showDetails)
+                    ? _buildButtonSection()
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: 40.h,
+                            margin: EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 0),
+                            decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                border: Border.all(color: lightBlue)),
+                            child: InkWell(
+                              onTap: () {
+                                var number = mobileController.text.toString();
+                                if (number.length == 0) {
+                                  showToastMessage(
+                                      "Enter the mobile no/DTH number");
+                                  return;
+                                }
+
+                                var dishOperator =
+                                    widget.map['billerName'].toString();
+                                var dishCode = "";
+
+                                printMessage(screen, "DTH number : $number");
+                                printMessage(
+                                    screen, "DTH Code : $dishOperator");
+
+                                //getDTHDetails(number, dishCode);
+
+                                if (dishOperator.toString().toString() ==
+                                    "Airtel Digital TV") {
+                                  setState(() {
+                                    dishCode = "Airteldth";
+                                  });
+                                } else if (dishOperator.toString().toString() ==
+                                    "Dish TV") {
+                                  setState(() {
+                                    dishCode = "Dishtv";
+                                  });
+                                } else if (dishOperator.toString().toString() ==
+                                    "Sun Direct") {
+                                  setState(() {
+                                    dishCode = "Sundirect";
+                                  });
+                                } else if (dishOperator.toString().toString() ==
+                                    "Tata Sky") {
+                                  setState(() {
+                                    dishCode = "TataSky";
+                                  });
+                                } else if (dishOperator.toString().toString() ==
+                                    "Videocon D2H") {
+                                  setState(() {
+                                    dishCode = "Videocon";
+                                  });
+                                }
+
+                                closeKeyBoard(context);
+
+                                generateJWTToken(number, dishCode, 1);
+                              },
+                              child: Center(
+                                child: Text(
+                                  "$search",
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: font14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            )));
+  }
+
+  _buildPayDetails() {
+    return Column(
+      children: [
+        (isError)
+            ? Container()
+            : Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 30.0, right: 30, left: 30),
                     child: Row(
                       children: [
-                        Image.asset(
-                          'assets/invoice.png',
-                          height: 20.h,
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "Name",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
                         ),
-                        SizedBox(
-                          width: 4.w,
-                        ),
-                        Text(
-                          "Sample Bill",
-                          style: TextStyle(color: black, fontSize: font14.sp),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "$customerName",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: font13.sp,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.right,
+                          ),
                         )
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 10,
-                    left: padding,
-                    right: padding,
-                  ),
-                  decoration: BoxDecoration(
-                    color: editBg,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 10, bottom: 10),
-                    child: TextFormField(
-                      style: TextStyle(
-                          color: black,
-                          fontSize: inputFont.sp,
-                          fontWeight: FontWeight.bold),
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.characters,
-                      controller: mobileController,
-                      decoration: new InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 10),
-                        counterText: "",
-                        label: Text("DTH number "),
-                      ),
-                      maxLength: 20,
-                    ),
-                  ),
-                ),
-                (showDetails)?_buildPayDetails():Container()
-              ],
-            ),
-          ),
-          bottomNavigationBar: Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: (showDetails)
-                ? _buildButtonSection()
-                : Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * .8,
-                  height: 40.h,
-                  margin: EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 0),
-                  decoration: BoxDecoration(
-                      color: lightBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                      border: Border.all(color: lightBlue)),
-                  child: InkWell(
-                    onTap: () {
-                      var number = mobileController.text.toString();
-                      if (number.length == 0) {
-                        showToastMessage("Enter the mobile no/DTH number");
-                        return;
-                      }
-
-                      var dishOperator = widget.map['billerName'].toString();
-                      var dishCode = "";
-
-                      printMessage(screen, "DTH number : $number");
-                      printMessage(screen, "DTH Code : $dishOperator");
-
-                      //getDTHDetails(number, dishCode);
-
-                      if(dishOperator.toString().toString()=="Airtel Digital TV"){
-                        setState(() {
-                          dishCode = "Airteldth";
-                        });
-                      }else if(dishOperator.toString().toString()=="Dish TV"){
-                        setState(() {
-                          dishCode = "Dishtv";
-                        });
-                      }else if(dishOperator.toString().toString()=="Sun Direct"){
-                        setState(() {
-                          dishCode = "Sundirect";
-                        });
-                      }
-                      else if(dishOperator.toString().toString()=="Tata Sky"){
-                        setState(() {
-                          dishCode = "TataSky";
-                        });
-                      }else if(dishOperator.toString().toString()=="Videocon D2H"){
-                        setState(() {
-                          dishCode = "Videocon";
-                        });
-                      }
-
-                      closeKeyBoard(context);
-
-                      generateJWTToken(number, dishCode,1);
-
-                    },
-                    child: Center(
-                      child: Text(
-                        "$search",
-                        style: TextStyle(
-                          color: white,
-                          fontSize: font14.sp,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20.0, right: 30, left: 30),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "Balance",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "$rupeeSymbol $Balance",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: font13.sp,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.right,
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        )));
-  }
-
-  _buildPayDetails(){
-    return Column(
-      children: [
-        (isError)?Container():Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 30.0, right: 30, left: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex:1,
-                    child: Text(
-                      "Name",
-                      style: TextStyle(
-                          color: lightBlack, fontSize: font13.sp),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex:2,
-                    child: Text(
-                      "$customerName",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  )
+                  (NextRechargeDate.toString() == "")
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, right: 30, left: 30),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "Next Recharge Date",
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font13.sp),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "$NextRechargeDate",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font13.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  (MonthlyRecharge.toString() == "")
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, right: 30, left: 30),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "Monthly Recharge",
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font13.sp),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "$rupeeSymbol $MonthlyRecharge",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font13.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  (planname.toString() == "")
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, right: 30, left: 30, bottom: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "Plan", //wb26k2153
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font13.sp),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "$planname",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font13.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 20.0, right: 30, left: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex:1,
-                    child: Text(
-                      "Balance",
-                      style: TextStyle(
-                          color: lightBlack, fontSize: font13.sp),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex:2,
-                    child: Text(
-                      "$rupeeSymbol $Balance",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            (NextRechargeDate.toString()=="")?Container():   Padding(
-              padding: const EdgeInsets.only(
-                  top: 20.0, right: 30, left: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Next Recharge Date",
-                      style: TextStyle(
-                          color: lightBlack,
-                          fontSize: font13.sp),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "$NextRechargeDate",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            (MonthlyRecharge.toString()=="")?Container():   Padding(
-              padding: const EdgeInsets.only(
-                  top: 20.0, right: 30, left: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      "Monthly Recharge",
-                      style: TextStyle(
-                          color: lightBlack,
-                          fontSize: font13.sp),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "$rupeeSymbol $MonthlyRecharge",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            (planname.toString()=="")?Container():
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 20.0, right: 30, left: 30, bottom: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex:1,
-                    child: Text(
-                      "Plan", //wb26k2153
-                      style: TextStyle(
-                          color: lightBlack, fontSize: font13.sp),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex:2,
-                    child: Text(
-                      "$planname",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: font13.sp,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
         Container(
           margin: EdgeInsets.only(
             top: 15,
@@ -577,25 +584,25 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 label: Text("Amount"),
               ),
               maxLength: 6,
-              onChanged: (val){
-
-                if(val.length!=0){
+              onChanged: (val) {
+                if (val.length != 0) {
                   double xx = double.parse(val);
 
                   setState(() {
-                    if(welcomeAMT.toString()=="null" || welcomeAMT.toString()=="0" ||welcomeAMT.toString()==""){
+                    if (welcomeAMT.toString() == "null" ||
+                        welcomeAMT.toString() == "0" ||
+                        welcomeAMT.toString() == "") {
                       isWelcomeOffer = false;
-                    }else{
-                      if(xx>300){
+                    } else {
+                      if (xx > 300) {
                         isWelcomeOffer = true;
                         calculateWelcomeAMt(val.toString());
-                      }else{
+                      } else {
                         isWelcomeOffer = false;
                       }
                     }
                   });
                 }
-
               },
             ),
           ),
@@ -608,137 +615,134 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             textAlign: TextAlign.center,
           ),
         ),
-        (isWelcomeOffer)?_buildOfferRwo():Container(),
+        (isWelcomeOffer) ? _buildOfferRwo() : Container(),
         Divider(),
         Padding(
-          padding:
-          const EdgeInsets.only(top: 10.0, right: 30, left: 30),
+          padding: const EdgeInsets.only(top: 10.0, right: 30, left: 30),
           child: Text(
             billMsg,
             style: TextStyle(color: lightBlack, fontSize: font14.sp),
           ),
         ),
-        (mainWallet.toString()=="0" || mainWallet.toString()=="0.0"|| mainWallet.toString()=="null")?Container():Padding(
-          padding:
-          const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                debitFrom,
-                style: TextStyle(
-                    color: black,
-                    fontSize: font14.sp,
-                    fontWeight: FontWeight.w400),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                      value: checkedValue,
-                      onChanged: (val) async{
+        (mainWallet.toString() == "0" ||
+                mainWallet.toString() == "0.0" ||
+                mainWallet.toString() == "null")
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.only(top: 15.0, right: 30, left: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      debitFrom,
+                      style: TextStyle(
+                          color: black,
+                          fontSize: font14.sp,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                            value: checkedValue,
+                            onChanged: (val) async {
+                              var mpBalc = await getWalletBalance();
 
-                        var mpBalc = await getWalletBalance();
+                              setState(() {
+                                double walletValue = 0;
+                                double rechargeValue = 0;
 
-                        setState(()  {
-                          double walletValue = 0;
-                          double rechargeValue = 0;
+                                var rechargeAmount =
+                                    amountController.text.toString();
 
-                          var rechargeAmount = amountController.text.toString();
+                                setState(() {
+                                  if (mpBalc.toString() == "") {
+                                    walletValue = 0;
+                                  } else {
+                                    walletValue = double.parse(moneyProBalc);
+                                  }
 
+                                  if (rechargeAmount.toString() == "") {
+                                    rechargeValue = 0;
+                                  } else {
+                                    rechargeValue =
+                                        double.parse(rechargeAmount);
+                                  }
+                                });
 
+                                if (walletValue < rechargeValue) {
+                                  setState(() {
+                                    remainAmt = rechargeValue - walletValue;
+                                  });
 
-                          setState(() {
-                            if (mpBalc.toString() == "") {
-                              walletValue = 0;
-                            } else {
-                              walletValue =
-                                  double.parse(moneyProBalc);
-                            }
+                                  if (isWelcomeOffer) {
+                                    remainAmt = remainAmt - welcomeCharge;
+                                  }
+                                }
 
-                            if (rechargeAmount.toString() == "") {
-                              rechargeValue = 0;
-                            } else {
-                              rechargeValue =
-                                  double.parse(rechargeAmount);
-                            }
-                          });
-
-                          if (walletValue < rechargeValue) {
-                            setState(() {
-                              remainAmt =
-                                  rechargeValue - walletValue;
-                            });
-
-                            if(isWelcomeOffer){
-                              remainAmt = remainAmt - welcomeCharge;
-                            }
-                          }
-
-                          if (walletValue < 0) {
-                            closeKeyBoard(context);
-                            showToastMessage(
-                                "Your wallet does not have enough balance");
-                          } else {
-                            closeKeyBoard(context);
-                            checkedValue = val!;
-                          }
-                        });
-                      }),
-                  Text(
-                    "$wallet",
-                    style:
-                    TextStyle(fontSize: font14.sp, color: black),
-                  ),
-                  Spacer(),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: walletBg,
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(color: walletBg)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, top: 5, bottom: 5),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        children: [
-                          Image.asset(
-                            "assets/wallet.png",
-                            height: 24.h,
-                          ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8, top: 5),
-                              child: Text(
-                              //  "${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
-                                "$moneyProBalc",
-                                style: TextStyle(
-                                    color: white, fontSize: font15.sp),
-                              ),
+                                if (walletValue < 0) {
+                                  closeKeyBoard(context);
+                                  showToastMessage(
+                                      "Your wallet does not have enough balance");
+                                } else {
+                                  closeKeyBoard(context);
+                                  checkedValue = val!;
+                                }
+                              });
+                            }),
+                        Text(
+                          "$wallet",
+                          style: TextStyle(fontSize: font14.sp, color: black),
+                        ),
+                        Spacer(),
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: walletBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(color: walletBg)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, top: 5, bottom: 5),
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              children: [
+                                Image.asset(
+                                  "assets/wallet.png",
+                                  height: 24.h,
+                                ),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8, top: 5),
+                                    child: Text(
+                                      //  "${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
+                                      "$moneyProBalc",
+                                      style: TextStyle(
+                                          color: white, fontSize: font15.sp),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-              (remainAmt != 0 && checkedValue)
-                  ? Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Text(
-                  "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                  style: TextStyle(
-                      color: black, fontSize: font14.sp),
+                    (remainAmt != 0 && checkedValue)
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Text(
+                              "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                              style:
+                                  TextStyle(color: black, fontSize: font14.sp),
+                            ),
+                          )
+                        : Container(),
+                  ],
                 ),
-              )
-                  : Container(),
-            ],
-          ),
-        ),
+              ),
         _buildUPISection(),
         _buildCardSection(),
       ],
@@ -758,7 +762,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               border: Border.all(color: lightBlue)),
           child: InkWell(
-            onTap: () async{
+            onTap: () async {
               var mpBalc = await getWalletBalance();
               setState(() {});
 
@@ -781,10 +785,11 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 }
               });
 
-              if(minLimit.toString()!="null" && minLimit.toString()!=""){
+              if (minLimit.toString() != "null" && minLimit.toString() != "") {
                 double minDb = double.parse(minLimit);
-                if(rechargeValue<minDb){
-                  showToastMessage("Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
+                if (rechargeValue < minDb) {
+                  showToastMessage(
+                      "Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
                   return;
                 }
               }
@@ -792,17 +797,16 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               if (checkedValue) {
                 if (walletValue >= rechargeValue) {
                   setState(() {
-                    isWallMore =true;
+                    isWallMore = true;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
 
                   var number = mobileController.text.toString();
-                  generateJWTToken(number, formatNow.format(rechargeValue),2);
-
+                  generateJWTToken(number, formatNow.format(rechargeValue), 2);
                 } else {
                   if (isCardOpen) {
                     setState(() {
-                      isWallMore =false;
+                      isWallMore = false;
                     });
                     var cardNo = cardController.text.toString();
                     var cardName = cardHolderNameController.text.toString();
@@ -837,15 +841,15 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
                     remainAmt = remainAmt + cardCharge;
 
-                    if(isWelcomeOffer){
-                      remainAmt = remainAmt -welcomeCharge;
+                    if (isWelcomeOffer) {
+                      remainAmt = remainAmt - welcomeCharge;
                     }
 
-                    printMessage(screen, "Remaining amount : ${formatNow.format(remainAmt)}");
+                    printMessage(screen,
+                        "Remaining amount : ${formatNow.format(remainAmt)}");
 
-                    generateJWTTokenWPG(id, formatNow.format(remainAmt), rechargeAmount);
-
-
+                    generateJWTTokenWPG(
+                        id, formatNow.format(remainAmt), rechargeAmount);
                   } else {
                     showToastMessage("Select any one payment method");
                   }
@@ -854,15 +858,14 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 printMessage(screen, "Check card Open : $isCardOpen");
                 if (isCardOpen) {
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  if(isWelcomeOffer){
-                    rechargeValue = rechargeValue -welcomeCharge;
+                  if (isWelcomeOffer) {
+                    rechargeValue = rechargeValue - welcomeCharge;
                   }
                   setState(() {
-                    isWallMore =false;
+                    isWallMore = false;
                   });
 
                   rechargeValue = rechargeValue + cardCharge;
-
 
                   generateJWTTokenPG(id, formatNow.format(rechargeValue));
                 } else {
@@ -897,19 +900,19 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
           children: [
             Expanded(
                 child: Image.asset(
-                  'assets/pci.png',
-                  height: 24.h,
-                )),
+              'assets/pci.png',
+              height: 24.h,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/upi.png',
-                  height: 20.h,
-                )),
+              'assets/upi.png',
+              height: 20.h,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/iso.png',
-                  height: 30.h,
-                )),
+              'assets/iso.png',
+              height: 30.h,
+            )),
           ],
         ),
         SizedBox(
@@ -950,9 +953,10 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
           var jwtToken = data['token'].toString();
-          if(action==1) {
+          if (action == 1) {
             getDTHDetailsInfo(jwtToken, dthNo, dthName);
-          }if(action==2) {
+          }
+          if (action == 2) {
             paymentStatusByWalletOnly(jwtToken, dthName);
           }
         } else {
@@ -961,7 +965,6 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       }
     });
   }
-
 
   Future generateJWTTokenWPG(id, remainAmt, rechargeAmount) async {
     setState(() {
@@ -993,8 +996,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       Navigator.pop(context);
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
-           jwtToken = data['token'].toString();
-            paymentByUPIWallet(id, remainAmt, rechargeAmount);
+          jwtToken = data['token'].toString();
+          paymentByUPIWallet(id, remainAmt, rechargeAmount);
         } else {
           showToastMessage(somethingWrong);
         }
@@ -1032,7 +1035,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       Navigator.pop(context);
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
-           jwtToken = data['token'].toString();
+          jwtToken = data['token'].toString();
           paymentByPGDirect(id, rechargeValue);
         } else {
           showToastMessage(somethingWrong);
@@ -1041,8 +1044,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     });
   }
 
-  getDTHDetailsInfo(jwtToken,dthNo, dthName) async {
-
+  getDTHDetailsInfo(jwtToken, dthNo, dthName) async {
     setState(() {
       showDialog(
           barrierDismissible: false,
@@ -1059,21 +1061,21 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       "Authorization": "$authHeader",
     };
 
-
     var body = {
-      "user_token":"$userToken",
-      "token":"$jwtToken",
-      "canumber":"$dthNo",
-      "op":"$dthName",
+      "user_token": "$userToken",
+      "token": "$jwtToken",
+      "canumber": "$dthNo",
+      "op": "$dthName",
     };
 
     printMessage(screen, "Body : $body");
 
-    final response = await http.post(Uri.parse(dthInfoAPI), headers: headers, body: jsonEncode(body));
+    final response = await http.post(Uri.parse(dthInfoAPI),
+        headers: headers, body: jsonEncode(body));
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       printMessage(screen, "Response DTH : ${data}");
@@ -1084,9 +1086,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         var status = data['status'].toString();
 
         if (status.toString() == "1") {
-
-          if(data['data']['status'].toString()=="true"){
-
+          if (data['data']['status'].toString() == "true") {
             MonthlyRecharge = data['data']['info'][0]['MonthlyRecharge'];
             Balance = data['data']['info'][0]['Balance'];
             customerName = data['data']['info'][0]['customerName'];
@@ -1096,14 +1096,12 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             lastrechargedate = data['data']['info'][0]['lastrechargedate'];
             planname = data['data']['info'][0]['planname'];
 
-
             amountController =
                 TextEditingController(text: "${MonthlyRecharge.toString()}");
-
           }
 
           setState(() {
-            showDetails=true;
+            showDetails = true;
             isError = false;
           });
 
@@ -1121,22 +1119,20 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         pinCode = data['DATA']['PIN Code'];*/
         } else {
           setState(() {
-            showDetails=false;
+            showDetails = false;
             isError = true;
           });
           showToastMessage(data['Message'].toString());
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
-        showDetails=false;
+        showDetails = false;
         isError = true;
       });
       showToastMessage(status500);
     }
-
-
   }
 
   _buildUPISection() {
@@ -1147,8 +1143,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       elevation: 10,
       margin: EdgeInsets.only(top: 15.0, left: 20, right: 20),
       child: InkWell(
-        onTap: () async{
-
+        onTap: () async {
           var mpBalc = await getWalletBalance();
 
           setState(() {
@@ -1158,7 +1153,6 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
           double walletValue = 0;
           double rechargeValue = 0;
-
 
           setState(() {
             if (mpBalc.toString() == "") {
@@ -1176,10 +1170,11 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               rechargeValue = double.parse(amt);
             }
 
-            if(minLimit.toString()!="null" && minLimit.toString()!=""){
+            if (minLimit.toString() != "null" && minLimit.toString() != "") {
               double minDb = double.parse(minLimit);
-              if(rechargeValue<minDb){
-                showToastMessage("Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
+              if (rechargeValue < minDb) {
+                showToastMessage(
+                    "Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
                 return;
               }
             }
@@ -1192,32 +1187,32 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               }
             }*/
 
-
             if (checkedValue) {
               if (walletValue >= rechargeValue) {
                 setState(() {
-                  isWallMore =true;
+                  isWallMore = true;
                 });
                 var id = DateTime.now().millisecondsSinceEpoch;
-               // paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                // paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
                 var number = mobileController.text.toString();
-                generateJWTToken(number, formatNow.format(rechargeValue),2);
+                generateJWTToken(number, formatNow.format(rechargeValue), 2);
               } else {
                 if (isUPIOpen) {
                   setState(() {
                     remainAmt = rechargeValue - walletValue;
                   });
 
-                  if(isWelcomeOffer){
-                    remainAmt = remainAmt -welcomeCharge;
+                  if (isWelcomeOffer) {
+                    remainAmt = remainAmt - welcomeCharge;
                   }
                   setState(() {
-                    isWallMore =false;
+                    isWallMore = false;
                   });
 
                   var id = DateTime.now().millisecondsSinceEpoch;
                   //paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
-                  generateJWTTokenWPG(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                  generateJWTTokenWPG(id, formatNow.format(remainAmt),
+                      formatNow.format(rechargeValue));
                 } else {
                   showToastMessage("Select any one payment method");
                 }
@@ -1226,10 +1221,10 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               if (isUPIOpen) {
                 var id = DateTime.now().millisecondsSinceEpoch;
                 setState(() {
-                  isWallMore =false;
+                  isWallMore = false;
                 });
-                if(isWelcomeOffer){
-                  rechargeValue = rechargeValue -welcomeCharge;
+                if (isWelcomeOffer) {
+                  rechargeValue = rechargeValue - welcomeCharge;
                 }
 
                 //paymentByPGDirect(id, formatNow.format(rechargeValue));
@@ -1242,7 +1237,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         },
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
+              const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
           child: Row(
             children: [
               Image.asset(
@@ -1374,7 +1369,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -1408,7 +1404,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -1437,8 +1434,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeMM,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardMMController,
@@ -1450,7 +1447,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -1465,8 +1463,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeYY,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardYYController,
@@ -1478,7 +1476,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -1512,7 +1511,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -1556,7 +1556,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     );
   }
 
-  Future paymentStatusByWalletOnly(jwtToken,rechargeAmt) async {
+  Future paymentStatusByWalletOnly(jwtToken, rechargeAmt) async {
     setState(() {
       currentTime = DateFormat.jm().format(DateTime.now());
 
@@ -1583,17 +1583,17 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       mId = "";
     }
 
-
-
+    var lat = await getLatitude();
+    var long = await getLongitude();
     var amt = amountController.text.toString();
 
-    if(isWallMore){
-      xAmt= double.parse(amt);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(amt);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
 
@@ -1627,32 +1627,36 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
       //"refId":"$finalString"*/
 
-
-      "user_token":"$token",
-      "token":"$jwtToken",
-      "operator_code":"${widget.map['billerId']}",
-      "mobile":"$dthNo",
-      "amount":"$amt",
-      "wallet":"$xAmt",
-      "category":"${widget.map['billerName']}",//operator name
+      "user_token": "$token",
+      // "token":"$jwtToken",
+      "spkey": "${widget.map['billerId']}",
+      "operator_code": "${widget.map['billerId']}",
+      "mobile": "$dthNo",
+      "amount": "$amt",
+      "wallet": "$xAmt",
+      "category": "${widget.map['billerName']}", //operator name
       //"operator_name":"${widget.map['operatorName']}",
-      "operator_name":"PREPAID",
+      "operator_name": "PREPAID",
       //"circle":"${widget.map['circleName']}",
-      "circle":"WB",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
-      "paymentgateway_amount":"0",
-      "paymentgateway_orderId":"",
-      "paymentgateway_txn":"",
-      "paymentgateway_mode":"",
-      "txTime":"",
-      "signature":"",
-      "txStatus":"",
-      "referenceId":""
+      "circle": "WB",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
+      "lat": "${lat.toStringAsFixed(4)}",
+      "long": "${long.toStringAsFixed(4)}",
+      "m_id": "$mId",
+      "paymentgateway_amount": "0",
+      // "paymentgateway_orderId":"",
+      "paymentgateway_txn": "",
+      "paymentgateway_mode": "",
+      "txTime": "",
+      "signature": "",
+      "txStatus": "",
+      "referenceId": ""
     };
 
     printMessage(screen, "body : $body");
 
-    final response = await http.post(Uri.parse(doRechargePrepaidAPI),
+    final response = await http.post(Uri.parse(doRechargeinstantPay),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
@@ -1666,9 +1670,9 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         var status = data['status'].toString();
         if (status.toLowerCase() == "success" || status.toLowerCase() == "1") {
           Navigator.pop(context);
-          showToastMessage(data['message'].toString());
+          showToastMessage(data['response']['status'].toString());
 
-          var tId = data['transction_id'].toString();
+          var tId = data['response']['data']['ipay_id'].toString();
           var commission = data['commission'].toString();
           Map map = {
             "tId": "$tId",
@@ -1679,18 +1683,18 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             "txTime": "$currentTime",
             "txMsg": "Transaction is successfull",
             "type": "MoneyPro Wallet",
-            "referenceId": "",
+            "referenceId": "${data['response']['data']['orderid']}",
             "signature": "",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobile']}",
-            "commission":"$commission"
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
           //}
 
         } else if (status.toString() == "2") {
           Navigator.pop(context);
-          showToastMessage(somethingWrong);
+          showToastMessage(data['response']['status'].toString());
         } else if (status.toString() == "0") {
           Navigator.pop(context);
           showToastMessage(somethingWrong);
@@ -1723,7 +1727,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             "txTime": "$currentTime",
             "txMsg": "$msg",
             "type": "MoneyPro Wallet",
-            "referenceId": "",
+            "referenceId": "${data['response']['data']['orderid']}",
             "signature": ""
           };
           openPaymentFailure(context, map);
@@ -1837,7 +1841,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
       CashfreePGSDK.doPayment(inputFinalParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "Final result : $value");
       });
@@ -1846,13 +1850,13 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     if (isUPIOpen) {
       CashfreePGSDK.getUPIApps().then((value) {
         setState(() {
-          getUPIAppNames(value, orderId, difAmt, token,rechAmt);
+          getUPIAppNames(value, orderId, difAmt, token, rechAmt);
         });
       });
     }
   }
 
-  getUPIAppNames(result, orderId, difAmt, token,rechAmt) async {
+  getUPIAppNames(result, orderId, difAmt, token, rechAmt) async {
     String orderNote = "Order Note";
 
     if (result.length == 0) {
@@ -1912,15 +1916,14 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
       CashfreePGSDK.doUPIPayment(inputParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "doUPIPayment result : $value");
       });
     }
   }
 
-
-  verifySignatureByUPIWallet(responsePG,rechAmt) async {
+  verifySignatureByUPIWallet(responsePG, rechAmt) async {
     var txStatus = responsePG['txStatus'];
     var orderAmount = responsePG['orderAmount'];
     var paymentMode = responsePG['paymentMode'];
@@ -1943,9 +1946,9 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentStatusDirectPG(rechAmt, orderAmount, orderId, paymentMode,
@@ -2013,9 +2016,9 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1"){
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentStatusDirectPG(orderAmount, orderAmount, orderId, paymentMode,
@@ -2066,18 +2069,19 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     } else {
       mId = "";
     }
-
+    var lat = await getLatitude();
+    var long = await getLongitude();
     var amt = amountController.text.toString();
 
     var number = mobileController.text.toString();
 
-    if(isWallMore){
-      xAmt= double.parse(amt);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(amt);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
 
@@ -2112,39 +2116,41 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
       //"refId":"$finalString"*/
 
-
-
-      "user_token":"$token",
-      "token":"$jwtToken",
-      "operator_code":"${widget.map['billerId']}",
-      "mobile":"$dthNo",
-      "amount":"$amt",
-      "wallet":"$xAmt",
-      "category":"${widget.map['billerName']}",//operator name
+      "user_token": "$token",
+      "spkey": "${widget.map['billerId']}",
+      // "token": "$jwtToken",
+      "operator_code": "${widget.map['billerId']}",
+      "mobile": "$dthNo",
+      "amount": "$amt",
+      "wallet": "$xAmt",
+      "category": "${widget.map['billerName']}", //operator name
       //"operator_name":"${widget.map['operatorName']}",
-      "operator_name":"PREPAID",
+      "operator_name": "PREPAID",
       //"circle":"${widget.map['circleName']}",
-      "circle":"WB",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
-      "paymentgateway_amount":"$pgAmt",
-      "paymentgateway_orderId":"$pgTxn",
-      "paymentgateway_txn":"$pgTxn",
-      "paymentgateway_mode":"$pgMode",
-      "txTime":"$pgTxTime",
-      "signature":"$pgSign",
-      "txStatus":"$pgTxStatus",
-      "referenceId":"$pgRefId"
+      "circle": "WB",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
+      "lat": "${lat.toStringAsFixed(4)}",
+      "long": "${long.toStringAsFixed(4)}",
+      "m_id": "$mId",
+      "paymentgateway_amount": "$pgAmt",
+      // "paymentgateway_orderId":"$pgTxn",
+      "paymentgateway_txn": "$pgTxn",
+      "paymentgateway_mode": "$pgMode",
+      "txTime": "$pgTxTime",
+      "signature": "$pgSign",
+      "txStatus": "$pgTxStatus",
+      "referenceId": "$pgRefId"
     };
 
     printMessage(screen, "body : $body");
 
-    final response = await http.post(Uri.parse(doRechargePrepaidAPI),
+    final response = await http.post(Uri.parse(doRechargeinstantPay),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
 
     printMessage(screen, "Response statusCode : $statusCode");
-
 
     if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -2153,7 +2159,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
       setState(() {
         var status = data['status'].toString();
-        if (status.toLowerCase() == "success" || status.toString()=="1") {
+        if (status.toLowerCase() == "success" || status.toString() == "1") {
           Navigator.pop(context);
           showToastMessage(data['message'].toString());
           var tId = data['transction_id'].toString();
@@ -2171,12 +2177,12 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             "signature": "$pgSign",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobile']}",
-            "commission":"$commission"
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
         } else if (status.toString() == "2") {
           Navigator.pop(context);
-          showToastMessage(somethingWrong);
+          showToastMessage(data['response']['status'].toString());
         } else if (status.toString() == "0") {
           Navigator.pop(context);
           showToastMessage(somethingWrong);
@@ -2432,10 +2438,10 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     printMessage(screen, "cardCharge : ${formatNow.format(cardCharge)}");
   }
 
-  calculateWelcomeAMt(amt){
+  calculateWelcomeAMt(amt) {
     printMessage(screen, "welcomeAMT : $amt");
-    if(welcomeAMT!=""){
-      double v1 = 3.0;
+    if (welcomeAMT != "") {
+      double v1 = 1.2;
       double v2 = double.parse(amt);
       double v3 = 100;
 
@@ -2447,14 +2453,14 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         welcomeCharge = v4;
       }
       printMessage(screen, "v4 : ${formatNow.format(v4)}");
-      printMessage(screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
+      printMessage(
+          screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
     }
   }
 
-  _buildOfferRwo(){
+  _buildOfferRwo() {
     return Container(
-      margin: EdgeInsets.only(
-          top: padding, left: padding, right: padding),
+      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
       decoration: BoxDecoration(
         color: editBg,
         borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -2463,16 +2469,28 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            SizedBox(width: 15.w,),
+            SizedBox(
+              width: 15.w,
+            ),
             Image.asset('assets/offer_icon.png', height: 24.h),
-            SizedBox(width: 10.w,),
-            Text("Welcome offer applied", style: TextStyle(color: black, fontSize: font14.sp),),
+            SizedBox(
+              width: 10.w,
+            ),
+            Text(
+              "Welcome offer applied",
+              style: TextStyle(color: black, fontSize: font14.sp),
+            ),
             Spacer(),
-            Text("$rupeeSymbol ${formatNow.format(welcomeCharge)}",style: TextStyle(color: green, fontSize: font14.sp),),
-            SizedBox(width: 15.w,),
+            Text(
+              "$rupeeSymbol ${formatNow.format(welcomeCharge)}",
+              style: TextStyle(color: green, fontSize: font14.sp),
+            ),
+            SizedBox(
+              width: 15.w,
+            ),
           ],
         ),
-      ) ,
+      ),
     );
   }
 }

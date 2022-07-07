@@ -16,8 +16,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
-
 class MobilePaymentNew extends StatefulWidget {
   final Map map;
   const MobilePaymentNew({Key? key, required this.map}) : super(key: key);
@@ -57,10 +55,10 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
   int upiIndex = 0;
   var upiId = "";
 
-  double welcomeAMT =0.0;
+  double welcomeAMT = 0.0;
   var isWelcomeOffer = false;
 
-  var actualRechargeAmount="";
+  var actualRechargeAmount = "";
 
   var isWallMore = false;
 
@@ -74,7 +72,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
   var currentYear = "";
   var timeH = "";
   var cDate = "";
-  var finalString  = "";
+  var finalString = "";
 
   var jwtToken = "";
 
@@ -94,14 +92,13 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     generateJWTToken();
     setState(() {
       rechargeAmount = widget.map['price'].toString();
-      actualRechargeAmount= widget.map['price'].toString();
+      actualRechargeAmount = widget.map['price'].toString();
 
       currentYear = yearFormat.format(currentDate);
       timeH = timeFormat.format(currentDate);
       cDate = dateFormat.format(currentDate);
 
       currentYear = currentYear[3];
-
     });
 
     setState(() {
@@ -113,7 +110,6 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
 
   updateWalletBalances() async {
     var mpBalc = await getWalletBalance();
@@ -144,19 +140,20 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         moneyProBalc = "0.0";
       }
 
-      if(welAmt.toString()=="null" || welAmt.toString()=="0" ||welAmt.toString()==""){
+      if (welAmt.toString() == "null" ||
+          welAmt.toString() == "0" ||
+          welAmt.toString() == "") {
         isWelcomeOffer = false;
-      }else{
+      } else {
         double xx = double.parse(rechargeAmount);
-        welcomeAMT =double.parse(welAmt);
-        if(xx>399){
+        welcomeAMT = double.parse(welAmt);
+        if (xx > 399) {
           isWelcomeOffer = true;
-        }else{
+        } else {
           isWelcomeOffer = false;
         }
         var x = double.parse(moneyProBalc) + welcomeAMT;
         moneyProBalc = "${formatDecimal2Digit.format(x)}";
-
       }
     });
 
@@ -178,294 +175,339 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-          backgroundColor: white,
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            backgroundColor: white,
-            brightness: Brightness.light,
-            leading: InkWell(
-              onTap: () {
-                closeKeyBoard(context);
-                closeCurrentPage(context);
-              },
-              child: Container(
-                height: 60.h,
-                width: 60.w,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/back_arrow_bg.png',
-                      height: 60.h,
-                    ),
-                    Positioned(
-                      top: 16,
-                      left: 12,
-                      child: Image.asset(
-                        'assets/back_arrow.png',
-                        height: 16.h,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            titleSpacing: 0,
-            title: appLogo(),
-          ),
-          body: (loading)?Center(
-            child: circularProgressLoading(40.0),
-          ):SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, top: 20),
-                  child: Row(
-                    children: [
-                      (widget.map['billerImg'].toString() == "")
-                          ? Container()
-                          : SizedBox(
-                        height: 30.h,
-                        child: Image.network(
-                          "$imageSubAPI${widget.map['billerImg'].toString()}",
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: false,
+                backgroundColor: white,
+                brightness: Brightness.light,
+                leading: InkWell(
+                  onTap: () {
+                    closeKeyBoard(context);
+                    closeCurrentPage(context);
+                  },
+                  child: Container(
+                    height: 60.h,
+                    width: 60.w,
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/back_arrow_bg.png',
+                          height: 60.h,
                         ),
-                      ),
-                      (widget.map['billerImg'].toString() == "")
-                          ? Container()
-                          : SizedBox(
-                        width: 10.w,
-                      ),
-                      SizedBox(
-                        width: 0.w,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${widget.map['mobileNo']}",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font15.sp,
-                                fontWeight: FontWeight.bold),
+                        Positioned(
+                          top: 16,
+                          left: 12,
+                          child: Image.asset(
+                            'assets/back_arrow.png',
+                            height: 16.h,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                (widget.map['operatorName'].toString()=="")?"${widget.map['operatorSecName']}":  "${widget.map['operatorName']}",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15.sp,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                " | ",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15.sp,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                (widget.map['circleName'].toString()=="")?"${widget.map['stateName']}":  "${widget.map['circleName']}",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15.sp,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                  child: Divider(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, top: 20, right: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+                titleSpacing: 0,
+                title: appLogo(),
+              ),
+              body: (loading)
+                  ? Center(
+                      child: circularProgressLoading(40.0),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25.0, top: 20),
+                            child: Row(
                               children: [
-                                Text(
-                                  "$rupeeSymbol ${widget.map['price']}",
-                                  style: TextStyle(
-                                      color: dotColor,
-                                      fontSize: font18.sp,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Spacer(),
-                                InkWell(
-                                  onTap: () {
-                                    closeKeyBoard(context);
-                                    closeCurrentPage(context);
-                                  },
-                                  child: Text(
-                                    "Change Plan",
-                                    style: TextStyle(color: lightBlue, fontSize: font15.sp),
-                                  ),
-                                ),
+                                (widget.map['billerImg'].toString() == "")
+                                    ? Container()
+                                    : SizedBox(
+                                        height: 30.h,
+                                        child: Image.network(
+                                          "$imageSubAPI${widget.map['billerImg'].toString()}",
+                                        ),
+                                      ),
+                                (widget.map['billerImg'].toString() == "")
+                                    ? Container()
+                                    : SizedBox(
+                                        width: 10.w,
+                                      ),
                                 SizedBox(
-                                  width: 10.w,
+                                  width: 0.w,
                                 ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${widget.map['mobileNo']}",
+                                      style: TextStyle(
+                                          color: black,
+                                          fontSize: font15.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          (widget.map['operatorName']
+                                                      .toString() ==
+                                                  "")
+                                              ? "${widget.map['operatorSecName']}"
+                                              : "${widget.map['operatorName']}",
+                                          style: TextStyle(
+                                              color: lightBlack,
+                                              fontSize: font15.sp,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                        Text(
+                                          " | ",
+                                          style: TextStyle(
+                                              color: lightBlack,
+                                              fontSize: font15.sp,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                        Text(
+                                          (widget.map['circleName']
+                                                      .toString() ==
+                                                  "")
+                                              ? "${widget.map['stateName']}"
+                                              : "${widget.map['circleName']}",
+                                          style: TextStyle(
+                                              color: lightBlack,
+                                              fontSize: font15.sp,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
                               ],
                             ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              "${widget.map['packageDescription']}",
-                              style: TextStyle(
-                                  color: lightBlack,
-                                  fontSize: font13.sp,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            SizedBox(
-                              height: 4.h,
-                            ),
-                            /*Text(
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 5),
+                            child: Divider(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25.0, top: 20, right: 25),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "$rupeeSymbol ${widget.map['price']}",
+                                            style: TextStyle(
+                                                color: dotColor,
+                                                fontSize: font18.sp,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Spacer(),
+                                          InkWell(
+                                            onTap: () {
+                                              closeKeyBoard(context);
+                                              closeCurrentPage(context);
+                                            },
+                                            child: Text(
+                                              "Change Plan",
+                                              style: TextStyle(
+                                                  color: lightBlue,
+                                                  fontSize: font15.sp),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 2.h,
+                                      ),
+                                      Text(
+                                        "${widget.map['packageDescription']}",
+                                        style: TextStyle(
+                                            color: lightBlack,
+                                            fontSize: font13.sp,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      SizedBox(
+                                        height: 4.h,
+                                      ),
+                                      /*Text(
                               "${widget.map['validityDescription']}",
                               style: TextStyle(
                                   color: lightBlack,
                                   fontSize: font13,
                                   fontWeight: FontWeight.normal),
                             ),*/
-                          ],
-                        ),
-                      ),
-
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                  child: Divider(),
-                ),
-                (mainWallet.toString()=="0" || mainWallet.toString()=="0.0"|| mainWallet.toString()=="null")?Container(): Padding(
-                  padding: const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        debitFrom,
-                        style: TextStyle(
-                            color: black,
-                            fontSize: font14.sp,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Checkbox(
-                              value: checkedValue,
-                              onChanged: (val) async {
-
-                                var mpBalc = await getWalletBalance();
-
-                                setState(() {
-                                  double walletValue = 0;
-                                  double rechargeValue = 0;
-
-                                  setState(() {
-                                    if (mpBalc.toString() == "") {
-                                      walletValue = 0;
-                                    } else {
-                                      walletValue = double.parse(mpBalc);
-                                    }
-
-                                    if (rechargeAmount.toString() == "") {
-                                      rechargeValue = 0;
-                                    } else {
-                                      rechargeValue = double.parse(rechargeAmount);
-                                    }
-                                  });
-
-                                  if (walletValue < rechargeValue) {
-                                    setState(() {
-                                      remainAmt = rechargeValue - walletValue;
-                                    });
-
-                                    if(isWelcomeOffer){
-                                      remainAmt = remainAmt - welcomeCharge;
-                                    }
-                                  }
-
-                                  if (walletValue < 0) {
-                                    closeKeyBoard(context);
-                                    showToastMessage("Your wallet does not have enough balance");
-                                  } else {
-                                    closeKeyBoard(context);
-                                    checkedValue = val!;
-                                  }
-                                });
-                              }),
-                          Text(
-                            "$wallet",
-                            style: TextStyle(fontSize: font14.sp, color: black),
-                          ),
-                          Spacer(),
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: walletBg,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(color: walletBg)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, top: 5, bottom: 5),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Image.asset(
-                                    "assets/wallet.png",
-                                    height: 24.h,
+                                    ],
                                   ),
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8, top: 5),
-                                      child: Text(
-                                        //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
-                                        "$moneyProBalc",
-                                        style: TextStyle(
-                                            color: white, fontSize: font15.sp),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 5),
+                            child: Divider(),
+                          ),
+                          (mainWallet.toString() == "0" ||
+                                  mainWallet.toString() == "0.0" ||
+                                  mainWallet.toString() == "null")
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 15.0, right: 30, left: 30),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        debitFrom,
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: font14.sp,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Checkbox(
+                                              value: checkedValue,
+                                              onChanged: (val) async {
+                                                var mpBalc =
+                                                    await getWalletBalance();
+
+                                                setState(() {
+                                                  double walletValue = 0;
+                                                  double rechargeValue = 0;
+
+                                                  setState(() {
+                                                    if (mpBalc.toString() ==
+                                                        "") {
+                                                      walletValue = 0;
+                                                    } else {
+                                                      walletValue =
+                                                          double.parse(mpBalc);
+                                                    }
+
+                                                    if (rechargeAmount
+                                                            .toString() ==
+                                                        "") {
+                                                      rechargeValue = 0;
+                                                    } else {
+                                                      rechargeValue =
+                                                          double.parse(
+                                                              rechargeAmount);
+                                                    }
+                                                  });
+
+                                                  if (walletValue <
+                                                      rechargeValue) {
+                                                    setState(() {
+                                                      remainAmt =
+                                                          rechargeValue -
+                                                              walletValue;
+                                                    });
+
+                                                    if (isWelcomeOffer) {
+                                                      remainAmt = remainAmt -
+                                                          welcomeCharge;
+                                                    }
+                                                  }
+
+                                                  if (walletValue < 0) {
+                                                    closeKeyBoard(context);
+                                                    showToastMessage(
+                                                        "Your wallet does not have enough balance");
+                                                  } else {
+                                                    closeKeyBoard(context);
+                                                    checkedValue = val!;
+                                                  }
+                                                });
+                                              }),
+                                          Text(
+                                            "$wallet",
+                                            style: TextStyle(
+                                                fontSize: font14.sp,
+                                                color: black),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: walletBg,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
+                                                border: Border.all(
+                                                    color: walletBg)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, top: 5, bottom: 5),
+                                              child: Wrap(
+                                                direction: Axis.horizontal,
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/wallet.png",
+                                                    height: 24.h,
+                                                  ),
+                                                  Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0,
+                                                              right: 8,
+                                                              top: 5),
+                                                      child: Text(
+                                                        //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
+                                                        "$moneyProBalc",
+                                                        style: TextStyle(
+                                                            color: white,
+                                                            fontSize:
+                                                                font15.sp),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      (remainAmt != 0 && checkedValue)
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0),
+                                              child: Text(
+                                                "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font14.sp),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
+                          (isWelcomeOffer) ? _buildOfferRwo() : Container(),
+                          _buildUPISection(),
+                          _buildCardSection(),
                         ],
                       ),
-                      (remainAmt != 0 && checkedValue)
-                          ? Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                          style: TextStyle(color: black, fontSize: font14.sp),
-                        ),
-                      )
-                          : Container(),
-                    ],
-                  ),
-                ),
-                (isWelcomeOffer)?_buildOfferRwo():Container(),
-                _buildUPISection(),
-                _buildCardSection(),
-              ],
-            ),
-          ),
-          bottomNavigationBar: _buildButtonSection(),
-        )));
+                    ),
+              bottomNavigationBar: _buildButtonSection(),
+            )));
   }
 
   _buildUPISection() {
@@ -476,8 +518,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       elevation: 10,
       margin: EdgeInsets.only(top: 15.0, left: 20, right: 20),
       child: InkWell(
-        onTap: () async{
-
+        onTap: () async {
           var mpBalc = await getWalletBalance();
 
           setState(() {
@@ -487,8 +528,6 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
           double walletValue = 0;
           double rechargeValue = 0;
-
-
 
           setState(() {
             if (mpBalc.toString() == "") {
@@ -508,12 +547,12 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             if (walletValue >= rechargeValue) {
               var id = DateTime.now().millisecondsSinceEpoch;
               setState(() {
-                isWallMore =true;
+                isWallMore = true;
               });
               paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
             } else {
               setState(() {
-                isWallMore =false;
+                isWallMore = false;
               });
               if (isUPIOpen) {
                 setState(() {
@@ -521,10 +560,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                 });
                 var id = DateTime.now().millisecondsSinceEpoch;
 
-                if(isWelcomeOffer){
-                  remainAmt = remainAmt -welcomeCharge;
+                if (isWelcomeOffer) {
+                  remainAmt = remainAmt - welcomeCharge;
                 }
-                paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                paymentByUPIWallet(id, formatNow.format(remainAmt),
+                    formatNow.format(rechargeValue));
               } else {
                 showToastMessage("Select any one payment method");
               }
@@ -533,11 +573,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             if (isUPIOpen) {
               var id = DateTime.now().millisecondsSinceEpoch;
 
-              if(isWelcomeOffer){
-                rechargeValue = rechargeValue -welcomeCharge;
+              if (isWelcomeOffer) {
+                rechargeValue = rechargeValue - welcomeCharge;
               }
               setState(() {
-                isWallMore =false;
+                isWallMore = false;
               });
               printMessage(screen, "Recharge Value is : $rechargeValue");
 
@@ -549,7 +589,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         },
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
+              const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
           child: Row(
             children: [
               Image.asset(
@@ -682,7 +722,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -716,7 +757,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -745,8 +787,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeMM,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardMMController,
@@ -758,7 +800,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -773,8 +816,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeYY,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardYYController,
@@ -786,7 +829,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -820,7 +864,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -877,16 +922,13 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               border: Border.all(color: lightBlue)),
           child: InkWell(
-            onTap: () async{
-
+            onTap: () async {
               var mpBalc = await getWalletBalance();
 
               setState(() {});
 
               double walletValue = 0;
               double rechargeValue = 0;
-
-
 
               setState(() {
                 if (mpBalc.toString() == "") {
@@ -905,14 +947,15 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
               if (checkedValue) {
                 if (walletValue >= rechargeValue) {
                   setState(() {
-                    isWallMore =true;
+                    isWallMore = true;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                  paymentStatusByWalletOnly(
+                      id, formatNow.format(rechargeValue));
                 } else {
                   if (isCardOpen) {
                     setState(() {
-                      isWallMore =false;
+                      isWallMore = false;
                     });
                     var cardNo = cardController.text.toString();
                     var cardName = cardHolderNameController.text.toString();
@@ -947,14 +990,15 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
                     remainAmt = remainAmt + cardCharge;
 
-                    if(isWelcomeOffer){
-                      remainAmt = remainAmt -welcomeCharge;
+                    if (isWelcomeOffer) {
+                      remainAmt = remainAmt - welcomeCharge;
                     }
 
                     printMessage(screen,
                         "Remaining amount : ${formatNow.format(remainAmt)}");
 
-                    paymentByUPIWallet(id, formatNow.format(remainAmt), rechargeAmount);
+                    paymentByUPIWallet(
+                        id, formatNow.format(remainAmt), rechargeAmount);
                   } else {
                     showToastMessage("Select any one payment method");
                   }
@@ -963,11 +1007,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                 printMessage(screen, "Check card Open : $isCardOpen");
                 if (isCardOpen) {
                   setState(() {
-                    isWallMore =false;
+                    isWallMore = false;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  if(isWelcomeOffer){
-                    rechargeValue = rechargeValue -welcomeCharge;
+                  if (isWelcomeOffer) {
+                    rechargeValue = rechargeValue - welcomeCharge;
                   }
                   rechargeValue = rechargeValue + cardCharge;
                   paymentByPGDirect(id, formatNow.format(rechargeValue));
@@ -1003,19 +1047,19 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
           children: [
             Expanded(
                 child: Image.asset(
-                  'assets/pci.png',
-                  height: 24.h,
-                )),
+              'assets/pci.png',
+              height: 24.h,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/upi.png',
-                  height: 20.h,
-                )),
+              'assets/upi.png',
+              height: 20.h,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/iso.png',
-                  height: 30.h,
-                )),
+              'assets/iso.png',
+              height: 30.h,
+            )),
           ],
         ),
         SizedBox(
@@ -1068,9 +1112,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     });
 
     var token = await getToken();
+    var lat = await getLatitude();
+    var long = await getLongitude();
     var mId;
     var xAmt;
-    var mBal =await getWalletBalance();
+    var mBal = await getWalletBalance();
 
     var role = await getRole();
 
@@ -1080,18 +1126,15 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       mId = "";
     }
 
-
-    if(isWallMore){
-      xAmt= double.parse(actualRechargeAmount);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(actualRechargeAmount);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
-
-
 
     var headers = {
       "Content-Type": "application/json",
@@ -1099,30 +1142,35 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     };
 
     final body = {
-      "user_token":"$token",
-      "token":"$jwtToken",
-      "operator_code":"${widget.map['operatorId']}",
-      "mobile":"${widget.map['mobileNo']}",
-      "amount":"$actualRechargeAmount",
-      "wallet":"$xAmt",
-      "category":"${widget.map['operatorName']}",//operator name
+      "user_token": "$token",
+      // "token": "$jwtToken",
+      "spkey": "${widget.map['spKey']}",
+      // "operator_code": "${widget.map['operatorId']}",
+      "mobile": "${widget.map['mobileNo']}",
+      "amount": "$actualRechargeAmount",
+      "wallet": "$xAmt",
+      "category": "${widget.map['operatorName']}", //operator name
       //"operator_name":"${widget.map['operatorName']}",
-      "operator_name":"PREPAID",
-      "circle":"${widget.map['circleName']}",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
-      "paymentgateway_amount":"0",
-      "paymentgateway_orderId":"",
-      "paymentgateway_txn":"",
-      "paymentgateway_mode":"",
-      "txTime":"",
-      "signature":"",
-      "txStatus":"",
-      "referenceId":""
+      "operator_name": "PREPAID",
+      "circle": "${widget.map['circleName']}",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
+      "lat": "${lat.toStringAsFixed(4)}",
+      "long": "${long.toStringAsFixed(4)}",
+      "m_id": "$mId",
+      "paymentgateway_amount": "0",
+      // "paymentgateway_orderId": "",
+      "paymentgateway_txn": "",
+      "paymentgateway_mode": "",
+      "txTime": "",
+      "signature": "",
+      "txStatus": "",
+      "referenceId": ""
     };
 
     printMessage(screen, "body : $body");
 
-    final response = await http.post(Uri.parse(doRechargePrepaidAPI),
+    final response = await http.post(Uri.parse(doRechargeinstantPay),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
@@ -1136,10 +1184,12 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       setState(() {
         Navigator.pop(context);
         var status = data['status'].toString();
-        if (status.toLowerCase() == "success" || status.toLowerCase() == "1" || status.toLowerCase() == "3") {
-          showToastMessage(data['message'].toString());
+        if (status.toLowerCase() == "success" ||
+            status.toLowerCase() == "1" ||
+            status.toLowerCase() == "3") {
+          showToastMessage(data["response"]['status'].toString());
           var commission = data['commission'];
-          var tId = data['transction_id'].toString();
+          var tId = data["response"]["data"]['ipay_id'].toString();
 
           Map map = {
             "tId": "$tId",
@@ -1150,15 +1200,16 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "txTime": "$currentTime",
             "txMsg": "Transaction is successfull",
             "type": "MoneyPro Wallet",
-            "referenceId": "",
+            "referenceId": "${data["response"]['ipay_uuid']}",
             "signature": "",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobileNo']}",
-            "commission":"$commission"
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
-        }
-       else if (status.toLowerCase() == "pending" || status.toLowerCase() == "2" || status.toLowerCase() == "4") {
+        } else if (status.toLowerCase() == "pending" ||
+            status.toLowerCase() == "2" ||
+            status.toLowerCase() == "4") {
           String msg = "Transaction is pending";
           Map map = {
             "txStatus": "Pending",
@@ -1168,11 +1219,12 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "txTime": "$currentTime",
             "txMsg": "$msg",
             "type": "MoneyPro Wallet",
-            "referenceId": "",
+            "referenceId": "${data["response"]['ipay_uuid']}",
             "signature": ""
           };
           openPaymentFailure(context, map);
-        }else if (status.toLowerCase() == "failure" || status.toLowerCase() == "0") {
+        } else if (status.toLowerCase() == "failure" ||
+            status.toLowerCase() == "0") {
           String msg = "Transaction is failure";
           Map map = {
             "txStatus": "Failure",
@@ -1182,18 +1234,15 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "txTime": "$currentTime",
             "txMsg": "$msg",
             "type": "MoneyPro Wallet",
-            "referenceId": "",
+            "referenceId": "${data["response"]['ipay_uuid']}",
             "signature": ""
           };
           openPaymentFailure(context, map);
-        }
-        else {
+        } else {
           showToastMessage(data['message'].toString());
-
         }
       });
-    }
-    else {
+    } else {
       Navigator.pop(context);
       showToastMessage(status500);
     }
@@ -1301,7 +1350,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
       CashfreePGSDK.doPayment(inputFinalParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "Final result : $value");
       });
@@ -1310,13 +1359,13 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     if (isUPIOpen) {
       CashfreePGSDK.getUPIApps().then((value) {
         setState(() {
-          getUPIAppNames(value, orderId, difAmt, token,rechAmt);
+          getUPIAppNames(value, orderId, difAmt, token, rechAmt);
         });
       });
     }
   }
 
-  verifySignatureByUPIWallet(responsePG,rechAmt) async {
+  verifySignatureByUPIWallet(responsePG, rechAmt) async {
     var txStatus = responsePG['txStatus'];
     var orderAmount = responsePG['orderAmount'];
     var paymentMode = responsePG['paymentMode'];
@@ -1339,9 +1388,9 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
     Navigator.pop(context);
 
-    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-    || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentStatusDirectPG(rechAmt, orderAmount, orderId, paymentMode,
@@ -1381,6 +1430,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     var token = await getToken();
     var mId;
     var xAmt;
+    var lat = await getLatitude();
+    var long = await getLongitude();
 
     var mBal = await getWalletBalance();
 
@@ -1392,13 +1443,13 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       mId = "";
     }
 
-    if(isWallMore){
-      xAmt= double.parse(actualRechargeAmount);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(actualRechargeAmount);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
 
@@ -1412,30 +1463,34 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     };
 
     final body = {
-      "user_token":"$token",
-      "token":"$jwtToken",
-      "operator_code":"${widget.map['operatorId']}",
-      "mobile":"${widget.map['mobileNo']}",
-      "amount":"$actualRechargeAmount",
-      "wallet":"$xAmt",
-      "category":"${widget.map['operatorName']}",//operator name
-      "operator_name":"PREPAID",
-      "circle":"${widget.map['circleName']}",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
-      "paymentgateway_amount":"$pgAmt",
-      "paymentgateway_orderId":"$pgTxn",
-      "paymentgateway_txn":"$pgTxn",
-      "paymentgateway_mode":"$pgMode",
-      "txTime":"$pgTxTime",
-      "signature":"$pgSign",
-      "txStatus":"$pgTxStatus",
-      "referenceId":"$pgRefId"
+      "user_token": "$token",
+      // "token": "$jwtToken",
+      "spkey": "${widget.map['spKey']}",
+      // "operator_code": "${widget.map['operatorId']}",
+      "mobile": "${widget.map['mobileNo']}",
+      "amount": "$actualRechargeAmount",
+      "wallet": "$xAmt",
+      "category": "${widget.map['operatorName']}", //operator name
+      "operator_name": "PREPAID",
+      "circle": "${widget.map['circleName']}",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
+      "paymentgateway_amount": "$pgAmt",
+      // "paymentgateway_orderId": "$pgTxn",
+      "paymentgateway_txn": "$pgTxn",
+      "paymentgateway_mode": "$pgMode",
+      "lat": "${lat.toStringAsFixed(4)}",
+      "long": "${long.toStringAsFixed(4)}",
+      "m_id": "$mId",
+      "txTime": "$pgTxTime",
+      "signature": "$pgSign",
+      "txStatus": "$pgTxStatus",
+      "referenceId": "$pgRefId"
     };
 
     printMessage(screen, "body : $body");
 
-
-    final response = await http.post(Uri.parse(doRechargePrepaidAPI),
+    final response = await http.post(Uri.parse(doRechargeinstantPay),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
@@ -1449,9 +1504,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       Navigator.pop(context);
       setState(() {
         var status = data['status'].toString();
-        if (status.toLowerCase() == "success" || status.toLowerCase() == "1" || status.toLowerCase() == "3") {
-          showToastMessage(data['message'].toString());
-          var tId = data['transction_id'].toString();
+        if (status.toLowerCase() == "success" ||
+            status.toLowerCase() == "1" ||
+            status.toLowerCase() == "3") {
+          showToastMessage(data['response']['status'].toString());
+          var tId = data['response']['data']['ipay_id'].toString();
           var commission = data['commission'];
           Map map = {
             "tId": "$tId",
@@ -1466,12 +1523,12 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "signature": "$pgSign",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobileNo']}",
-            "commission":"$commission"
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
-        }
-
-       else if (status.toLowerCase() == "pending" || status.toLowerCase() == "2" || status.toLowerCase() == "4") {
+        } else if (status.toLowerCase() == "pending" ||
+            status.toLowerCase() == "2" ||
+            status.toLowerCase() == "4") {
           Map map = {
             "txStatus": "Pending",
             "orderAmount": "$pgAmt",
@@ -1484,8 +1541,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "signature": "$pgSign"
           };
           openPaymentFailure(context, map);
-        }
-        else if (status.toLowerCase() == "failure" || status.toLowerCase() == "0") {
+        } else if (status.toLowerCase() == "failure" ||
+            status.toLowerCase() == "0") {
           Map map = {
             "txStatus": "Failure",
             "orderAmount": "$pgAmt",
@@ -1498,9 +1555,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
             "signature": "$pgSign"
           };
           openPaymentFailure(context, map);
-
-        }
-        else {
+        } else {
           showToastMessage(data['message'].toString());
         }
       });
@@ -1510,7 +1565,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     }
   }
 
-  getUPIAppNames(result, orderId, difAmt, token,rechAmt) async {
+  getUPIAppNames(result, orderId, difAmt, token, rechAmt) async {
     String orderNote = "Order Note";
 
     if (result.length == 0) {
@@ -1570,7 +1625,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
       CashfreePGSDK.doUPIPayment(inputParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "doUPIPayment result : $value");
       });
@@ -1630,7 +1685,6 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
   }
 
   moveToPaymentGateway(orderId, token, difAmt) async {
-
     String orderNote = "Order Note";
 
     var name = await getContactName();
@@ -1708,10 +1762,10 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     }
   }
 
-  calculateWelcomeAMt(amt){
+  calculateWelcomeAMt(amt) {
     printMessage(screen, "welcomeAMT : $amt");
-    if(welcomeAMT!=0){
-      double v1 = 3.0;
+    if (welcomeAMT != 0) {
+      double v1 = 1.1;
       double v2 = double.parse(amt);
       double v3 = 100;
 
@@ -1723,14 +1777,14 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         welcomeCharge = v4;
       }
       printMessage(screen, "v4 : ${formatNow.format(v4)}");
-      printMessage(screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
+      printMessage(
+          screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
     }
   }
 
-  _buildOfferRwo(){
+  _buildOfferRwo() {
     return Container(
-      margin: EdgeInsets.only(
-          top: padding, left: padding, right: padding),
+      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
       decoration: BoxDecoration(
         color: editBg,
         borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -1739,21 +1793,35 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            SizedBox(width: 15.w,),
-            Image.asset('assets/offer_icon.png', height: 24.h,),
-            SizedBox(width: 10.w,),
-            Text("Welcome offer applied", style: TextStyle(color: black, fontSize: font14.sp),),
+            SizedBox(
+              width: 15.w,
+            ),
+            Image.asset(
+              'assets/offer_icon.png',
+              height: 24.h,
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Text(
+              "Welcome offer applied",
+              style: TextStyle(color: black, fontSize: font14.sp),
+            ),
             Spacer(),
-            Text("$rupeeSymbol ${formatNow.format(welcomeCharge)}",style: TextStyle(color: green, fontSize: font14.sp),),
-            SizedBox(width: 15.w,),
+            Text(
+              "$rupeeSymbol ${formatNow.format(welcomeCharge)}",
+              style: TextStyle(color: green, fontSize: font14.sp),
+            ),
+            SizedBox(
+              width: 15.w,
+            ),
           ],
         ),
-      ) ,
+      ),
     );
   }
 
   getUPIAppNamesUPI(result, orderId, difAmt, token) async {
-
     String orderNote = "Order Note";
 
     if (result.length == 0) {
@@ -1843,9 +1911,9 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
 
     // Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         paymentStatusDirectPG(orderAmount, orderAmount, orderId, paymentMode,
@@ -1903,5 +1971,4 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
       }
     });
   }
-
 }

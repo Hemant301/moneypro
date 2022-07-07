@@ -22,7 +22,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
 import 'package:permission_handler/permission_handler.dart';
 
 class MobileSelection extends StatefulWidget {
@@ -56,6 +55,7 @@ class _MobileSelectionState extends State<MobileSelection> {
 
   List<Contact> _contacts = [];
   List<Contact> _contactFilter = [];
+  List<String> planType = [];
 
   List<MyContacts> myContacts = [];
   List<MyContacts> myFilteredContacts = [];
@@ -70,12 +70,14 @@ class _MobileSelectionState extends State<MobileSelection> {
 
   var isPlanVisible = false;
 
-  String mainWallet ="";
+  String mainWallet = "";
 
   var billerImg = "";
 
   var circleName = "";
   var operatorName = "";
+  var spKey = "";
+  var cirCode = "";
   var operatorId = "";
 
   List<String> planTypies = [];
@@ -90,6 +92,8 @@ class _MobileSelectionState extends State<MobileSelection> {
     updateWalletBalances();
     _askContactPermissions();
     getRecentTransactions();
+    planType.clear();
+    planType.insert(0, "All");
   }
 
   @override
@@ -148,392 +152,408 @@ class _MobileSelectionState extends State<MobileSelection> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-            backgroundColor: white,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              backgroundColor: white,
-              brightness: Brightness.light,
-              leading: InkWell(
-                onTap: () {
-                  closeKeyBoard(context);
-                  closeCurrentPage(context);
-                },
-                child: Container(
-                  height: 60.h,
-                  width: 60.w,
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/back_arrow_bg.png',
-                        height: 60.h,
-                      ),
-                      Positioned(
-                        top: 16,
-                        left: 12,
-                        child: Image.asset(
-                          'assets/back_arrow.png',
-                          height: 16.h,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              titleSpacing: 0,
-              title: appLogo(),
-              actions: [
-                Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: walletBg,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      border: Border.all(color: walletBg)),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      children: [
-                        Image.asset(
-                          "assets/wallet.png",
-                          height: 20.h,
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10.0, right: 10, top: 5),
-                            child: Text(
-                              //"${formatDecimal2Digit.format(mainWallet)}",
-                              "$mainWallet",
-                              style: TextStyle(color: white, fontSize: font15),
-                            ),
+        builder: () => SafeArea(
+            child: Scaffold(
+                backgroundColor: white,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  backgroundColor: white,
+                  brightness: Brightness.light,
+                  leading: InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      closeCurrentPage(context);
+                    },
+                    child: Container(
+                      height: 60.h,
+                      width: 60.w,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/back_arrow_bg.png',
+                            height: 60.h,
                           ),
-                        ),
-                      ],
+                          Positioned(
+                            top: 16,
+                            left: 12,
+                            child: Image.asset(
+                              'assets/back_arrow.png',
+                              height: 16.h,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                )
-              ],
-            ),
-            body: (loading)
-                ? Center(
-                    child: circularProgressLoading(40.0),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      (isPlanVisible)
-                          ? Container()
-                          : appSelectedBanner(
-                              context, "recharge_banner.png", 150.0.h),
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: padding, left: padding, right: padding),
-                        decoration: BoxDecoration(
-                          color: editBg,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 10, bottom: 10),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: TextFormField(
-                                  style: TextStyle(
-                                      color: black,
-                                      fontSize: inputFont.sp,
-                                      fontWeight: FontWeight.bold),
-                                  keyboardType: TextInputType.phone,
-                                  textInputAction: TextInputAction.done,
-                                  controller: phoneController,
-                                  decoration: new InputDecoration(
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(left: 10),
-                                    counterText: "",
-                                    label: Text("Phone number"),
-                                  ),
-                                  maxLength: 10,
-                                  onChanged: (val) {
-                                    if (val.length == 10) {
-                                      closeKeyBoard(context);
-                                      generateJWTToken(val.toString(), 1);
-                                    }
-                                  },
+                  titleSpacing: 0,
+                  title: appLogo(),
+                  actions: [
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: walletBg,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(color: walletBg)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, top: 5, bottom: 5),
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: [
+                            Image.asset(
+                              "assets/wallet.png",
+                              height: 20.h,
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10, top: 5),
+                                child: Text(
+                                  //"${formatDecimal2Digit.format(mainWallet)}",
+                                  "$mainWallet",
+                                  style:
+                                      TextStyle(color: white, fontSize: font15),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  if (_contacts.length == 0) {
-                                    showToastMessage(
-                                        "Please wait, while we are loading your contacts");
-                                  } else {
-                                    _showContactList();
-                                  }
-                                },
-                                child: Image.asset(
-                                  'assets/phonebook.png',
-                                  height: 20.h,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      (isPlanVisible)
-                          ? Padding(
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    )
+                  ],
+                ),
+                body: (loading)
+                    ? Center(
+                        child: circularProgressLoading(40.0),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          (isPlanVisible)
+                              ? Container()
+                              : appSelectedBanner(
+                                  context, "recharge_banner.png", 150.0.h),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: padding, left: padding, right: padding),
+                            decoration: BoxDecoration(
+                              color: editBg,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 20.0, right: 20, top: 15),
+                                  left: 15.0, right: 15, top: 10, bottom: 10),
                               child: Row(
                                 children: [
                                   Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: editBg,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        padding: EdgeInsets.only(
-                                            left: 15,
-                                            right: 15,
-                                            top: 5,
-                                            bottom: 5),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Operator",
-                                              style: TextStyle(
-                                                  color: lightBlack,
-                                                  fontSize: font13.sp),
-                                            ),
-                                            SizedBox(
-                                              height: 2.h,
-                                            ),
-                                            Row(
-                                              children: [
-                                                (billerImg == "")
-                                                    ? SizedBox(
-                                                        width: 10.w,
-                                                      )
-                                                    : SizedBox(
-                                                        height: 16.h,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  right: 8.0),
-                                                          child: Image.network(
-                                                            "$imageSubAPI${billerImg}",
-                                                          ),
-                                                        ),
-                                                      ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "$operatorName",
-                                                    style: TextStyle(
-                                                        color: black,
-                                                        fontSize: font15.sp),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.fade,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )),
+                                    flex: 1,
+                                    child: TextFormField(
+                                      style: TextStyle(
+                                          color: black,
+                                          fontSize: inputFont.sp,
+                                          fontWeight: FontWeight.bold),
+                                      keyboardType: TextInputType.phone,
+                                      textInputAction: TextInputAction.done,
+                                      controller: phoneController,
+                                      decoration: new InputDecoration(
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        contentPadding:
+                                            EdgeInsets.only(left: 10),
+                                        counterText: "",
+                                        label: Text("Phone number"),
+                                      ),
+                                      maxLength: 10,
+                                      onChanged: (val) {
+                                        if (val.length == 10) {
+                                          closeKeyBoard(context);
+                                          generateJWTToken(val.toString(), 1);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      if (_contacts.length == 0) {
+                                        showToastMessage(
+                                            "Please wait, while we are loading your contacts");
+                                      } else {
+                                        _showContactList();
+                                      }
+                                    },
+                                    child: Image.asset(
+                                      'assets/phonebook.png',
+                                      height: 20.h,
+                                    ),
+                                  ),
                                   SizedBox(
                                     width: 10.w,
                                   ),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: editBg,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        padding: EdgeInsets.only(
-                                            left: 15,
-                                            right: 15,
-                                            top: 5,
-                                            bottom: 5),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Circle",
-                                              style: TextStyle(
-                                                  color: lightBlack,
-                                                  fontSize: font13.sp),
+                                ],
+                              ),
+                            ),
+                          ),
+                          (isPlanVisible)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, right: 20, top: 15),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: editBg,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30)),
                                             ),
-                                            SizedBox(
-                                              height: 2.h,
-                                            ),
-                                            Row(
+                                            padding: EdgeInsets.only(
+                                                left: 15,
+                                                right: 15,
+                                                top: 5,
+                                                bottom: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    "$circleName",
-                                                    style: TextStyle(
-                                                        color: black,
-                                                        fontSize: font15.sp),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.fade,
-                                                  ),
+                                                Text(
+                                                  "Operator",
+                                                  style: TextStyle(
+                                                      color: lightBlack,
+                                                      fontSize: font13.sp),
+                                                ),
+                                                SizedBox(
+                                                  height: 2.h,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    (billerImg == "")
+                                                        ? SizedBox(
+                                                            width: 10.w,
+                                                          )
+                                                        : SizedBox(
+                                                            height: 16.h,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right:
+                                                                          8.0),
+                                                              child:
+                                                                  Image.network(
+                                                                "$imageSubAPI${billerImg}",
+                                                              ),
+                                                            ),
+                                                          ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        "$operatorName",
+                                                        style: TextStyle(
+                                                            color: black,
+                                                            fontSize:
+                                                                font15.sp),
+                                                        maxLines: 1,
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            )
-                          : Container(),
-                      Expanded(
-                        flex: 1,
-                        child: (isPlanVisible)
-                            ? Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.only(top: 20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(50.0)),
-                                  color: white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 10,
-                                      blurRadius: 10,
-                                      offset: Offset(
-                                          0, 1), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        color: gray,
-                                        width: 50.w,
-                                        height: 5.h,
+                                          )),
+                                      SizedBox(
+                                        width: 10.w,
                                       ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: padding,
-                                          left: padding,
-                                          right: padding),
-                                      decoration: BoxDecoration(
-                                        color: editBg,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0,
-                                            right: 15,
-                                            top: 10,
-                                            bottom: 10),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: TextFormField(
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: inputFont.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                textInputAction:
-                                                    TextInputAction.done,
-                                                controller: searchAmount,
-                                                decoration: new InputDecoration(
-                                                  isDense: true,
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      EdgeInsets.only(left: 10),
-                                                  counterText: "",
-                                                  label: Text(
-                                                      "Search plan by amount"),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: editBg,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30)),
+                                            ),
+                                            padding: EdgeInsets.only(
+                                                left: 15,
+                                                right: 15,
+                                                top: 5,
+                                                bottom: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Circle",
+                                                  style: TextStyle(
+                                                      color: lightBlack,
+                                                      fontSize: font13.sp),
                                                 ),
-                                                maxLength: 5,
-                                                onFieldSubmitted: (val) {
-                                                  if (val.toString().length ==
-                                                      0) {
-                                                    showToastMessage(
-                                                        "enter the amount");
-                                                    return;
-                                                  }
-                                                  searchByAmount(
-                                                      val.toString());
-                                                },
-                                              ),
+                                                SizedBox(
+                                                  height: 2.h,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        "$circleName",
+                                                        style: TextStyle(
+                                                            color: black,
+                                                            fontSize:
+                                                                font12.sp),
+                                                        maxLines: 1,
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                var res = searchAmount.text
-                                                    .toString();
-                                                if (res.toString().length ==
-                                                    0) {
-                                                  showToastMessage(
-                                                      "enter the amount");
-                                                  return;
-                                                }
-                                                searchByAmount(res.toString());
-                                              },
-                                              child: Icon(Icons.search),
-                                            ),
-                                            SizedBox(
-                                              width: 10.w,
-                                            ),
-                                          ],
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
+                          Expanded(
+                            flex: 1,
+                            child: (isPlanVisible)
+                                ? Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: EdgeInsets.only(top: 20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(50.0)),
+                                      color: white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 10,
+                                          blurRadius: 10,
+                                          offset: Offset(0,
+                                              1), // changes position of shadow
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    _buildPlanTabs(),
-                                    Divider(),
-                                    Expanded(
-                                      child: (showSearchResult)
-                                          ? (mobilePlansFiltered.length == 0)
-                                              ? Center(
-                                                  child: Text("No plan found"),
-                                                )
-                                              : _buildPlanFilterList()
-                                          : (mobilePlans.length == 0)
-                                              ? Container()
-                                              : _buildPlanDetail(),
-                                    )
-                                  ],
-                                ),
-                              )
-                            : _buildContactSection(),
-                      ),
-                    ],
-                  ))));
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            color: gray,
+                                            width: 50.w,
+                                            height: 5.h,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: padding,
+                                              left: padding,
+                                              right: padding),
+                                          decoration: BoxDecoration(
+                                            color: editBg,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15.0,
+                                                right: 15,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: TextFormField(
+                                                    style: TextStyle(
+                                                        color: black,
+                                                        fontSize: inputFont.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    keyboardType:
+                                                        TextInputType.phone,
+                                                    textInputAction:
+                                                        TextInputAction.done,
+                                                    controller: searchAmount,
+                                                    decoration:
+                                                        new InputDecoration(
+                                                      isDense: true,
+                                                      border: InputBorder.none,
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 10),
+                                                      counterText: "",
+                                                      label: Text(
+                                                          "Search plan by amount"),
+                                                    ),
+                                                    maxLength: 5,
+                                                    onFieldSubmitted: (val) {
+                                                      if (val
+                                                              .toString()
+                                                              .length ==
+                                                          0) {
+                                                        showToastMessage(
+                                                            "enter the amount");
+                                                        return;
+                                                      }
+                                                      searchByAmount(
+                                                          val.toString());
+                                                    },
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    var res = searchAmount.text
+                                                        .toString();
+                                                    if (res.toString().length ==
+                                                        0) {
+                                                      showToastMessage(
+                                                          "enter the amount");
+                                                      return;
+                                                    }
+                                                    searchByAmount(
+                                                        res.toString());
+                                                  },
+                                                  child: Icon(Icons.search),
+                                                ),
+                                                SizedBox(
+                                                  width: 10.w,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        _buildPlanTabs(),
+                                        Divider(),
+                                        Expanded(
+                                          child: (showSearchResult)
+                                              ? (mobilePlansFiltered.length ==
+                                                      0)
+                                                  ? Center(
+                                                      child:
+                                                          Text("No plan found"),
+                                                    )
+                                                  : _buildPlanFilterList()
+                                              : (mobilePlans.length == 0)
+                                                  ? Container()
+                                                  : _buildPlanDetail(),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : _buildContactSection(),
+                          ),
+                        ],
+                      ))));
   }
 
   _buildContactSection() {
@@ -777,6 +797,7 @@ class _MobileSelectionState extends State<MobileSelection> {
                   circle: circle,
                   billerImg: billerImg,
                   number: number,
+                  spKey: spKey,
                   operatorId: operatorId),
             ));
   }
@@ -1159,10 +1180,9 @@ class _MobileSelectionState extends State<MobileSelection> {
 
     printMessage(screen, "DD recent : $dd");
 
-
-    if(dd['status'].toString()=="1"){
-      var data =
-      RecentTransaction.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    if (dd['status'].toString() == "1") {
+      var data = RecentTransaction.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
 
       setState(() {
         var status = data.status;
@@ -1176,9 +1196,6 @@ class _MobileSelectionState extends State<MobileSelection> {
     setState(() {
       loading = false;
     });
-
-
-
   }
 
   _buildRecentTrans() {
@@ -1459,7 +1476,7 @@ class _MobileSelectionState extends State<MobileSelection> {
 
     printMessage(screen, "HLR Body : $body");
 
-    final response = await http.post(Uri.parse(hlrCheckAPI),
+    final response = await http.post(Uri.parse(fetchOperatorAPI),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
@@ -1473,12 +1490,14 @@ class _MobileSelectionState extends State<MobileSelection> {
         Navigator.pop(context);
 
         if (data['status'].toString() == "1") {
-          var status = data['data']['status'].toString();
-          if (status.toString() == "true") {
+          var status = data['status'].toString();
+          if (status.toString() == "1") {
             setState(() {
               isPlanVisible = true;
-              operatorName = data['data']['info']['operator'];
-              circleName = data['data']['info']['circle'];
+              operatorName = data['optr'];
+              circleName = data['circle'];
+              spKey = data['spe_key'];
+              cirCode = data['circle_code'];
               generateJWTToken(mobile, 2);
               getOperatorsList();
               generateJWTToken(mobile, 3);
@@ -1490,7 +1509,7 @@ class _MobileSelectionState extends State<MobileSelection> {
           }
         } else if (data['status'].toString() == "2") {
           closeCurrentPage(context);
-          openPayUMobilePlans(context, mobile, _contacts);
+          openPayUMobilePlans(context, mobile, _contacts, spKey);
         } else {
           showToastMessage(somethingWrong);
         }
@@ -1504,6 +1523,7 @@ class _MobileSelectionState extends State<MobileSelection> {
   }
 
   Future getPlanDetails(jwtToken) async {
+    print('jst called');
     setState(() {
       planTypies.clear();
       mobilePlans.clear();
@@ -1526,60 +1546,65 @@ class _MobileSelectionState extends State<MobileSelection> {
 
     final body = {
       "user_token": "$userToken",
-      "token": "$jwtToken",
-      "circle": "$circleName",
-      "op": "$operatorName",
+      "spkey": "$spKey",
+      "cir_code": "$cirCode"
     };
-
-    final response = await http.post(Uri.parse(browsPlanAPI),
+    // "user_token": "$userToken",
+    // "token": "$jwtToken",
+    // "circle": "$circleName",
+    // "op": "$operatorName",
+    final response = await http.post(Uri.parse(fetchPlanAPI),
         body: jsonEncode(body), headers: headers);
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
+      printMessage(screen, "Plan Details : $body");
       printMessage(screen, "Plan Details : $data");
 
       setState(() {
         Navigator.pop(context);
-        var status = data['data']['status'].toString();
-        if (status.toString() == "true") {
-          var stringJson = data['data']['info'];
+        var status = data['status'].toString();
+        if (status.toString() == "1") {
+          List stringJson = data['plan_data'];
+          List planList = data['plan'];
 
-          stringJson.forEach((key, value) {
-            planTypies.add(key);
+          // stringJson.forEach((key, value) {
+          // planTypies.add(key);
+          for (var i = 0; i < planList.length; i++) {
+            planType.add(planList[i]['plan']);
+          }
 
-            var planType = key;
-            for (int i = 0; i < value.length; i++) {
-              var rs = value[i]['rs'];
-              var desc = value[i]['desc'];
-              var validity = value[i]['validity'];
-              var last_update = value[i]['last_update'];
+          for (int i = 0; i < stringJson.length; i++) {
+            var rs = stringJson[i]['recharge_value'];
+            var desc = stringJson[i]['recharge_description'];
+            var validity = stringJson[i]['recharge_validity'];
+            var last_update = stringJson[i]['last_update'];
+            var plansT = stringJson[i]['recharge_short_description'];
 
-              NewMobilePlans plans = new NewMobilePlans(
-                  rs: rs,
-                  desc: desc,
-                  validity: validity,
-                  last_update: last_update,
-                  planType: planType);
-              mobilePlans.add(plans);
-            }
-          });
+            NewMobilePlans plans = new NewMobilePlans(
+                rs: rs,
+                desc: desc,
+                validity: validity,
+                last_update: last_update,
+                planType: plansT);
+            mobilePlans.add(plans);
+          }
+          // });
 
           printMessage(screen, "Plan Typies Length : ${planTypies.length}");
 
           if (planTypies.length != 0) planTypies.insert(0, "All");
         } else {}
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   _buildPlanTabs() {
@@ -1587,14 +1612,14 @@ class _MobileSelectionState extends State<MobileSelection> {
       height: 30.h,
       margin: EdgeInsets.only(left: 15, right: 25, top: 10, bottom: 0),
       child: ListView.builder(
-          itemCount: planTypies.length,
+          itemCount: planType.length,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           physics: ScrollPhysics(),
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                var text = planTypies[index].toString();
+                var text = planType[index].toString();
                 setState(() {
                   typeIndex = index;
                 });
@@ -1604,14 +1629,14 @@ class _MobileSelectionState extends State<MobileSelection> {
                     showSearchResult = false;
                   });
                 } else {
-                  searchByType(planTypies[index].toString());
+                  searchByType(planType[index].toString());
                 }
               },
               child: Center(
                   child: Padding(
                 padding: const EdgeInsets.only(left: 15.0, right: 15),
                 child: Text(
-                  planTypies[index].toString().toUpperCase(),
+                  planType[index].toString().toUpperCase(),
                   style: TextStyle(
                       color: (typeIndex == index) ? lightBlue : black,
                       fontSize: font14.sp),
@@ -1653,11 +1678,13 @@ class _MobileSelectionState extends State<MobileSelection> {
                       children: [
                         Text(
                           "$plan",
-                          style: TextStyle(color: lightBlack, fontSize: font11.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font11.sp),
                         ),
                         Text(
                           "$rupeeSymbol ${mobilePlans[index].rs}",
-                          style: TextStyle(color: dotColor, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: dotColor, fontSize: font14.sp),
                         ),
                       ],
                     ),
@@ -1669,7 +1696,8 @@ class _MobileSelectionState extends State<MobileSelection> {
                       children: [
                         Text(
                           "$validity",
-                          style: TextStyle(color: lightBlack, fontSize: font12.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font12.sp),
                         ),
                         Text(
                           "${mobilePlans[index].validity}",
@@ -1720,10 +1748,11 @@ class _MobileSelectionState extends State<MobileSelection> {
                           "circleName": "$circleName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "$spKey"
                         };
 
-                      printMessage(screen, "1 : Map :${map.toString()}");
+                        printMessage(screen, "1 : Map :${map.toString()}");
 
                         openMobilePaymentNew(context, map);
                       },
@@ -1782,11 +1811,13 @@ class _MobileSelectionState extends State<MobileSelection> {
                       children: [
                         Text(
                           "$plan",
-                          style: TextStyle(color: lightBlack, fontSize: font11.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font11.sp),
                         ),
                         Text(
                           "$rupeeSymbol ${mobilePlansFiltered[index].rs}",
-                          style: TextStyle(color: dotColor, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: dotColor, fontSize: font14.sp),
                         ),
                       ],
                     ),
@@ -1798,7 +1829,8 @@ class _MobileSelectionState extends State<MobileSelection> {
                       children: [
                         Text(
                           "$validity",
-                          style: TextStyle(color: lightBlack, fontSize: font12.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font12.sp),
                         ),
                         Text(
                           "${mobilePlansFiltered[index].validity}",
@@ -1851,13 +1883,13 @@ class _MobileSelectionState extends State<MobileSelection> {
                           "circleName": "$circleName",
                           "billerImg": "$billerImg",
                           "mobileNo": "$mobileNo",
-                          "operatorId": "$operatorId"
+                          "operatorId": "$operatorId",
+                          "spKey": "$spKey",
                         };
 
                         printMessage(screen, "2 : Map :${map.toString()}");
 
                         openMobilePaymentNew(context, map);
-
                       },
                       child: Center(
                         child: Padding(
@@ -1890,12 +1922,19 @@ class _MobileSelectionState extends State<MobileSelection> {
       setState(() {});
       return;
     }
-
-    mobilePlans.forEach((userDetail) {
-      if (userDetail.planType.toString().toLowerCase() == text.toLowerCase()) {
-        mobilePlansFiltered.add(userDetail);
+    print(mobilePlans[0].planType);
+    for (var i = 0; i < mobilePlans.length; i++) {
+      if (mobilePlans[i].planType.toString().toLowerCase() ==
+          text.toLowerCase()) {
+        mobilePlansFiltered.add(mobilePlans[i]);
       }
-    });
+    }
+
+    // mobilePlans.forEach((userDetail) {
+    //   if (userDetail.planType.toString().toLowerCase() == text.toLowerCase()) {
+    //     mobilePlansFiltered.add(userDetail);
+    //   }
+    // });
 
     setState(() {
       if (mobilePlansFiltered.length != 0) {
@@ -1911,11 +1950,16 @@ class _MobileSelectionState extends State<MobileSelection> {
       return;
     }
 
-    mobilePlans.forEach((userDetail) {
-      if (userDetail.rs.toString() == text) {
-        mobilePlansFiltered.add(userDetail);
+    for (var i = 0; i < mobilePlans.length; i++) {
+      if (mobilePlans[i].rs.toString() == text) {
+        mobilePlansFiltered.add(mobilePlans[i]);
       }
-    });
+    }
+    // mobilePlans.forEach((userDetail) {
+    //   if (userDetail.rs.toString() == text) {
+    //     mobilePlansFiltered.add(userDetail);
+    //   }
+    // });
 
     setState(() {
       if (mobilePlansFiltered.length != 0) {
@@ -1992,7 +2036,7 @@ class _MobileSelectionState extends State<MobileSelection> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       setState(() {
@@ -2007,14 +2051,10 @@ class _MobileSelectionState extends State<MobileSelection> {
           }
         }
       });
-    }else{
-      setState(() {
-
-      });
+    } else {
+      setState(() {});
       showToastMessage(status500);
     }
-
-
   }
 }
 
@@ -2027,6 +2067,7 @@ class showPlanDetail extends StatelessWidget {
       circle,
       billerImg,
       number,
+      spKey,
       operatorId;
 
   const showPlanDetail(
@@ -2038,6 +2079,7 @@ class showPlanDetail extends StatelessWidget {
       required this.operator,
       required this.circle,
       required this.billerImg,
+      required this.spKey,
       required this.number,
       required this.operatorId})
       : super(key: key);
@@ -2049,120 +2091,124 @@ class showPlanDetail extends StatelessWidget {
         ScreenUtilInit(
             designSize: Size(deviceWidth, deviceHeight),
             builder: () => Container(
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(50.0)),
-                    color: planBg,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 10,
-                        blurRadius: 10,
-                        offset: Offset(0, 1), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30.0, right: 30, top: 20),
-                        child: Row(
-                          children: [
-                            Spacer(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Image.asset(
-                                'assets/cancel.png',
-                                height: 30.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "$rupeeSymbol ",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font26.sp,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "${price}",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: 48.sp,
-                                fontWeight: FontWeight.bold),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(50.0)),
+                        color: planBg,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 10,
+                            blurRadius: 10,
+                            offset: Offset(0, 1), // changes position of shadow
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      /*Text(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30.0, right: 30, top: 20),
+                            child: Row(
+                              children: [
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                    'assets/cancel.png',
+                                    height: 30.h,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "$rupeeSymbol ",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: font26.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "${price}",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: 48.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          ),
+                          /*Text(
                         "2 GB/DAY PACK",
                         style: TextStyle(color: black, fontSize: font16),
                       ),*/
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 30.0, right: 30, top: 40),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Plan Name",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$planType",
-                          style: TextStyle(color: black, fontSize: font16.sp),
-                          textAlign: TextAlign.end,
-                        ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 40),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Plan Name",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$planType",
+                              style:
+                                  TextStyle(color: black, fontSize: font16.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 30.0, right: 30, top: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Validity",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Validity",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$validity",
+                              style:
+                                  TextStyle(color: black, fontSize: font16.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$validity",
-                          style: TextStyle(color: black, fontSize: font16.sp),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                /*Padding(
+                    ),
+                    /*Padding(
                   padding:
                       const EdgeInsets.only(left: 30.0, right: 30, top: 20),
                   child: Row(
@@ -2185,80 +2231,84 @@ class showPlanDetail extends StatelessWidget {
                     ],
                   ),
                 ),*/
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 30.0, right: 30, top: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Description",
-                          style: TextStyle(color: lightBlack, fontSize: font16.sp),
-                        ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30.0, right: 30, top: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Description",
+                              style: TextStyle(
+                                  color: lightBlack, fontSize: font16.sp),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "$discription",
+                              style:
+                                  TextStyle(color: black, fontSize: font15.sp),
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "$discription",
-                          style: TextStyle(color: black, fontSize: font15.sp),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40.h,
-                  margin:
-                      EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 25),
-                  decoration: BoxDecoration(
-                      color: lightBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                      border: Border.all(color: lightBlue)),
-                  child: InkWell(
-                    onTap: () {
-                      Map map = {
-                        "planName": "$planType",
-                        "price": "$price",
-                        "validity": "$validity",
-                        "packageDescription": "$discription",
-                        "operatorName": "$operator",
-                        "circleName": "$circle",
-                        "billerImg": "$billerImg",
-                        "mobileNo": "$number",
-                        "operatorId": "$operatorId"
-                      };
-                      printMessage("screen", "3 : Map :${map.toString()}");
-                      openMobilePaymentNew(context, map);
-                    },
-                    child: Center(
-                      child: Text(
-                        "$buy",
-                        style: TextStyle(
-                          color: white,
-                          fontSize: font16.sp,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40.h,
+                      margin: EdgeInsets.only(
+                          left: 20, right: 20, top: 25, bottom: 25),
+                      decoration: BoxDecoration(
+                          color: lightBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                          border: Border.all(color: lightBlue)),
+                      child: InkWell(
+                        onTap: () {
+                          Map map = {
+                            "planName": "$planType",
+                            "price": "$price",
+                            "validity": "$validity",
+                            "packageDescription": "$discription",
+                            "operatorName": "$operator",
+                            "circleName": "$circle",
+                            "billerImg": "$billerImg",
+                            "mobileNo": "$number",
+                            "operatorId": "$operatorId",
+                            "spKey": "$spKey",
+                          };
+                          printMessage("screen", "3 : Map :${map.toString()}");
+                          openMobilePaymentNew(context, map);
+                        },
+                        child: Center(
+                          child: Text(
+                            "$buy",
+                            style: TextStyle(
+                              color: white,
+                              fontSize: font16.sp,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 10,
-                  blurRadius: 10,
-                  offset: Offset(0, 1), // changes position of shadow
-                ),
-              ],
-            ))),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(50.0)),
+                  color: white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 10,
+                      blurRadius: 10,
+                      offset: Offset(0, 1), // changes position of shadow
+                    ),
+                  ],
+                ))),
       ],
     );
   }

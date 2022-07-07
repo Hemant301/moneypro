@@ -14,8 +14,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
-
-
 class MobilePayment extends StatefulWidget {
   final Map map;
 
@@ -56,10 +54,10 @@ class _MobilePaymentState extends State<MobilePayment> {
   int upiIndex = 0;
   var upiId = "";
 
-  double welcomeAMT =0.0;
+  double welcomeAMT = 0.0;
   var isWelcomeOffer = false;
 
-  var actualRechargeAmount="";
+  var actualRechargeAmount = "";
 
   var isWallMore = false;
 
@@ -73,7 +71,7 @@ class _MobilePaymentState extends State<MobilePayment> {
   var currentYear = "";
   var timeH = "";
   var cDate = "";
-  var finalString  = "";
+  var finalString = "";
 
   @override
   void initState() {
@@ -85,7 +83,7 @@ class _MobilePaymentState extends State<MobilePayment> {
 
     setState(() {
       rechargeAmount = widget.map['price'].toString();
-      actualRechargeAmount= widget.map['price'].toString();
+      actualRechargeAmount = widget.map['price'].toString();
 
       currentYear = yearFormat.format(currentDate);
       timeH = timeFormat.format(currentDate);
@@ -103,7 +101,6 @@ class _MobilePaymentState extends State<MobilePayment> {
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
 
   updateWalletBalances() async {
     var mpBalc = await getWalletBalance();
@@ -133,19 +130,20 @@ class _MobilePaymentState extends State<MobilePayment> {
         moneyProBalc = "0.0";
       }
 
-      if(welAmt.toString()=="null" || welAmt.toString()=="0" ||welAmt.toString()==""){
+      if (welAmt.toString() == "null" ||
+          welAmt.toString() == "0" ||
+          welAmt.toString() == "") {
         isWelcomeOffer = false;
-      }else{
+      } else {
         double xx = double.parse(rechargeAmount);
-        welcomeAMT =double.parse(welAmt);
-        if(xx>399){
+        welcomeAMT = double.parse(welAmt);
+        if (xx > 399) {
           isWelcomeOffer = true;
-        }else{
+        } else {
           isWelcomeOffer = false;
         }
         var x = double.parse(moneyProBalc) + welcomeAMT;
         moneyProBalc = "$x";
-
       }
     });
 
@@ -167,281 +165,285 @@ class _MobilePaymentState extends State<MobilePayment> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: white,
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: false,
-            backgroundColor: white,
-            brightness: Brightness.light,
-            leading: InkWell(
-              onTap: () {
-                closeKeyBoard(context);
-                closeCurrentPage(context);
-              },
-              child: Container(
-                height: 60,
-                width: 60,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/back_arrow_bg.png',
-                      height: 60,
-                    ),
-                    Positioned(
-                      top: 16,
-                      left: 12,
-                      child: Image.asset(
-                        'assets/back_arrow.png',
-                        height: 16,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            titleSpacing: 0,
-            title: appLogo(),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
+      backgroundColor: white,
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: false,
+        backgroundColor: white,
+        brightness: Brightness.light,
+        leading: InkWell(
+          onTap: () {
+            closeKeyBoard(context);
+            closeCurrentPage(context);
+          },
+          child: Container(
+            height: 60,
+            width: 60,
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, top: 20),
-                  child: Row(
-                    children: [
-                      (widget.map['billerImg'].toString() == "")
-                          ? Container()
-                          : SizedBox(
-                        height: 30,
-                        child: Image.network(
-                          "$imageSubAPI${widget.map['billerImg'].toString()}",
-                        ),
-                      ),
-                      (widget.map['billerImg'].toString() == "")
-                          ? Container()
-                          : SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: 0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${widget.map['mobileNo']}",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                (widget.map['operatorName'].toString()=="")?"${widget.map['operatorSecName']}":  "${widget.map['operatorName']}",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                " | ",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                (widget.map['circleName'].toString()=="")?"${widget.map['stateName']}":  "${widget.map['circleName']}",
-                                style: TextStyle(
-                                    color: lightBlack,
-                                    fontSize: font15,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
+                Image.asset(
+                  'assets/back_arrow_bg.png',
+                  height: 60,
+                ),
+                Positioned(
+                  top: 16,
+                  left: 12,
+                  child: Image.asset(
+                    'assets/back_arrow.png',
+                    height: 16,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                  child: Divider(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, top: 20, right: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "$rupeeSymbol ${widget.map['price']}",
-                              style: TextStyle(
-                                  color: dotColor,
-                                  fontSize: font18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "${widget.map['packageDescription']}",
-                              style: TextStyle(
-                                  color: lightBlack,
-                                  fontSize: font13,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              "${widget.map['validityDescription']}",
-                              style: TextStyle(
-                                  color: lightBlack,
-                                  fontSize: font13,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          closeKeyBoard(context);
-                          closeCurrentPage(context);
-                        },
-                        child: Text(
-                          "Change Plan",
-                          style: TextStyle(color: lightBlue, fontSize: font15),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                  child: Divider(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        debitFrom,
-                        style: TextStyle(
-                            color: black,
-                            fontSize: font14,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Checkbox(
-                              value: checkedValue,
-                              onChanged: (val) async {
-
-                                var mpBalc = await getWalletBalance();
-
-                                setState(() {
-                                  double walletValue = 0;
-                                  double rechargeValue = 0;
-
-                                  setState(() {
-                                    if (mpBalc.toString() == "") {
-                                      walletValue = 0;
-                                    } else {
-                                      walletValue = double.parse(mpBalc);
-                                    }
-
-                                    if (rechargeAmount.toString() == "") {
-                                      rechargeValue = 0;
-                                    } else {
-                                      rechargeValue = double.parse(rechargeAmount);
-                                    }
-                                  });
-
-                                  if (walletValue < rechargeValue) {
-                                    setState(() {
-                                      remainAmt = rechargeValue - walletValue;
-                                    });
-
-                                    if(isWelcomeOffer){
-                                      remainAmt = remainAmt - welcomeCharge;
-                                    }
-                                  }
-
-                                  if (walletValue < 0) {
-                                    closeKeyBoard(context);
-                                    showToastMessage("Your wallet does not have enough balance");
-                                  } else {
-                                    closeKeyBoard(context);
-                                    checkedValue = val!;
-                                  }
-                                });
-                              }),
-                          Text(
-                            "$wallet",
-                            style: TextStyle(fontSize: font14, color: black),
-                          ),
-                          Spacer(),
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: walletBg,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(color: walletBg)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, top: 5, bottom: 5),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Image.asset(
-                                    "assets/wallet.png",
-                                    height: 24,
-                                  ),
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8, top: 5),
-                                      child: Text(
-                                        //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
-                                        "$moneyProBalc",
-                                        style: TextStyle(
-                                            color: white, fontSize: font15),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      (remainAmt != 0 && checkedValue)
-                          ? Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                          style: TextStyle(color: black, fontSize: font14),
-                        ),
-                      )
-                          : Container(),
-                    ],
-                  ),
-                ),
-                (isWelcomeOffer)?_buildOfferRwo():Container(),
-                _buildUPISection(),
-                _buildCardSection(),
+                )
               ],
             ),
           ),
-          bottomNavigationBar: _buildButtonSection(),
-        ));
+        ),
+        titleSpacing: 0,
+        title: appLogo(),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, top: 20),
+              child: Row(
+                children: [
+                  (widget.map['billerImg'].toString() == "")
+                      ? Container()
+                      : SizedBox(
+                          height: 30,
+                          child: Image.network(
+                            "$imageSubAPI${widget.map['billerImg'].toString()}",
+                          ),
+                        ),
+                  (widget.map['billerImg'].toString() == "")
+                      ? Container()
+                      : SizedBox(
+                          width: 10,
+                        ),
+                  SizedBox(
+                    width: 0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${widget.map['mobileNo']}",
+                        style: TextStyle(
+                            color: black,
+                            fontSize: font15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            (widget.map['operatorName'].toString() == "")
+                                ? "${widget.map['operatorSecName']}"
+                                : "${widget.map['operatorName']}",
+                            style: TextStyle(
+                                color: lightBlack,
+                                fontSize: font15,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            " | ",
+                            style: TextStyle(
+                                color: lightBlack,
+                                fontSize: font15,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            (widget.map['circleName'].toString() == "")
+                                ? "${widget.map['stateName']}"
+                                : "${widget.map['circleName']}",
+                            style: TextStyle(
+                                color: lightBlack,
+                                fontSize: font15,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, top: 20, right: 25),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "$rupeeSymbol ${widget.map['price']}",
+                          style: TextStyle(
+                              color: dotColor,
+                              fontSize: font18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          "${widget.map['packageDescription']}",
+                          style: TextStyle(
+                              color: lightBlack,
+                              fontSize: font13,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "${widget.map['validityDescription']}",
+                          style: TextStyle(
+                              color: lightBlack,
+                              fontSize: font13,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      closeKeyBoard(context);
+                      closeCurrentPage(context);
+                    },
+                    child: Text(
+                      "Change Plan",
+                      style: TextStyle(color: lightBlue, fontSize: font15),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+              child: Divider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0, right: 30, left: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    debitFrom,
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font14,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: checkedValue,
+                          onChanged: (val) async {
+                            var mpBalc = await getWalletBalance();
+
+                            setState(() {
+                              double walletValue = 0;
+                              double rechargeValue = 0;
+
+                              setState(() {
+                                if (mpBalc.toString() == "") {
+                                  walletValue = 0;
+                                } else {
+                                  walletValue = double.parse(mpBalc);
+                                }
+
+                                if (rechargeAmount.toString() == "") {
+                                  rechargeValue = 0;
+                                } else {
+                                  rechargeValue = double.parse(rechargeAmount);
+                                }
+                              });
+
+                              if (walletValue < rechargeValue) {
+                                setState(() {
+                                  remainAmt = rechargeValue - walletValue;
+                                });
+
+                                if (isWelcomeOffer) {
+                                  remainAmt = remainAmt - welcomeCharge;
+                                }
+                              }
+
+                              if (walletValue < 0) {
+                                closeKeyBoard(context);
+                                showToastMessage(
+                                    "Your wallet does not have enough balance");
+                              } else {
+                                closeKeyBoard(context);
+                                checkedValue = val!;
+                              }
+                            });
+                          }),
+                      Text(
+                        "$wallet",
+                        style: TextStyle(fontSize: font14, color: black),
+                      ),
+                      Spacer(),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: walletBg,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: walletBg)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, top: 5, bottom: 5),
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            children: [
+                              Image.asset(
+                                "assets/wallet.png",
+                                height: 24,
+                              ),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8, top: 5),
+                                  child: Text(
+                                    //"${formatDecimal2Digit.format(double.parse(moneyProBalc))}",
+                                    "$moneyProBalc",
+                                    style: TextStyle(
+                                        color: white, fontSize: font15),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  (remainAmt != 0 && checkedValue)
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Text(
+                            "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                            style: TextStyle(color: black, fontSize: font14),
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
+            ),
+            (isWelcomeOffer) ? _buildOfferRwo() : Container(),
+            _buildUPISection(),
+            _buildCardSection(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: _buildButtonSection(),
+    ));
   }
 
   _buildUPISection() {
@@ -452,8 +454,7 @@ class _MobilePaymentState extends State<MobilePayment> {
       elevation: 10,
       margin: EdgeInsets.only(top: 15.0, left: 20, right: 20),
       child: InkWell(
-        onTap: () async{
-
+        onTap: () async {
           var mpBalc = await getWalletBalance();
 
           setState(() {
@@ -463,8 +464,6 @@ class _MobilePaymentState extends State<MobilePayment> {
 
           double walletValue = 0;
           double rechargeValue = 0;
-
-
 
           setState(() {
             if (mpBalc.toString() == "") {
@@ -484,12 +483,12 @@ class _MobilePaymentState extends State<MobilePayment> {
             if (walletValue >= rechargeValue) {
               var id = DateTime.now().millisecondsSinceEpoch;
               setState(() {
-                isWallMore =true;
+                isWallMore = true;
               });
               paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
             } else {
               setState(() {
-                isWallMore =false;
+                isWallMore = false;
               });
               if (isUPIOpen) {
                 setState(() {
@@ -497,10 +496,11 @@ class _MobilePaymentState extends State<MobilePayment> {
                 });
                 var id = DateTime.now().millisecondsSinceEpoch;
 
-                if(isWelcomeOffer){
-                  remainAmt = remainAmt -welcomeCharge;
+                if (isWelcomeOffer) {
+                  remainAmt = remainAmt - welcomeCharge;
                 }
-                paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                paymentByUPIWallet(id, formatNow.format(remainAmt),
+                    formatNow.format(rechargeValue));
               } else {
                 showToastMessage("Select any one payment method");
               }
@@ -509,11 +509,11 @@ class _MobilePaymentState extends State<MobilePayment> {
             if (isUPIOpen) {
               var id = DateTime.now().millisecondsSinceEpoch;
 
-              if(isWelcomeOffer){
-                rechargeValue = rechargeValue -welcomeCharge;
+              if (isWelcomeOffer) {
+                rechargeValue = rechargeValue - welcomeCharge;
               }
               setState(() {
-                isWallMore =false;
+                isWallMore = false;
               });
               printMessage(screen, "Recharge Value is : $rechargeValue");
 
@@ -525,7 +525,7 @@ class _MobilePaymentState extends State<MobilePayment> {
         },
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
+              const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
           child: Row(
             children: [
               Image.asset(
@@ -718,8 +718,8 @@ class _MobilePaymentState extends State<MobilePayment> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeMM,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardMMController,
@@ -746,8 +746,8 @@ class _MobilePaymentState extends State<MobilePayment> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeYY,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardYYController,
@@ -850,16 +850,13 @@ class _MobilePaymentState extends State<MobilePayment> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               border: Border.all(color: lightBlue)),
           child: InkWell(
-            onTap: () async{
-
+            onTap: () async {
               var mpBalc = await getWalletBalance();
 
               setState(() {});
 
               double walletValue = 0;
               double rechargeValue = 0;
-
-
 
               setState(() {
                 if (mpBalc.toString() == "") {
@@ -878,14 +875,15 @@ class _MobilePaymentState extends State<MobilePayment> {
               if (checkedValue) {
                 if (walletValue >= rechargeValue) {
                   setState(() {
-                    isWallMore =true;
+                    isWallMore = true;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                  paymentStatusByWalletOnly(
+                      id, formatNow.format(rechargeValue));
                 } else {
                   if (isCardOpen) {
                     setState(() {
-                      isWallMore =false;
+                      isWallMore = false;
                     });
                     var cardNo = cardController.text.toString();
                     var cardName = cardHolderNameController.text.toString();
@@ -920,14 +918,15 @@ class _MobilePaymentState extends State<MobilePayment> {
 
                     remainAmt = remainAmt + cardCharge;
 
-                    if(isWelcomeOffer){
-                      remainAmt = remainAmt -welcomeCharge;
+                    if (isWelcomeOffer) {
+                      remainAmt = remainAmt - welcomeCharge;
                     }
 
                     printMessage(screen,
                         "Remaining amount : ${formatNow.format(remainAmt)}");
 
-                    paymentByUPIWallet(id, formatNow.format(remainAmt), rechargeAmount);
+                    paymentByUPIWallet(
+                        id, formatNow.format(remainAmt), rechargeAmount);
                   } else {
                     showToastMessage("Select any one payment method");
                   }
@@ -936,11 +935,11 @@ class _MobilePaymentState extends State<MobilePayment> {
                 printMessage(screen, "Check card Open : $isCardOpen");
                 if (isCardOpen) {
                   setState(() {
-                    isWallMore =false;
+                    isWallMore = false;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-                  if(isWelcomeOffer){
-                    rechargeValue = rechargeValue -welcomeCharge;
+                  if (isWelcomeOffer) {
+                    rechargeValue = rechargeValue - welcomeCharge;
                   }
                   rechargeValue = rechargeValue + cardCharge;
                   paymentByPGDirect(id, formatNow.format(rechargeValue));
@@ -976,19 +975,19 @@ class _MobilePaymentState extends State<MobilePayment> {
           children: [
             Expanded(
                 child: Image.asset(
-                  'assets/pci.png',
-                  height: 24,
-                )),
+              'assets/pci.png',
+              height: 24,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/upi.png',
-                  height: 20,
-                )),
+              'assets/upi.png',
+              height: 20,
+            )),
             Expanded(
                 child: Image.asset(
-                  'assets/iso.png',
-                  height: 30,
-                )),
+              'assets/iso.png',
+              height: 30,
+            )),
           ],
         ),
         SizedBox(
@@ -1043,7 +1042,7 @@ class _MobilePaymentState extends State<MobilePayment> {
     var token = await getToken();
     var mId;
     var xAmt;
-    var mBal =await getWalletBalance();
+    var mBal = await getWalletBalance();
 
     var role = await getRole();
 
@@ -1053,18 +1052,15 @@ class _MobilePaymentState extends State<MobilePayment> {
       mId = "";
     }
 
-
-    if(isWallMore){
-      xAmt= double.parse(actualRechargeAmount);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(actualRechargeAmount);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
-
-
 
     var headers = {
       "Content-Type": "application/json",
@@ -1093,7 +1089,8 @@ class _MobilePaymentState extends State<MobilePayment> {
       "param5": "",
       "operator_name": "${widget.map['operatorSecName']}",
       "category": "${widget.map['category']}",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
       //"refId":"$finalString"
     };
 
@@ -1134,8 +1131,7 @@ class _MobilePaymentState extends State<MobilePayment> {
             "signature": "",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobile']}",
-            "commission":"$commission"
-
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
           //}
@@ -1289,7 +1285,7 @@ class _MobilePaymentState extends State<MobilePayment> {
 
       CashfreePGSDK.doPayment(inputFinalParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "Final result : $value");
       });
@@ -1298,13 +1294,13 @@ class _MobilePaymentState extends State<MobilePayment> {
     if (isUPIOpen) {
       CashfreePGSDK.getUPIApps().then((value) {
         setState(() {
-          getUPIAppNames(value, orderId, difAmt, token,rechAmt);
+          getUPIAppNames(value, orderId, difAmt, token, rechAmt);
         });
       });
     }
   }
 
-  verifySignatureByUPIWallet(responsePG,rechAmt) async {
+  verifySignatureByUPIWallet(responsePG, rechAmt) async {
     var txStatus = responsePG['txStatus'];
     var orderAmount = responsePG['orderAmount'];
     var paymentMode = responsePG['paymentMode'];
@@ -1378,13 +1374,13 @@ class _MobilePaymentState extends State<MobilePayment> {
       mId = "";
     }
 
-    if(isWallMore){
-      xAmt= double.parse(actualRechargeAmount);
-    }else{
-      if(checkedValue){
+    if (isWallMore) {
+      xAmt = double.parse(actualRechargeAmount);
+    } else {
+      if (checkedValue) {
         xAmt = double.parse(mBal);
-      }else{
-        xAmt= 0;
+      } else {
+        xAmt = 0;
       }
     }
 
@@ -1419,12 +1415,12 @@ class _MobilePaymentState extends State<MobilePayment> {
       "param5": "",
       "operator_name": "${widget.map['operatorSecName']}",
       "category": "${widget.map['category']}",
-      "welcome_amount":(isWelcomeOffer)?"${formatNow.format(welcomeCharge)}":"0",
+      "welcome_amount":
+          (isWelcomeOffer) ? "${formatNow.format(welcomeCharge)}" : "0",
       //"refId":"$finalString"
     };
 
     printMessage(screen, "body : $body");
-
 
     final response = await http.post(Uri.parse(mobileRechargePaymentAPI),
         body: jsonEncode(body), headers: headers);
@@ -1458,7 +1454,7 @@ class _MobilePaymentState extends State<MobilePayment> {
             "signature": "$pgSign",
             "operatorName": "${widget.map['operatorName']}",
             "mobile": "${widget.map['mobile']}",
-            "commission":"$commission"
+            "commission": "$commission"
           };
           openMobileReceipt(context, map, true);
         } else if (status.toString() == "2") {
@@ -1509,7 +1505,7 @@ class _MobilePaymentState extends State<MobilePayment> {
     }
   }
 
-  getUPIAppNames(result, orderId, difAmt, token,rechAmt) async {
+  getUPIAppNames(result, orderId, difAmt, token, rechAmt) async {
     String orderNote = "Order Note";
 
     if (result.length == 0) {
@@ -1569,7 +1565,7 @@ class _MobilePaymentState extends State<MobilePayment> {
 
       CashfreePGSDK.doUPIPayment(inputParams).then((value) {
         setState(() {
-          verifySignatureByUPIWallet(value,rechAmt);
+          verifySignatureByUPIWallet(value, rechAmt);
         });
         printMessage(screen, "doUPIPayment result : $value");
       });
@@ -1629,7 +1625,6 @@ class _MobilePaymentState extends State<MobilePayment> {
   }
 
   moveToPaymentGateway(orderId, token, difAmt) async {
-
     String orderNote = "Order Note";
 
     var name = await getContactName();
@@ -1707,10 +1702,10 @@ class _MobilePaymentState extends State<MobilePayment> {
     }
   }
 
-  calculateWelcomeAMt(amt){
+  calculateWelcomeAMt(amt) {
     printMessage(screen, "welcomeAMT : $amt");
-    if(welcomeAMT!=0){
-      double v1 = 3.0;
+    if (welcomeAMT != 0) {
+      double v1 = 1.1;
       double v2 = double.parse(amt);
       double v3 = 100;
 
@@ -1722,14 +1717,14 @@ class _MobilePaymentState extends State<MobilePayment> {
         welcomeCharge = v4;
       }
       printMessage(screen, "v4 : ${formatNow.format(v4)}");
-      printMessage(screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
+      printMessage(
+          screen, "welcomeCharge : ${formatNow.format(welcomeCharge)}");
     }
   }
 
-  _buildOfferRwo(){
+  _buildOfferRwo() {
     return Container(
-      margin: EdgeInsets.only(
-          top: padding, left: padding, right: padding),
+      margin: EdgeInsets.only(top: padding, left: padding, right: padding),
       decoration: BoxDecoration(
         color: editBg,
         borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -1738,21 +1733,35 @@ class _MobilePaymentState extends State<MobilePayment> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            SizedBox(width: 15,),
-            Image.asset('assets/offer_icon.png', height: 24,),
-            SizedBox(width: 10,),
-            Text("Welcome offer applied", style: TextStyle(color: black, fontSize: font14),),
+            SizedBox(
+              width: 15,
+            ),
+            Image.asset(
+              'assets/offer_icon.png',
+              height: 24,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "Welcome offer applied",
+              style: TextStyle(color: black, fontSize: font14),
+            ),
             Spacer(),
-            Text("$rupeeSymbol ${formatNow.format(welcomeCharge)}",style: TextStyle(color: green, fontSize: font14),),
-            SizedBox(width: 15,),
+            Text(
+              "$rupeeSymbol ${formatNow.format(welcomeCharge)}",
+              style: TextStyle(color: green, fontSize: font14),
+            ),
+            SizedBox(
+              width: 15,
+            ),
           ],
         ),
-      ) ,
+      ),
     );
   }
 
   getUPIAppNamesUPI(result, orderId, difAmt, token) async {
-
     String orderNote = "Order Note";
 
     if (result.length == 0) {

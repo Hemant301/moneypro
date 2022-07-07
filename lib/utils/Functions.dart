@@ -1528,12 +1528,16 @@ openManagerBranchTranactions(BuildContext context) {
       ));
 }
 
-openPayUMobilePlans(BuildContext context, mobileNo, List<Contact> contacts) {
+openPayUMobilePlans(
+    BuildContext context, mobileNo, List<Contact> contacts, String spKey) {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            PayUMobilePlans(mobileNo: mobileNo, contacts: contacts),
+        builder: (context) => PayUMobilePlans(
+          mobileNo: mobileNo,
+          contacts: contacts,
+          spKey: spKey,
+        ),
       ));
 }
 
