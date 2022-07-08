@@ -371,12 +371,12 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                                     dishCode = "Sundirect";
                                   });
                                 } else if (dishOperator.toString().toString() ==
-                                    "Tata Sky") {
+                                    "Tata Play") {
                                   setState(() {
                                     dishCode = "TataSky";
                                   });
                                 } else if (dishOperator.toString().toString() ==
-                                    "Videocon D2H") {
+                                    "D2H") {
                                   setState(() {
                                     dishCode = "Videocon";
                                   });
@@ -923,6 +923,9 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   }
 
   Future generateJWTToken(dthNo, dthName, action) async {
+    print(dthNo);
+    print(dthName);
+    print(action);
     setState(() {
       showDialog(
           barrierDismissible: false,

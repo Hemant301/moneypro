@@ -883,7 +883,7 @@ class _MoreCategoriesState extends State<MoreCategories>
                           Text(
                             "$rechTag",
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.start, 
                             style: TextStyle(color: white, fontSize: font12.sp),
                           ),
                           Icon(
