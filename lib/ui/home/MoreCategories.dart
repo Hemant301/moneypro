@@ -254,15 +254,18 @@ class _MoreCategoriesState extends State<MoreCategories>
                             height: 5.h,
                           ),
                           Container(
+                            width: 80,
                             color: Colors.yellow,
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 3.0, right: 3, top: 1, bottom: 1),
-                              child: Text(
-                                "10% Cashback",
-                                style: TextStyle(
-                                    color: black, fontSize: font12.sp),
-                                maxLines: 1,
+                              child: Center(
+                                child: Text(
+                                  "10% Cashback",
+                                  style: TextStyle(
+                                      color: black, fontSize: font10.sp),
+                                  maxLines: 1,
+                                ),
                               ),
                             ),
                           ),
@@ -465,7 +468,7 @@ class _MoreCategoriesState extends State<MoreCategories>
                           "$rechTag",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.start,
-                          style: TextStyle(color: white, fontSize: font12.sp),
+                          style: TextStyle(color: white, fontSize: font11.sp),
                         ),
                         Icon(
                           Icons.arrow_forward_ios,
@@ -819,15 +822,18 @@ class _MoreCategoriesState extends State<MoreCategories>
                               height: 5.h,
                             ),
                             Container(
+                              width: 80,
                               color: Colors.yellow,
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 3.0, right: 3, top: 1, bottom: 1),
-                                child: Text(
-                                  "Zero Surcharge",
-                                  style: TextStyle(
-                                      color: black, fontSize: font10.sp),
-                                  maxLines: 1,
+                                child: Center(
+                                  child: Text(
+                                    "Zero Surcharge",
+                                    style: TextStyle(
+                                        color: black, fontSize: font10.sp),
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ),
                             ),
@@ -883,8 +889,8 @@ class _MoreCategoriesState extends State<MoreCategories>
                           Text(
                             "$rechTag",
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start, 
-                            style: TextStyle(color: white, fontSize: font12.sp),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: white, fontSize: font11.sp),
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
@@ -1238,7 +1244,7 @@ class _MoreCategoriesState extends State<MoreCategories>
                             "$fintag",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
-                            style: TextStyle(color: white, fontSize: font12.sp),
+                            style: TextStyle(color: white, fontSize: font10.sp),
                           ),
                           Icon(
                             Icons.arrow_forward_ios,

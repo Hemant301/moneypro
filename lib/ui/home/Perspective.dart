@@ -36,7 +36,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:showcaseview/showcaseview.dart';
 import 'package:moneypro_new/utils/AppKeys.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../main.dart';
 import 'package:translator/translator.dart';
 import '../../utils/Apicall.dart';
@@ -582,7 +582,8 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
             icon: Image.asset(
               'assets/loan.png',
             ),
-            title: 'Apply Loan',
+            // title: 'Apply Loan',
+            title: 'Loan',
             isIconBlend: false),
         TabItem(
             icon: Container(
@@ -1485,8 +1486,9 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Text(
+                          child: AutoSizeText(
                             "$rechTag",
+                            minFontSize: 5,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
                             style: TextStyle(color: white, fontSize: font12.sp),
@@ -1597,14 +1599,18 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                   child: Column(
                     children: [
                       Container(
+                        width: 80,
                         color: Colors.yellow,
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 3.0, right: 3, top: 1, bottom: 1),
-                          child: Text(
-                            "*9% Interest",
-                            style: TextStyle(color: black, fontSize: font12.sp),
-                            maxLines: 1,
+                          child: Center(
+                            child: Text(
+                              "*9% Interest",
+                              style:
+                                  TextStyle(color: black, fontSize: font12.sp),
+                              maxLines: 1,
+                            ),
                           ),
                         ),
                       ),
@@ -5672,9 +5678,9 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
               borderRadius: BorderRadius.circular(20),
             ),
             child: Container(
-              height: 180.h,
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 22.0),
+              // height: 180.h,
+              padding: const EdgeInsets.only(
+                  left: 16.0, right: 16.0, bottom: 22.0, top: 22.0),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -5692,7 +5698,8 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 0.0),
                     child: Row(
                       children: [
                         Image.asset(
@@ -5726,72 +5733,74 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                               fontSize: font13.sp,
                             ),
                           ),
+                          SizedBox(
+                            height: 2,
+                          ),
                           Text(
                             '$virtualCompanyName',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: font16.sp,
+                                fontSize: font15.sp,
                                 fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  SizedBox(height: 5),
+                  Wrap(
+                    spacing: 22.0,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'A/c No.',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: font13.sp,
-                              ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'A/c No.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: font13.sp,
                             ),
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Text(
-                                '$virtualAccountNumber',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: font16.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 2),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              '$virtualAccountNumber',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: font15.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
                       ),
                       SizedBox(
                         width: 10.w,
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              'IFSC Code',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: font13.sp,
-                              ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'IFSC Code',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: font13.sp,
                             ),
-                            Text(
-                              '$virtualAccountIfscCode',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: font16.sp,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            '$virtualAccountIfscCode',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: font15.sp,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
                       )
                     ],
                   ),
+                  SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -5819,7 +5828,7 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
                                 '${formatDecimal2Digit.format(avblBalc)}',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: font18.sp,
+                                    fontSize: font16.sp,
                                     fontWeight: FontWeight.bold),
                               )
                             ],
@@ -5835,94 +5844,86 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
         ),
         (role.toString() == "3")
             ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        if (approved.toString() == "1") {
-                          openMoneyTransferLanding(context);
-                        } else {
-                          showToastMessage(notApproved);
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 24.h,
+                  InkWell(
+                    onTap: () {
+                      if (approved.toString() == "1") {
+                        openMoneyTransferLanding(context);
+                      } else {
+                        showToastMessage(notApproved);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 24.h,
+                            width: 24.w,
+                            child: Image.asset(
+                              'assets/transfer_rupee.png',
+                              color: white,
                               width: 24.w,
-                              child: Image.asset(
-                                'assets/transfer_rupee.png',
-                                color: white,
-                                width: 24.w,
-                                height: 24.h,
-                              )),
-                          Text(
-                            "Transfer Money",
-                            style: TextStyle(color: white, fontSize: font14.sp),
-                          ),
-                        ],
-                      ),
+                              height: 24.h,
+                            )),
+                        Text(
+                          "Transfer Money",
+                          style: TextStyle(color: white, fontSize: font14.sp),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        if (role.toString() == "3") {
-                          openTransactionHistory(context, "", "");
-                        } else {
-                          openTransactionHistoryEmpUser(context);
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 24.h,
+                  InkWell(
+                    onTap: () {
+                      if (role.toString() == "3") {
+                        openTransactionHistory(context, "", "");
+                      } else {
+                        openTransactionHistoryEmpUser(context);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 24.h,
+                            width: 24.w,
+                            child: Image.asset(
+                              'assets/passbook.png',
+                              color: white,
                               width: 24.w,
-                              child: Image.asset(
-                                'assets/passbook.png',
-                                color: white,
-                                width: 24.w,
-                                height: 24.h,
-                              )),
-                          Text(
-                            "Passbook",
-                            style: TextStyle(color: white, fontSize: font14.sp),
-                          ),
-                        ],
-                      ),
+                              height: 24.h,
+                            )),
+                        Text(
+                          "Passbook",
+                          style: TextStyle(color: white, fontSize: font14.sp),
+                        ),
+                      ],
                     ),
                   ),
                   (isShowInvestor || isShowMPWallet)
-                      ? Expanded(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              openWithdrwal(context, isShowMPWallet,
-                                  isShowInvestor, totalEarning);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                    height: 24.h,
+                      ? InkWell(
+                          onTap: () {
+                            openWithdrwal(context, isShowMPWallet,
+                                isShowInvestor, totalEarning);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 24.h,
+                                  width: 24.w,
+                                  child: Image.asset(
+                                    'assets/with_rup_atm.png',
+                                    color: white,
                                     width: 24.w,
-                                    child: Image.asset(
-                                      'assets/with_rup_atm.png',
-                                      color: white,
-                                      width: 24.w,
-                                      height: 24.h,
-                                    )),
-                                Text(
-                                  "Withdrawal",
-                                  style: TextStyle(
-                                      color: white, fontSize: font14.sp),
-                                ),
-                              ],
-                            ),
+                                    height: 24.h,
+                                  )),
+                              Text(
+                                "Withdrawal",
+                                style: TextStyle(
+                                    color: white, fontSize: font14.sp),
+                              ),
+                            ],
                           ),
                         )
-                      : Expanded(flex: 1, child: Container()),
+                      : Container(),
                 ],
               )
             : Container(),

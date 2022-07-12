@@ -376,7 +376,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                                     dishCode = "TataSky";
                                   });
                                 } else if (dishOperator.toString().toString() ==
-                                    "D2H") {
+                                    "d2h") {
                                   setState(() {
                                     dishCode = "Videocon";
                                   });
