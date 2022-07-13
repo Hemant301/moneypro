@@ -571,13 +571,15 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
       backgroundColor: white,
       color: black,
       activeColor: black,
+      elevation: 1.5,
       items: [
         TabItem(
             icon: Image.asset(
               'assets/home_gray.png',
+              color: blue,
             ),
             title: 'Home',
-            isIconBlend: false),
+            isIconBlend: true),
         TabItem(
             icon: Image.asset(
               'assets/loan.png',

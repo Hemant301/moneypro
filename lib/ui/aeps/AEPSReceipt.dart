@@ -48,6 +48,8 @@ class _AEPSReceiptState extends State<AEPSReceipt>
     });
   }
 
+  int active = 0;
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -84,7 +86,15 @@ class _AEPSReceiptState extends State<AEPSReceipt>
                   actions: [
                     InkWell(
                       onTap: () {
+                        setState(() {
+                          active = 1;
+                        });
                         shareTransReceipt(_printKey, "aeps");
+                        Future.delayed(Duration(seconds: 5), () {
+                          setState(() {
+                            active = 0;
+                          });
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
@@ -96,7 +106,15 @@ class _AEPSReceiptState extends State<AEPSReceipt>
                     ),
                     InkWell(
                       onTap: () {
-                        downloadReceiptAsPDF(_printKey);
+                        setState(() {
+                          active = 1;
+                          downloadReceiptAsPDF(_printKey);
+                        });
+                        Future.delayed(Duration(seconds: 5), () {
+                          setState(() {
+                            active = 0;
+                          });
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
@@ -111,30 +129,40 @@ class _AEPSReceiptState extends State<AEPSReceipt>
                     )
                   ],
                 ),
-                body: RepaintBoundary(
-                  key: _printKey,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    color: white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _buildRecieptHeader(),
-                          Container(
-                            height: 10.h,
-                            width: MediaQuery.of(context).size.width,
-                            color: boxBg,
-                          ),
-                          _buildRecieptDetails(),
-                          Container(
-                            height: 10.h,
-                            width: MediaQuery.of(context).size.width,
-                            color: boxBg,
-                          ),
-                          _buildReciptBotton()
-                        ],
-                      ),
+                body: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: white,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildRecieptHeader(),
+                        Container(
+                          height: 10.h,
+                          width: MediaQuery.of(context).size.width,
+                          color: boxBg,
+                        ),
+                        _buildRecieptDetails(),
+                        Container(
+                          height: 10.h,
+                          width: MediaQuery.of(context).size.width,
+                          color: boxBg,
+                        ),
+                        _buildReciptBotton(),
+                        SizedBox(
+                          height: 100,
+                        ),
+                        active == 0
+                            ? Container()
+                            : RepaintBoundary(
+                                key: _printKey,
+                                child: Column(
+                                  children: [
+                                    _buildscreenRecieptDetails(),
+                                  ],
+                                ),
+                              )
+                      ],
                     ),
                   ),
                 ),
@@ -567,6 +595,366 @@ class _AEPSReceiptState extends State<AEPSReceipt>
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  _buildscreenRecieptDetails() {
+    return Container(
+      color: Color.fromARGB(255, 219, 247, 255),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/app_splash_logo.png',
+              height: 50,
+            ),
+            Text(
+              "Transactions Details",
+              style: TextStyle(
+                  color: black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: font16.sp),
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Avaiable Balance",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    (widget.map['balance'].toString() == "null")
+                        ? "NA"
+                        : "$rupeeSymbol ${widget.map['balance']}",
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font16.sp,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "$transactionId",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      print('${widget.map['transId']}');
+                    },
+                    child: Text(
+                      (widget.map['transId'].toString() == "null" ||
+                              widget.map['transId'].toString() == "")
+                          ? "NA"
+                          : "${widget.map['transId']}",
+                      style: TextStyle(
+                          color: black,
+                          fontSize: font13.sp,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "$refIdd",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "${widget.map['refId']}",
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font13.sp,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "$mode_",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "${widget.map['mode']}",
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font13.sp,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Adhaar No.",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "$ad",
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font13.sp,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Mobile No.",
+                  style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "${widget.map['mobile']}",
+                    style: TextStyle(
+                        color: black,
+                        fontSize: font13.sp,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              color: gray,
+            ),
+            (widget.map['mode'].toString().toLowerCase() == "ap" &&
+                    widget.map['customerCharge'].toString() != "null")
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Customer Charges",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
+                          SizedBox(
+                            width: 20.sp,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "$rupeeSymbol ${widget.map['customerCharge']}",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font13.sp,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.end,
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                    ],
+                  )
+                : Container(),
+            (widget.map['mode'].toString().toLowerCase() == "ap" &&
+                    widget.map['stan'].toString() != "null")
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "STAN",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "${widget.map['stan']}",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font13.sp,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.end,
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                    ],
+                  )
+                : Container(),
+            (widget.map['mode'].toString().toLowerCase() == "ap" &&
+                    widget.map['bankName'].toString() != "null")
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Bank Name",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "${widget.map['bankName']}",
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: font13.sp,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.end,
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                    ],
+                  )
+                : Container(),
+            (widget.map['mode'].toString().toLowerCase() == "ap" &&
+                    widget.map['rrn'].toString() != "null")
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "RRN",
+                            style: TextStyle(
+                                color: lightBlack, fontSize: font13.sp),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: () {
+                                print(widget.map['rrn']);
+                              },
+                              child: Text(
+                                widget.map['rrn'].toString() == ""
+                                    ? "N/A"
+                                    : "${widget.map['rrn']}",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: font13.sp,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Divider(
+                        color: gray,
+                      ),
+                    ],
+                  )
+                : Container(),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Bank Msg",
+                      style: TextStyle(color: lightBlack, fontSize: font13.sp),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          print("${widget.map['bankmsg']}");
+                        },
+                        child: Text(
+                          "${widget.map['bankmsg']}",
+                          style: TextStyle(
+                              color: black,
+                              fontSize: font13.sp,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Divider(
+                  color: gray,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
