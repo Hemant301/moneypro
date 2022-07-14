@@ -2,7 +2,7 @@
 * Update new version here
 *
 * */
-String appVersion = "2.0.5";
+String appVersion = "2.0.6";
 
 /*
 * Authorazation header for API
