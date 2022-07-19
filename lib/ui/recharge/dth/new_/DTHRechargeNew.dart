@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
+import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
@@ -808,7 +810,8 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                     setState(() {
                       isWallMore = false;
                     });
-                    var cardNo = cardController.text.toString();
+                    var cardNo =
+                        cardController.text.replaceAll(' ', '').toString();
                     var cardName = cardHolderNameController.text.toString();
                     var month = cardMMController.text.toString();
                     var year = cardYYController.text.toString();
@@ -1090,17 +1093,35 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
         if (status.toString() == "1") {
           if (data['data']['status'].toString() == "true") {
-            MonthlyRecharge = data['data']['info'][0]['MonthlyRecharge'];
-            Balance = data['data']['info'][0]['Balance'];
-            customerName = data['data']['info'][0]['customerName'];
-            status = data['data']['info'][0]['status'];
-            NextRechargeDate = data['data']['info'][0]['NextRechargeDate'];
-            lastrechargeamount = data['data']['info'][0]['lastrechargeamount'];
-            lastrechargedate = data['data']['info'][0]['lastrechargedate'];
-            planname = data['data']['info'][0]['planname'];
+            if (data['data']['info'].length == 1) {
+              MonthlyRecharge =
+                  data['data']['info'][0]['MonthlyRecharge'] ?? "";
+              Balance = data['data']['info'][0]['Balance'] ?? "";
+              customerName = data['data']['info'][0]['customerName'] ?? "";
+              status = data['data']['info'][0]['status'] ?? "";
+              NextRechargeDate =
+                  data['data']['info'][0]['NextRechargeDate'] ?? "";
+              lastrechargeamount =
+                  data['data']['info'][0]['lastrechargeamount'] ?? "";
+              lastrechargedate =
+                  data['data']['info'][0]['lastrechargedate'] ?? "";
+              planname = data['data']['info'][0]['planname'] ?? "";
 
-            amountController =
-                TextEditingController(text: "${MonthlyRecharge.toString()}");
+              amountController =
+                  TextEditingController(text: "${MonthlyRecharge.toString()}");
+            } else {
+              MonthlyRecharge = "";
+              Balance = "";
+              customerName = "";
+              status = "";
+              NextRechargeDate = "";
+              lastrechargeamount = "";
+              lastrechargedate = "";
+              planname = "";
+
+              amountController =
+                  TextEditingController(text: "${MonthlyRecharge.toString()}");
+            }
           }
 
           setState(() {
@@ -1360,6 +1381,10 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15, top: 10, bottom: 10),
                     child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new CustomInputFormatter()
+                      ],
                       style: TextStyle(color: black, fontSize: inputFont.sp),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -1804,7 +1829,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -2165,7 +2190,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         if (status.toLowerCase() == "success" || status.toString() == "1") {
           Navigator.pop(context);
           showToastMessage(data['message'].toString());
-          var tId = data['transction_id'].toString();
+          var tId = data['response']["data"]["biller_refid"].toString();
           var commission = data['commission'].toString();
           Map map = {
             "tId": "$tId",
@@ -2373,7 +2398,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();

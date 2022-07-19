@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:moneypro_new/ui/models/KeyValuePair.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
+import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
@@ -1205,6 +1207,10 @@ class _WBElectricityState extends State<WBElectricity> {
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15, top: 10, bottom: 10),
                     child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new CustomInputFormatter()
+                      ],
                       style: TextStyle(color: black, fontSize: inputFont.sp),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -1608,7 +1614,7 @@ class _WBElectricityState extends State<WBElectricity> {
                     setState(() {
                       isWallMore = false;
                     });
-                    var cardNo = cardController.text.toString();
+                    var cardNo = cardController.text.replaceAll(' ', '').toString();
                     var cardName = cardHolderNameController.text.toString();
                     var month = cardMMController.text.toString();
                     var year = cardYYController.text.toString();
@@ -1651,7 +1657,7 @@ class _WBElectricityState extends State<WBElectricity> {
                 }
               } else {
                 if (isCardOpen) {
-                  var cardNo = cardController.text.toString();
+                  var cardNo = cardController.text.replaceAll(' ', '').toString();
                   var cardName = cardHolderNameController.text.toString();
                   var month = cardMMController.text.toString();
                   var year = cardYYController.text.toString();
@@ -2471,7 +2477,7 @@ class _WBElectricityState extends State<WBElectricity> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -2760,7 +2766,7 @@ class _WBElectricityState extends State<WBElectricity> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
