@@ -1,9 +1,11 @@
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
+import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
@@ -13,8 +15,6 @@ import 'package:moneypro_new/utils/StateContainer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
-
-
 
 class LICDetails extends StatefulWidget {
   const LICDetails({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class LICDetails extends StatefulWidget {
 class _LICDetailsState extends State<LICDetails> {
   var screen = "LIC details";
 
-  double mainWallet=0.0;
+  double mainWallet = 0.0;
 
   var showDetails = false;
   var checkedValue = false;
@@ -38,7 +38,7 @@ class _LICDetailsState extends State<LICDetails> {
   double cardCharge = 0.0;
   double remainAmt = 0;
 
- var jwtToken = "";
+  var jwtToken = "";
 
   var name;
 
@@ -68,7 +68,7 @@ class _LICDetailsState extends State<LICDetails> {
 
   final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
 
-  Map mapFetch={};
+  Map mapFetch = {};
 
   var custEmail;
   var custPolicyNo;
@@ -92,7 +92,6 @@ class _LICDetailsState extends State<LICDetails> {
     emailController.dispose();
     partialAmtController.dispose();
 
-
     cardController.dispose();
     cardHolderNameController.dispose();
     cardMMController.dispose();
@@ -106,8 +105,8 @@ class _LICDetailsState extends State<LICDetails> {
     var mpBalc = await getWalletBalance();
     var qrBalc = await getQRBalance();
     var walBalc = await getWelcomeAmt();
-    double mX =0.0;
-    double wX=0.0;
+    double mX = 0.0;
+    double wX = 0.0;
 
     final inheritedWidget = StateContainer.of(context);
 
@@ -143,76 +142,76 @@ class _LICDetailsState extends State<LICDetails> {
       mainWal = mpBalc;
       mainWallet = wX + mX;
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-      backgroundColor: white,
-      appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
-      body: SingleChildScrollView(
-              child: Column(
-              children: [
-                appSelectedBanner(context, "recharge_banner.png", 150.0.h),
-                _buildInputFields(),
-              ],
-            )),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: (showDetails)
-            ? _buildButtonSection()
-            : Wrap(
-                alignment: WrapAlignment.center,
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: white,
+              appBar: appBarHome(context, "assets/bbps_2.png", 24.0.w),
+              body: SingleChildScrollView(
+                  child: Column(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: 40.h,
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        border: Border.all(color: lightBlue)),
-                    child: InkWell(
-                      onTap: () {
-                        custPolicyNo = policyNoController.text.toString();
-                        custEmail = emailController.text.toString();
-
-                        if (custPolicyNo.length == 0) {
-                          showToastMessage("enter the policy number");
-                          return;
-                        }
-                        if (custEmail.length == 0) {
-                          showToastMessage("please enter your email");
-                          return;
-                        }
-                        if (!emailPattern.hasMatch(custEmail)) {
-                          showToastMessage("Invalid email");
-                          return;
-                        }
-                        closeKeyBoard(context);
-                        generatePANToken(custPolicyNo,custEmail);
-
-                      },
-                      child: Center(
-                        child: Text(
-                          "$search",
-                          style: TextStyle(
-                            color: white,
-                            fontSize: font14.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  appSelectedBanner(context, "recharge_banner.png", 150.0.h),
+                  _buildInputFields(),
                 ],
+              )),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: (showDetails)
+                    ? _buildButtonSection()
+                    : Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .8,
+                            height: 40.h,
+                            margin: EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 0),
+                            decoration: BoxDecoration(
+                                color: lightBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                border: Border.all(color: lightBlue)),
+                            child: InkWell(
+                              onTap: () {
+                                custPolicyNo =
+                                    policyNoController.text.toString();
+                                custEmail = emailController.text.toString();
+
+                                if (custPolicyNo.length == 0) {
+                                  showToastMessage("enter the policy number");
+                                  return;
+                                }
+                                if (custEmail.length == 0) {
+                                  showToastMessage("please enter your email");
+                                  return;
+                                }
+                                if (!emailPattern.hasMatch(custEmail)) {
+                                  showToastMessage("Invalid email");
+                                  return;
+                                }
+                                closeKeyBoard(context);
+                                generatePANToken(custPolicyNo, custEmail);
+                              },
+                              child: Center(
+                                child: Text(
+                                  "$search",
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: font14.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-      ),
-    )));
+            )));
   }
 
   _buildInputFields() {
@@ -407,8 +406,8 @@ class _LICDetailsState extends State<LICDetails> {
                               padding: const EdgeInsets.only(
                                   left: 15.0, right: 15, top: 10, bottom: 10),
                               child: TextFormField(
-                                style:
-                                    TextStyle(color: black, fontSize: inputFont.sp),
+                                style: TextStyle(
+                                    color: black, fontSize: inputFont.sp),
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.done,
                                 textCapitalization:
@@ -447,126 +446,140 @@ class _LICDetailsState extends State<LICDetails> {
                           const EdgeInsets.only(top: 10.0, right: 30, left: 30),
                       child: Text(
                         billMsg,
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
-                    (mainWal.toString()=="0" || mainWal.toString()=="0.0"|| mainWal.toString()=="null")?Container(): Padding(
-                      padding:
-                          const EdgeInsets.only(top: 15.0, right: 30, left: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            debitFrom,
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font14.sp,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                  value: checkedValue,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      double walletValue = mainWallet;
-                                      double rechargeValue = 0;
+                    (mainWal.toString() == "0" ||
+                            mainWal.toString() == "0.0" ||
+                            mainWal.toString() == "null")
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15.0, right: 30, left: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  debitFrom,
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font14.sp,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                        value: checkedValue,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            double walletValue = mainWallet;
+                                            double rechargeValue = 0;
 
-                                      setState(() {
-                                        /*if (moneyProBalc.toString() == "") {
+                                            setState(() {
+                                              /*if (moneyProBalc.toString() == "") {
                                           walletValue = 0;
                                         } else {
                                           walletValue =
                                               double.parse(moneyProBalc);
                                         }*/
 
-                                        var amt;
-                                        if(acceptPartPay.toString() == "true"){
-                                          amt = partialAmtController.text.toString();
-                                        }else{
-                                          amt = billAmount;
-                                        }
+                                              var amt;
+                                              if (acceptPartPay.toString() ==
+                                                  "true") {
+                                                amt = partialAmtController.text
+                                                    .toString();
+                                              } else {
+                                                amt = billAmount;
+                                              }
 
-                                        if (amt.toString() == "") {
-                                          showToastMessage("enter the amount");
-                                          return;
-                                        } else {
-                                          rechargeValue = double.parse(amt);
-                                        }
-                                      });
+                                              if (amt.toString() == "") {
+                                                showToastMessage(
+                                                    "enter the amount");
+                                                return;
+                                              } else {
+                                                rechargeValue =
+                                                    double.parse(amt);
+                                              }
+                                            });
 
-                                      if (walletValue < rechargeValue) {
-                                        setState(() {
-                                          remainAmt =
-                                              rechargeValue - walletValue;
-                                        });
-                                      }
+                                            if (walletValue < rechargeValue) {
+                                              setState(() {
+                                                remainAmt =
+                                                    rechargeValue - walletValue;
+                                              });
+                                            }
 
-                                      if (walletValue < 0) {
-                                        closeKeyBoard(context);
-                                        showToastMessage(
-                                            "Your wallet does not have enough balance");
-                                      } else {
-                                        closeKeyBoard(context);
-                                        checkedValue = val!;
-                                      }
-                                    });
-                                  }),
-                              Text(
-                                "$wallet",
-                                style:
-                                    TextStyle(fontSize: font14.sp, color: black),
-                              ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: walletBg,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border: Border.all(color: walletBg)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, top: 5, bottom: 5),
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Image.asset(
-                                        "assets/wallet.png",
-                                        height: 24.h,
-                                      ),
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 5),
-                                          child: Text(
-                                            //"${formatDecimal2Digit.format(mainWallet)}",
-                                            "$mainWallet",
-                                            style: TextStyle(
-                                                color: white, fontSize: font15.sp),
-                                          ),
+                                            if (walletValue < 0) {
+                                              closeKeyBoard(context);
+                                              showToastMessage(
+                                                  "Your wallet does not have enough balance");
+                                            } else {
+                                              closeKeyBoard(context);
+                                              checkedValue = val!;
+                                            }
+                                          });
+                                        }),
+                                    Text(
+                                      "$wallet",
+                                      style: TextStyle(
+                                          fontSize: font14.sp, color: black),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          color: walletBg,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          border: Border.all(color: walletBg)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 5, bottom: 5),
+                                        child: Wrap(
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Image.asset(
+                                              "assets/wallet.png",
+                                              height: 24.h,
+                                            ),
+                                            Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 5),
+                                                child: Text(
+                                                  //"${formatDecimal2Digit.format(mainWallet)}",
+                                                  "$mainWallet",
+                                                  style: TextStyle(
+                                                      color: white,
+                                                      fontSize: font15.sp),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                                (remainAmt != 0 && checkedValue)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: Text(
+                                          "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
+                                          style: TextStyle(
+                                              color: black,
+                                              fontSize: font14.sp),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
                           ),
-                          (remainAmt != 0 && checkedValue)
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "Remaining amount $rupeeSymbol ${formatNow.format(remainAmt)}",
-                                    style: TextStyle(
-                                        color: black, fontSize: font14.sp),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
                   ],
                 )
               : Container(),
@@ -604,8 +617,7 @@ class _LICDetailsState extends State<LICDetails> {
       elevation: 10,
       margin: EdgeInsets.only(top: 15.0, left: 20, right: 20),
       child: InkWell(
-        onTap: () async{
-
+        onTap: () async {
           var mpBalc = await getWalletBalance();
 
           setState(() {
@@ -624,9 +636,9 @@ class _LICDetailsState extends State<LICDetails> {
             }
 
             var amt;
-            if(acceptPartPay.toString() == "true"){
+            if (acceptPartPay.toString() == "true") {
               amt = partialAmtController.text.toString();
-            }else{
+            } else {
               amt = billAmount;
             }
 
@@ -637,10 +649,12 @@ class _LICDetailsState extends State<LICDetails> {
               rechargeValue = double.parse(amt);
             }
 
-            if(acceptPartPay.toString() == "true" && maxBillAmount.toString()!=""){
+            if (acceptPartPay.toString() == "true" &&
+                maxBillAmount.toString() != "") {
               double minDb = double.parse(maxBillAmount);
-              if(rechargeValue>minDb){
-                showToastMessage("Maximum recharge is $rupeeSymbol $maxBillAmount");
+              if (rechargeValue > minDb) {
+                showToastMessage(
+                    "Maximum recharge is $rupeeSymbol $maxBillAmount");
                 return;
               }
             }
@@ -649,7 +663,6 @@ class _LICDetailsState extends State<LICDetails> {
               if (walletValue >= rechargeValue) {
                 var id = DateTime.now().millisecondsSinceEpoch;
                 getWalletJWTToken(id, rechargeValue);
-
               } else {
                 if (isUPIOpen) {
                   setState(() {
@@ -673,7 +686,7 @@ class _LICDetailsState extends State<LICDetails> {
         },
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
+              const EdgeInsets.only(left: 20.0, right: 4, top: 15, bottom: 15),
           child: Row(
             children: [
               Image.asset(
@@ -793,6 +806,10 @@ class _LICDetailsState extends State<LICDetails> {
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15, top: 10, bottom: 10),
                     child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new CustomInputFormatter()
+                      ],
                       style: TextStyle(color: black, fontSize: inputFont.sp),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -805,7 +822,8 @@ class _LICDetailsState extends State<LICDetails> {
                         hintText: "1234-5678-9012",
                         label: Text(
                           "Card No",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 16,
@@ -839,7 +857,8 @@ class _LICDetailsState extends State<LICDetails> {
                         hintText: "Card holder name",
                         label: Text(
                           "Name",
-                          style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
                       maxLength: 40,
@@ -868,8 +887,8 @@ class _LICDetailsState extends State<LICDetails> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeMM,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardMMController,
@@ -881,7 +900,8 @@ class _LICDetailsState extends State<LICDetails> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -896,8 +916,8 @@ class _LICDetailsState extends State<LICDetails> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeYY,
-                                  style:
-                                  TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardYYController,
@@ -909,7 +929,8 @@ class _LICDetailsState extends State<LICDetails> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -943,7 +964,8 @@ class _LICDetailsState extends State<LICDetails> {
                               left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -1000,17 +1022,16 @@ class _LICDetailsState extends State<LICDetails> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               border: Border.all(color: lightBlue)),
           child: InkWell(
-            onTap: () async{
+            onTap: () async {
               var id = DateTime.now().millisecondsSinceEpoch;
 
               var amt;
-              if(acceptPartPay.toString() == "true"){
+              if (acceptPartPay.toString() == "true") {
                 amt = partialAmtController.text.toString();
-              }else{
+              } else {
                 amt = billAmount;
               }
               //generateSecontPANToken(id, amt);
-
 
               setState(() {});
 
@@ -1027,9 +1048,9 @@ class _LICDetailsState extends State<LICDetails> {
                 }
 
                 var amt;
-                if(acceptPartPay.toString() == "true"){
+                if (acceptPartPay.toString() == "true") {
                   amt = partialAmtController.text.toString();
-                }else{
+                } else {
                   amt = billAmount;
                 }
 
@@ -1040,10 +1061,12 @@ class _LICDetailsState extends State<LICDetails> {
                   rechargeValue = double.parse(amt);
                 }
 
-                if(acceptPartPay.toString() == "true" && maxBillAmount.toString()!=""){
+                if (acceptPartPay.toString() == "true" &&
+                    maxBillAmount.toString() != "") {
                   double minDb = double.parse(maxBillAmount);
-                  if(rechargeValue>minDb){
-                    showToastMessage("Maximum recharge is $rupeeSymbol $maxBillAmount");
+                  if (rechargeValue > minDb) {
+                    showToastMessage(
+                        "Maximum recharge is $rupeeSymbol $maxBillAmount");
                     return;
                   }
                 }
@@ -1054,7 +1077,8 @@ class _LICDetailsState extends State<LICDetails> {
                     getWalletJWTToken(id, rechargeValue);
                   } else {
                     if (isCardOpen) {
-                      var cardNo = cardController.text.toString();
+                      var cardNo =
+                          cardController.text.replaceAll(' ', '').toString();
                       var cardName = cardHolderNameController.text.toString();
                       var month = cardMMController.text.toString();
                       var year = cardYYController.text.toString();
@@ -1090,8 +1114,8 @@ class _LICDetailsState extends State<LICDetails> {
                       printMessage(screen,
                           "Remaining amount : ${formatNow.format(remainAmt)}");
 
-                      getCardJWTToken(id, rechargeValue, formatNow.format(remainAmt), walletValue);
-
+                      getCardJWTToken(id, rechargeValue,
+                          formatNow.format(remainAmt), walletValue);
                     } else {
                       showToastMessage("Select any one payment method");
                     }
@@ -1099,7 +1123,8 @@ class _LICDetailsState extends State<LICDetails> {
                 } else {
                   printMessage(screen, "Check card Open : $isCardOpen");
                   if (isCardOpen) {
-                    var cardNo = cardController.text.toString();
+                    var cardNo =
+                        cardController.text.replaceAll(' ', '').toString();
                     var cardName = cardHolderNameController.text.toString();
                     var month = cardMMController.text.toString();
                     var year = cardYYController.text.toString();
@@ -1196,7 +1221,7 @@ class _LICDetailsState extends State<LICDetails> {
     printMessage(screen, "cardCharge : ${formatNow.format(cardCharge)}");
   }
 
-  Future generatePANToken(policy,email) async {
+  Future generatePANToken(policy, email) async {
     setState(() {
       showDialog(
           barrierDismissible: false,
@@ -1225,7 +1250,7 @@ class _LICDetailsState extends State<LICDetails> {
       var statusCode = response.statusCode;
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
-        var  jwtToken = data['token'].toString();
+          var jwtToken = data['token'].toString();
           getLicDetails(policy, email, jwtToken);
         } else {
           Navigator.pop(context);
@@ -1236,9 +1261,7 @@ class _LICDetailsState extends State<LICDetails> {
   }
 
   Future getLicDetails(policy, email, jwtToken) async {
-    setState(() {
-
-    });
+    setState(() {});
 
     var headers = {
       "Content-Type": "application/json",
@@ -1259,7 +1282,6 @@ class _LICDetailsState extends State<LICDetails> {
     final response = await http.post(Uri.parse(licBillFacthAPI),
         body: jsonEncode(body), headers: headers);
 
-
     setState(() {
       Navigator.pop(context);
       var statusCode = response.statusCode;
@@ -1270,26 +1292,24 @@ class _LICDetailsState extends State<LICDetails> {
         printMessage(screen, "Response statusCode : ${data}");
 
         if (data['status'].toString() == "1") {
+          var responseCode = data['fatch_list']['response_code'].toString();
 
-          var responseCode = data['fatch_list']['response_code'].toString() ;
-
-          if(responseCode.toString()=="0"){
+          if (responseCode.toString() == "0") {
             var message = data['fatch_list']['message'];
             showToastMessage(message);
             showDetails = false;
-          }else{
+          } else {
             showDetails = true;
             name = data['fatch_list']['name'];
             dueDate = data['fatch_list']['duedate'];
             billAmount = data['fatch_list']['amount'];
             maxBillAmount = data['fatch_list']['bill_fetch']['maxBillAmount'];
             acceptPartPay = data['fatch_list']['bill_fetch']['acceptPartPay'];
-            ad2=data['fatch_list']['ad2'];
-            ad3=data['fatch_list']['ad2'];
+            ad2 = data['fatch_list']['ad2'];
+            ad3 = data['fatch_list']['ad2'];
 
-           mapFetch = data['fatch_list']['bill_fetch'];
+            mapFetch = data['fatch_list']['bill_fetch'];
           }
-
         } else {
           showToastMessage(status500);
           showDetails = false;
@@ -1306,7 +1326,8 @@ class _LICDetailsState extends State<LICDetails> {
         updateLat = position.latitude;
         updateLng = position.longitude;
       });
-      printMessage(screen, "Update LAT : $updateLat and Update LNG : $updateLng");
+      printMessage(
+          screen, "Update LAT : $updateLat and Update LNG : $updateLng");
     }).catchError((e) {
       print(e);
     });
@@ -1341,8 +1362,8 @@ class _LICDetailsState extends State<LICDetails> {
       var statusCode = response.statusCode;
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
-          var  jwtToken = data['token'].toString();
-          paymentByWallet(id, amt,jwtToken);
+          var jwtToken = data['token'].toString();
+          paymentByWallet(id, amt, jwtToken);
         } else {
           Navigator.pop(context);
           showToastMessage(somethingWrong);
@@ -1381,7 +1402,8 @@ class _LICDetailsState extends State<LICDetails> {
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
           jwtToken = data['token'].toString();
-          createOrderForCard(id, rechargeValue, formatNow.format(remainAmt), walletValue);
+          createOrderForCard(
+              id, rechargeValue, formatNow.format(remainAmt), walletValue);
         } else {
           Navigator.pop(context);
           showToastMessage(somethingWrong);
@@ -1419,7 +1441,7 @@ class _LICDetailsState extends State<LICDetails> {
       var statusCode = response.statusCode;
       if (statusCode == 200) {
         if (data['status'].toString() == "1") {
-            jwtToken = data['token'].toString();
+          jwtToken = data['token'].toString();
           createOrderForFullCard(id, rechargeValue);
         } else {
           Navigator.pop(context);
@@ -1468,8 +1490,7 @@ class _LICDetailsState extends State<LICDetails> {
     });
   }*/
 
-  Future paymentByWallet(id, amt,jwtToken) async {
-
+  Future paymentByWallet(id, amt, jwtToken) async {
     var currentTime = DateFormat.jm().format(DateTime.now());
 
     setState(() {
@@ -1481,28 +1502,26 @@ class _LICDetailsState extends State<LICDetails> {
           });
     });
 
-
     var userToken = await getToken();
 
     var headers = {
       "Content-Type": "application/json",
       "Authorization": "$authHeader",
-      "jwttoken":"$jwtToken",
-      "userToken":"$userToken",
-      "wallet":"$amt",//(if not use send 0)
-      "paymentgatewayAmount":"0",
-      "paymentgatewayTxn":"",
-      "paymentgatewayMode":"",
-      "txTime":"",
-      "signature":"",
-      "txStatus":"",
-      "welcomeAmount":"0"
+      "jwttoken": "$jwtToken",
+      "userToken": "$userToken",
+      "wallet": "$amt", //(if not use send 0)
+      "paymentgatewayAmount": "0",
+      "paymentgatewayTxn": "",
+      "paymentgatewayMode": "",
+      "txTime": "",
+      "signature": "",
+      "txStatus": "",
+      "welcomeAmount": "0"
     };
 
     printMessage(screen, "Header : $headers");
 
-
-    Map body={
+    Map body = {
       "canumber": "$custPolicyNo",
       "mode": "offline",
       "amount": "$amt",
@@ -1512,25 +1531,23 @@ class _LICDetailsState extends State<LICDetails> {
       "referenceid": "$id",
       "latitude": "$updateLat",
       "longitude": "$updateLng",
-      "bill_fetch":"$mapFetch",
+      "bill_fetch": "$mapFetch",
     };
 
     printMessage(screen, "body : $body");
 
-    final response = await http.post(Uri.parse(licBillPayAPI), body: jsonEncode(body), headers: headers);
+    final response = await http.post(Uri.parse(licBillPayAPI),
+        body: jsonEncode(body), headers: headers);
 
     var statusCode = response.statusCode;
     printMessage(screen, "Response statusCode : ${response.body}");
-
-
 
     setState(() {
       Navigator.pop(context);
       if (statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         if (data['status'].toString() == "1") {
-          if(data['data']['status'].toString()=="true"){
-
+          if (data['data']['status'].toString() == "true") {
             var message = data['data']['message'].toString();
 
             Map map = {
@@ -1543,9 +1560,9 @@ class _LICDetailsState extends State<LICDetails> {
               "operatorName": "LIC",
               "referenceId": "",
               "signature": ""
-            };//{status: 1, data: {status: true, response_code: 0, operatorid: , ackno: 12021396, message: Transaction Initiated.}, commission: 5.4}
+            }; //{status: 1, data: {status: true, response_code: 0, operatorid: , ackno: 12021396, message: Transaction Initiated.}, commission: 5.4}
             openMobileReceipt(context, map, false);
-          }else{
+          } else {
             var message = data['data']['message'].toString();
             Map map = {
               "TxStatus": "Failure",
@@ -1564,7 +1581,7 @@ class _LICDetailsState extends State<LICDetails> {
         } else {
           showToastMessage(somethingWrong);
         }
-      }else{
+      } else {
         showToastMessage(status500);
       }
     });
@@ -1632,7 +1649,7 @@ class _LICDetailsState extends State<LICDetails> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -1685,17 +1702,16 @@ class _LICDetailsState extends State<LICDetails> {
 
     Navigator.pop(context);
 
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
         //call final API here
-        paymentByCardPayment(orderId,walletValue,remainAmt,referenceId,paymentMode,txTime,signature,txStatus,
-            orderAmount);
+        paymentByCardPayment(orderId, walletValue, remainAmt, referenceId,
+            paymentMode, txTime, signature, txStatus, orderAmount);
       });
     } else if (responsePG['txStatus'].toString() == "FAILED") {
-
       Map map = {
         "txStatus": "Failed",
         "orderAmount": "$orderAmount",
@@ -1715,8 +1731,8 @@ class _LICDetailsState extends State<LICDetails> {
     }
   }
 
-  Future paymentByCardPayment(orderId,walletAmt,pgAmt,pgTxn,pgMode,txTime,signature,txStatus,
-      orderAmount) async {
+  Future paymentByCardPayment(orderId, walletAmt, pgAmt, pgTxn, pgMode, txTime,
+      signature, txStatus, orderAmount) async {
     setState(() {
       showDialog(
           barrierDismissible: false,
@@ -1726,27 +1742,26 @@ class _LICDetailsState extends State<LICDetails> {
           });
     });
 
-
     var userToken = await getToken();
 
     var headers = {
       "Content-Type": "application/json",
       "Authorization": "$authHeader",
-      "jwttoken":"$jwtToken",
-      "userToken":"$userToken",
-      "wallet":"$walletAmt",//(if not use send 0)
-      "paymentgatewayAmount":"$pgAmt",
-      "paymentgatewayTxn":"$pgTxn",
-      "paymentgatewayMode":"$pgMode",
-      "txTime":"$txTime",
-      "signature":"$signature",
-      "txStatus":"$txStatus",
-      "welcomeAmount":"0"
+      "jwttoken": "$jwtToken",
+      "userToken": "$userToken",
+      "wallet": "$walletAmt", //(if not use send 0)
+      "paymentgatewayAmount": "$pgAmt",
+      "paymentgatewayTxn": "$pgTxn",
+      "paymentgatewayMode": "$pgMode",
+      "txTime": "$txTime",
+      "signature": "$signature",
+      "txStatus": "$txStatus",
+      "welcomeAmount": "0"
     };
 
     printMessage(screen, "Header : $headers");
 
-    Map body={
+    Map body = {
       "canumber": "$custPolicyNo",
       "mode": "offline",
       "amount": "$orderAmount",
@@ -1756,17 +1771,16 @@ class _LICDetailsState extends State<LICDetails> {
       "referenceid": "$pgTxn",
       "latitude": "$updateLat",
       "longitude": "$updateLng",
-      "bill_fetch":"$mapFetch",
+      "bill_fetch": "$mapFetch",
     };
 
     printMessage(screen, "body : $body");
 
-    final response = await http.post(Uri.parse(licBillPayAPI), body: jsonEncode(body), headers: headers);
-
+    final response = await http.post(Uri.parse(licBillPayAPI),
+        body: jsonEncode(body), headers: headers);
 
     var statusCode = response.statusCode;
     printMessage(screen, "Response statusCode : ${response.statusCode}");
-
 
     setState(() {
       Navigator.pop(context);
@@ -1774,8 +1788,7 @@ class _LICDetailsState extends State<LICDetails> {
       if (statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         if (data['status'].toString() == "1") {
-          if(data['data']['status'].toString()=="true"){
-
+          if (data['data']['status'].toString() == "true") {
             var message = data['data']['message'].toString();
 
             Map map = {
@@ -1790,7 +1803,7 @@ class _LICDetailsState extends State<LICDetails> {
               "signature": "$signature"
             };
             openMobileReceipt(context, map, true);
-          }else{
+          } else {
             var message = data['data']['message'].toString();
             Map map = {
               "TxStatus": "$txStatus",
@@ -1809,7 +1822,7 @@ class _LICDetailsState extends State<LICDetails> {
         } else {
           showToastMessage(somethingWrong);
         }
-      }else{
+      } else {
         showToastMessage(status500);
       }
     });
@@ -1904,13 +1917,13 @@ class _LICDetailsState extends State<LICDetails> {
 
     printMessage(screen, "responsePG    : $responsePG");
     Navigator.pop(context);
-    if  (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS"
-        || responsePG['txStatus'].toString().toUpperCase() == "TRUE"
-        || responsePG['txStatus'].toString() == "1") {
+    if (responsePG['txStatus'].toString().toUpperCase() == "SUCCESS" ||
+        responsePG['txStatus'].toString().toUpperCase() == "TRUE" ||
+        responsePG['txStatus'].toString() == "1") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
-        paymentByCardPayment(orderId,"0",orderAmount,referenceId,paymentMode,txTime,signature,txStatus,
-            orderAmount);
+        paymentByCardPayment(orderId, "0", orderAmount, referenceId,
+            paymentMode, txTime, signature, txStatus, orderAmount);
       });
     } else if (responsePG['txStatus'].toString() == "FAILED") {
       Map map = {
@@ -1933,9 +1946,9 @@ class _LICDetailsState extends State<LICDetails> {
   }
 
   createOrderForFullCard(
-      id,
-      rechargeValue,
-      ) async {
+    id,
+    rechargeValue,
+  ) async {
     setState(() {
       showDialog(
           barrierDismissible: false,
@@ -1997,7 +2010,7 @@ class _LICDetailsState extends State<LICDetails> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -2048,6 +2061,4 @@ class _LICDetailsState extends State<LICDetails> {
     printMessage(screen, "v4 : ${formatNow.format(v4)}");
     printMessage(screen, "cardCharge : ${formatNow.format(cardCharge)}");
   }
-
-
 }

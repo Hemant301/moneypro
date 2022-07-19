@@ -1,7 +1,9 @@
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
+import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
 import 'package:moneypro_new/utils/Constants.dart';
 import 'package:moneypro_new/utils/CustomWidgets.dart';
@@ -9,7 +11,6 @@ import 'package:moneypro_new/utils/Functions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
-
 
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/StateContainer.dart';
@@ -85,64 +86,66 @@ class _InvestorPaymentState extends State<InvestorPayment> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>SafeArea(
-        child: Scaffold(
-      backgroundColor: gray,
-      appBar: appBarHome(context, "assets/lendbox_head.png", 60.0.w),
-      body: Column(
-        children: [
-          appSelectedBanner(context, "invest_banner.png", 150.0.h),
-          Expanded(
-            flex: 1,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              margin: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-                color: white,
+        builder: () => SafeArea(
+                child: Scaffold(
+              backgroundColor: gray,
+              appBar: appBarHome(context, "assets/lendbox_head.png", 60.0.w),
+              body: Column(
+                children: [
+                  appSelectedBanner(context, "invest_banner.png", 150.0.h),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      margin: EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(50.0)),
+                        color: white,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Center(
+                                child: Container(
+                                  color: gray,
+                                  width: 50.w,
+                                  height: 5.h,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 15, left: 25),
+                                width: MediaQuery.of(context).size.width,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Amount to be pay : $rupeeSymbol",
+                                      style: TextStyle(
+                                          color: black, fontSize: font14.sp),
+                                    ),
+                                    Text(" ${widget.amount}",
+                                        style: TextStyle(
+                                            color: black,
+                                            fontSize: font16.sp,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              _buildUPISection(),
+                              _buildCardSection(),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Center(
-                        child: Container(
-                          color: gray,
-                          width: 50.w,
-                          height: 5.h,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15, left: 25),
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Amount to be pay : $rupeeSymbol",
-                              style: TextStyle(color: black, fontSize: font14.sp),
-                            ),
-                            Text(" ${widget.amount}",
-                                style: TextStyle(
-                                    color: black,
-                                    fontSize: font16.sp,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                      _buildUPISection(),
-                      _buildCardSection(),
-                    ]),
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: _buildButtonSection(),
-    )));
+              bottomNavigationBar: _buildButtonSection(),
+            )));
   }
 
   _buildUPISection() {
@@ -183,7 +186,9 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                       fontSize: font15.sp,
                     ),
                   ),
-                  SizedBox(width: 5.w,),
+                  SizedBox(
+                    width: 5.w,
+                  ),
                   Text(
                     "( 0% extra charges )",
                     style: TextStyle(
@@ -241,7 +246,9 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                       fontSize: font15.sp,
                     ),
                   ),
-                  SizedBox(width: 5.w,),
+                  SizedBox(
+                    width: 5.w,
+                  ),
                   Expanded(
                     flex: 1,
                     child: Text(
@@ -275,6 +282,10 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      new CustomInputFormatter()
+                    ],
                     style: TextStyle(color: black, fontSize: inputFont.sp),
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
@@ -287,7 +298,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                       hintText: "1234-5678-9012",
                       label: Text(
                         "Card No",
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
                     maxLength: 16,
@@ -319,7 +331,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                       hintText: "Card holder name",
                       label: Text(
                         "Name",
-                        style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                        style:
+                            TextStyle(color: lightBlack, fontSize: font14.sp),
                       ),
                     ),
                     maxLength: 40,
@@ -348,8 +361,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeMM,
-                                  style:
-                                      TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardMMController,
@@ -361,7 +374,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                                     label: Text(
                                       "MM",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 2,
@@ -376,8 +390,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                               Expanded(
                                 child: TextFormField(
                                   focusNode: nodeYY,
-                                  style:
-                                      TextStyle(color: black, fontSize: inputFont.sp),
+                                  style: TextStyle(
+                                      color: black, fontSize: inputFont.sp),
                                   keyboardType: TextInputType.datetime,
                                   textInputAction: TextInputAction.next,
                                   controller: cardYYController,
@@ -389,7 +403,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                                     label: Text(
                                       "YYYY",
                                       style: TextStyle(
-                                          color: lightBlack, fontSize: font14.sp),
+                                          color: lightBlack,
+                                          fontSize: font14.sp),
                                     ),
                                   ),
                                   maxLength: 4,
@@ -422,7 +437,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                               left: 15.0, right: 15, top: 0, bottom: 0),
                           child: TextFormField(
                             focusNode: nodeCVV,
-                            style: TextStyle(color: black, fontSize: inputFont.sp),
+                            style:
+                                TextStyle(color: black, fontSize: inputFont.sp),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             controller: cardCVVController,
@@ -473,7 +489,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
 
   _buildButtonSection() {
     return Container(
-      height: (isCardOpen)?127.h:120.h,
+      height: (isCardOpen) ? 127.h : 120.h,
       color: white,
       child: Column(
         children: [
@@ -489,8 +505,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                       border: Border.all(color: lightBlue)),
                   child: InkWell(
                     onTap: () {
-
-                      var cardNo = cardController.text.toString();
+                      var cardNo =
+                          cardController.text.replaceAll(' ', '').toString();
                       var cardName = cardHolderNameController.text.toString();
                       var month = cardMMController.text.toString();
                       var year = cardYYController.text.toString();
@@ -515,7 +531,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
 
                       var id = DateTime.now().millisecondsSinceEpoch;
                       var amount = double.parse(widget.amount);
-                      amount = amount +cardCharge;
+                      amount = amount + cardCharge;
                       printMessage(screen, "Paid Amount : $amount");
                       paymentByPGDirect(id, "$amount");
                     },
@@ -635,7 +651,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -710,13 +726,11 @@ class _InvestorPaymentState extends State<InvestorPayment> {
     if (responsePG['txStatus'].toString() == "SUCCESS") {
       printMessage(screen, "Transaction is Successful");
       setState(() {
-
-        if(isCardOpen){
+        if (isCardOpen) {
           sendResponse(orderId, "${widget.amount}", signature, referenceId);
-        }else{
+        } else {
           sendResponse(orderId, orderAmount, signature, referenceId);
         }
-
       });
     } else if (responsePG['txStatus'].toString() == "FAILED") {
       printMessage(screen, "Transaction is FAILED");
@@ -840,7 +854,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
 
     int statusCode = response.statusCode;
 
-    if(statusCode==200){
+    if (statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       setState(() {
@@ -849,20 +863,18 @@ class _InvestorPaymentState extends State<InvestorPayment> {
         if (data['status'].toString() == "1") {
           closeCurrentPage(context);
           //showToastMessage(data['message'].toString());
-          showErrorAlert(orderAmount,orderId,"Success");
+          showErrorAlert(orderAmount, orderId, "Success");
         } else {
           //showToastMessage(data['message'].toString());
-          showErrorAlert(orderAmount,orderId,"Failed");
+          showErrorAlert(orderAmount, orderId, "Failed");
         }
       });
-    }else{
+    } else {
       setState(() {
         Navigator.pop(context);
       });
       showToastMessage(status500);
     }
-
-
   }
 
   showErrorAlert(amount, orderId, status) {
@@ -913,123 +925,125 @@ class AddMoneyResponse extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(deviceWidth, deviceHeight),
-        builder: () =>Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: new BoxDecoration(
-            color: Colors.white,
-            borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(40.0),
-                topRight: const Radius.circular(40.0))),
-        child: Wrap(
-            children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20.0, top: 40, bottom: 0, right: 20),
-            child: Row(
-              children: [
-                Container(
-                  height: 30.h,
-                  width: 30.w,
-                  decoration: BoxDecoration(
-                      color: (status.toString() == "Success") ? green : red,
-                      shape: BoxShape.circle),
-                  child: Center(
-                    child: (status.toString() == "Success")
-                        ? Image.asset(
-                            'assets/tick.png',
-                            height: 16.h,
-                            color: white,
-                          )
-                        : Icon(
-                            Icons.clear,
-                            size: 16,
-                            color: white,
-                          ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        builder: () => Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(40.0),
+                    topRight: const Radius.circular(40.0))),
+            child: Wrap(children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 20.0, top: 40, bottom: 0, right: 20),
+                child: Row(
                   children: [
-                    Text(
-                      "$status",
-                      style: TextStyle(color: black, fontSize: font16.sp),
+                    Container(
+                      height: 30.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                          color: (status.toString() == "Success") ? green : red,
+                          shape: BoxShape.circle),
+                      child: Center(
+                        child: (status.toString() == "Success")
+                            ? Image.asset(
+                                'assets/tick.png',
+                                height: 16.h,
+                                color: white,
+                              )
+                            : Icon(
+                                Icons.clear,
+                                size: 16,
+                                color: white,
+                              ),
+                      ),
                     ),
-                    Text(
-                      "$transId",
-                      style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "$status",
+                          style: TextStyle(color: black, fontSize: font16.sp),
+                        ),
+                        Text(
+                          "$transId",
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 60.0, top: 20, right: 60),
-            child: Row(
-              children: [
-                Text(
-                  "Amount",
-                  style: TextStyle(color: lightBlack, fontSize: font14.sp),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "$rupeeSymbol $amount",
-                    style: TextStyle(
-                        color: black,
-                        fontSize: font16.sp,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.right,
-                  ),
-                )
-              ],
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 60.0, right: 60, top: 10, bottom: 20),
-            child: Row(
-              children: [
-                Text(
-                  "Transfer to",
-                  style: TextStyle(color: lightBlack, fontSize: font14.sp),
-                ),
-
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    "Investment Account",
-                    style: TextStyle(
-                        color: black, fontSize: font16.sp, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.right,
-                  ),
-                )
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              removeAllPages(context);
-            },
-            child: Container(
-              height: 45.h,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 20),
-              decoration: BoxDecoration(
-                color: lightBlue,
-                borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
-              child: Center(
-                child: Text(
-                  "Ok".toUpperCase(),
-                  style: TextStyle(fontSize: font13.sp, color: white),
+              Padding(
+                padding: const EdgeInsets.only(left: 60.0, top: 20, right: 60),
+                child: Row(
+                  children: [
+                    Text(
+                      "Amount",
+                      style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "$rupeeSymbol $amount",
+                        style: TextStyle(
+                            color: black,
+                            fontSize: font16.sp,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          )
-        ])));
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 60.0, right: 60, top: 10, bottom: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      "Transfer to",
+                      style: TextStyle(color: lightBlack, fontSize: font14.sp),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Investment Account",
+                        style: TextStyle(
+                            color: black,
+                            fontSize: font16.sp,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  removeAllPages(context);
+                },
+                child: Container(
+                  height: 45.h,
+                  width: MediaQuery.of(context).size.width,
+                  margin:
+                      EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 20),
+                  decoration: BoxDecoration(
+                    color: lightBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Ok".toUpperCase(),
+                      style: TextStyle(fontSize: font13.sp, color: white),
+                    ),
+                  ),
+                ),
+              )
+            ])));
   }
 }

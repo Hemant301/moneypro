@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
@@ -710,6 +711,10 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15, top: 10, bottom: 10),
                     child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new CustomInputFormatter()
+                      ],
                       style: TextStyle(color: black, fontSize: inputFont.sp),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -726,7 +731,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -957,7 +962,8 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                     setState(() {
                       isWallMore = false;
                     });
-                    var cardNo = cardController.text.toString();
+                    var cardNo =
+                        cardController.text.replaceAll(' ', '').toString();
                     var cardName = cardHolderNameController.text.toString();
                     var month = cardMMController.text.toString();
                     var year = cardYYController.text.toString();
@@ -1310,7 +1316,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -1707,7 +1713,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
     };
 
     if (isCardOpen) {
-      var cardNo = cardController.text.toString();
+      var cardNo = cardController.text.replaceAll(' ', '').toString();
       var cardName = cardHolderNameController.text.toString();
       var month = cardMMController.text.toString();
       var year = cardYYController.text.toString();
@@ -1970,5 +1976,32 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         }
       }
     });
+  }
+}
+
+class CustomInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var text = newValue.text;
+
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    var buffer = new StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      var nonZeroIndex = i + 1;
+      if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
+        buffer.write(
+            ' '); // Replace this with anything you want to put after each 4 numbers
+      }
+    }
+
+    var string = buffer.toString();
+    return newValue.copyWith(
+        text: string,
+        selection: new TextSelection.collapsed(offset: string.length));
   }
 }
