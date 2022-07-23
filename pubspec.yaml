@@ -116,6 +116,7 @@ dependencies:
   uuid: ^3.0.6
   system_alert_window: ^1.1.1
   auto_size_text: ^3.0.0
+  upi_india: ^3.0.1
 
 
 dev_dependencies:

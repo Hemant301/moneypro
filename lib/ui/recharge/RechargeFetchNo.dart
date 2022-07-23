@@ -4,7 +4,9 @@ import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/models/KeyValuePair.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
 import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
@@ -18,6 +20,7 @@ import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
 
 import 'package:moneypro_new/utils/StateContainer.dart';
+import 'package:upi_india/upi_app.dart';
 
 class RechargeFetchNo extends StatefulWidget {
   final Map map;
@@ -29,6 +32,7 @@ class RechargeFetchNo extends StatefulWidget {
 }
 
 class _RechargeFetchNoState extends State<RechargeFetchNo> {
+  var packageName = "";
   var screen = "Fetch Bill Yes";
   var loading = false;
 
@@ -121,10 +125,18 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
   int paramCount = 1;
 
   var mainWallet;
+  checkUpiapp() {
+    if (apps!.isNotEmpty) {
+      packageName = apps!.first.packageName;
+    } else {
+      Fluttertoast.showToast(msg: "No Upi Found");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    checkUpiapp();
     getBBPSToken();
     updateATMStatus(context);
     fetchUserAccountBalance();
@@ -798,6 +810,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
+                    displayUpiApps(),
                     _buildUPISection(),
                     _buildCardSection(),
                   ],
@@ -948,6 +961,138 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
       }
     });
   }*/
+  Widget displayUpiApps() {
+    if (apps == null)
+      return Center(child: CircularProgressIndicator());
+    else if (apps!.length == 0)
+      return Center(
+        child: Text(
+          "No apps found to handle transaction.",
+        ),
+      );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps!.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () async {
+                  var mpBalc = await getWalletBalance();
+
+                  setState(() {
+                    packageName = app.packageName;
+
+                    isCardOpen = false;
+                    isUPIOpen = true;
+                  });
+
+                  double walletValue = 0;
+                  double rechargeValue = 0;
+
+                  setState(() {
+                    if (mpBalc.toString() == "") {
+                      walletValue = 0;
+                    } else {
+                      walletValue = double.parse(mpBalc);
+                    }
+
+                    var amt = param1Controller.text
+                        .toString(); // = partPayController.text.toString();
+
+                    actualRechargeAmount = amt;
+
+                    /*if (isAdhoc.toString() == "1") {
+              amt = param1Controller.text.toString();
+            } else {
+              amt = rechargeAmount;
+            }
+
+            if (amt.length != 0) {
+              rechargeAmount = amt;
+            }*/
+
+                    if (amt.toString() == "") {
+                      rechargeValue = 0;
+                    } else {
+                      rechargeValue = double.parse(amt);
+                    }
+                  });
+
+                  if (rechargeValue == 0) {
+                    showToastMessage(
+                        "You cannot processed with $rupeeSymbol $rechargeValue");
+                    return;
+                  }
+
+                  if (checkedValue) {
+                    if (walletValue >= rechargeValue) {
+                      setState(() {
+                        isWallMore = true;
+                      });
+                      var id = DateTime.now().millisecondsSinceEpoch;
+                      if (isWelcomeOffer) {
+                        rechargeValue = rechargeValue - welcomeCharge;
+                      }
+                      paymentByWallet(id, rechargeValue);
+                    } else {
+                      if (isUPIOpen) {
+                        setState(() {
+                          isWallMore = false;
+                        });
+                        setState(() {
+                          remainAmt = rechargeValue - walletValue;
+                        });
+
+                        if (isWelcomeOffer) {
+                          remainAmt = remainAmt - welcomeCharge;
+                        }
+
+                        var id = DateTime.now().millisecondsSinceEpoch;
+                        createOrderForUPI(id);
+                      } else {
+                        showToastMessage("Select any one payment method");
+                      }
+                    }
+                  } else {
+                    if (isUPIOpen) {
+                      setState(() {
+                        isWallMore = false;
+                      });
+                      var id = DateTime.now().millisecondsSinceEpoch;
+                      var pg = rechargeValue;
+                      if (isWelcomeOffer) {
+                        pg = pg - welcomeCharge;
+                      }
+                      createOrderForUPIOnly(id, formatNow.format(pg));
+                    } else {
+                      showToastMessage("Select any one payment method");
+                    }
+                  }
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+  }
 
   _buildUPISection() {
     return Card(
@@ -1833,7 +1978,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
       };
 
       printMessage(screen, "Input Params : $inputParams");
@@ -2152,7 +2297,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
       };
 
       printMessage(screen, "Input Params : $inputParams");
