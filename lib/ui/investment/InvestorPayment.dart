@@ -32,6 +32,8 @@ class _InvestorPaymentState extends State<InvestorPayment> {
   var packageName = "";
   var isCardOpen = false;
   var isUPIOpen = false;
+  bool isRequestUpi = false;
+  TextEditingController upiController = TextEditingController();
 
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
@@ -148,6 +150,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                                 ),
                               ),
                               displayUpiApps(),
+                              _buildUPIRequestSection(),
                               _buildUPISection(),
                               _buildCardSection(),
                             ]),
@@ -182,6 +185,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                     packageName = app.packageName;
                     isUPIOpen = true;
                     isCardOpen = false;
+                    isRequestUpi = false;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
                   paymentByPGDirect(id, "${widget.amount}");
@@ -209,6 +213,53 @@ class _InvestorPaymentState extends State<InvestorPayment> {
       );
   }
 
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              setState(() {
+                isUPIOpen = true;
+                isCardOpen = false;
+                isRequestUpi = true;
+              });
+              var id = DateTime.now().millisecondsSinceEpoch;
+              paymentByPGDirect(id, "${widget.amount}");
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   _buildUPISection() {
     return Card(
       color: tabBg,
@@ -221,6 +272,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
           setState(() {
             isUPIOpen = true;
             isCardOpen = false;
+            isRequestUpi = false;
           });
           var id = DateTime.now().millisecondsSinceEpoch;
           paymentByPGDirect(id, "${widget.amount}");
@@ -858,15 +910,38 @@ class _InvestorPaymentState extends State<InvestorPayment> {
         "orderNote": orderNote,
         "appName": packageName,
       };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$difAmt",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+      };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignature(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

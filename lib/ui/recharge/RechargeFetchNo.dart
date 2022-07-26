@@ -79,10 +79,10 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
   double remainAmt = 0;
   String moneyProBalc = "0";
-
+  bool isRequestUpi = false;
   var isCardOpen = false;
   var isUPIOpen = false;
-
+  TextEditingController upiController = TextEditingController();
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
   final cardMMController = TextEditingController();
@@ -811,6 +811,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                       ),
                     ),
                     displayUpiApps(),
+                    _buildUPIRequestSection(),
                     _buildUPISection(),
                     _buildCardSection(),
                   ],
@@ -986,6 +987,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
                     isCardOpen = false;
                     isUPIOpen = true;
+                    isRequestUpi = false;
                   });
 
                   double walletValue = 0;
@@ -1094,6 +1096,136 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
       );
   }
 
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              var mpBalc = await getWalletBalance();
+
+              setState(() {
+                isCardOpen = false;
+                isUPIOpen = true;
+                isRequestUpi = true;
+              });
+
+              double walletValue = 0;
+              double rechargeValue = 0;
+
+              setState(() {
+                if (mpBalc.toString() == "") {
+                  walletValue = 0;
+                } else {
+                  walletValue = double.parse(mpBalc);
+                }
+
+                var amt = param1Controller.text
+                    .toString(); // = partPayController.text.toString();
+
+                actualRechargeAmount = amt;
+
+                /*if (isAdhoc.toString() == "1") {
+              amt = param1Controller.text.toString();
+            } else {
+              amt = rechargeAmount;
+            }
+
+            if (amt.length != 0) {
+              rechargeAmount = amt;
+            }*/
+
+                if (amt.toString() == "") {
+                  rechargeValue = 0;
+                } else {
+                  rechargeValue = double.parse(amt);
+                }
+              });
+
+              if (rechargeValue == 0) {
+                showToastMessage(
+                    "You cannot processed with $rupeeSymbol $rechargeValue");
+                return;
+              }
+
+              if (checkedValue) {
+                if (walletValue >= rechargeValue) {
+                  setState(() {
+                    isWallMore = true;
+                  });
+                  var id = DateTime.now().millisecondsSinceEpoch;
+                  if (isWelcomeOffer) {
+                    rechargeValue = rechargeValue - welcomeCharge;
+                  }
+                  paymentByWallet(id, rechargeValue);
+                } else {
+                  if (isUPIOpen) {
+                    setState(() {
+                      isWallMore = false;
+                    });
+                    setState(() {
+                      remainAmt = rechargeValue - walletValue;
+                    });
+
+                    if (isWelcomeOffer) {
+                      remainAmt = remainAmt - welcomeCharge;
+                    }
+
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    createOrderForUPI(id);
+                  } else {
+                    showToastMessage("Select any one payment method");
+                  }
+                }
+              } else {
+                if (isUPIOpen) {
+                  setState(() {
+                    isWallMore = false;
+                  });
+                  var id = DateTime.now().millisecondsSinceEpoch;
+                  var pg = rechargeValue;
+                  if (isWelcomeOffer) {
+                    pg = pg - welcomeCharge;
+                  }
+                  createOrderForUPIOnly(id, formatNow.format(pg));
+                } else {
+                  showToastMessage("Select any one payment method");
+                }
+              }
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   _buildUPISection() {
     return Card(
       color: tabBg,
@@ -1108,6 +1240,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
           setState(() {
             isCardOpen = false;
             isUPIOpen = true;
+            isRequestUpi = false;
           });
 
           double walletValue = 0;
@@ -1257,6 +1390,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                 setState(() {
                   isCardOpen = val;
                   isUPIOpen = false;
+                  isRequestUpi = false;
                 });
               },
               title: Row(
@@ -1586,6 +1720,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                   if (isCardOpen) {
                     setState(() {
                       isWallMore = false;
+                      isRequestUpi = false;
                     });
                     var cardNo =
                         cardController.text.replaceAll(' ', '').toString();
@@ -1980,15 +2115,38 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "orderNote": orderNote,
         "appName": packageName,
       };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$remainAmt",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+      };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifyPaymentForUPI(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifyPaymentForUPI(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifyPaymentForUPI(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 
@@ -2299,15 +2457,38 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "orderNote": orderNote,
         "appName": packageName,
       };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$pgAmt",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+      };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifyPaymentForUPIOnly(value, pgAmt);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifyPaymentForUPIOnly(value, pgAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifyPaymentForUPIOnly(value, pgAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

@@ -47,7 +47,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   var checkedValue = false;
 
   double remainAmt = 0;
-
+  TextEditingController upiController = TextEditingController();
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
   final cardMMController = TextEditingController();
@@ -88,6 +88,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   var timeH = "";
   var cDate = "";
   var finalString = "";
+  var isRequestUpi = false;
 
   var MonthlyRecharge;
   var Balance;
@@ -761,6 +762,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 ),
               ),
         displayUpiApps(),
+        _buildUPIRequestSection(),
         _buildUPISection(),
         _buildCardSection(),
       ],
@@ -1329,6 +1331,139 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       );
   }
 
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              var mpBalc = await getWalletBalance();
+
+              setState(() {
+                isCardOpen = false;
+                isUPIOpen = true;
+                isRequestUpi = true;
+              });
+
+              double walletValue = 0;
+              double rechargeValue = 0;
+
+              setState(() {
+                if (mpBalc.toString() == "") {
+                  walletValue = 0;
+                } else {
+                  walletValue = double.parse(mpBalc);
+                }
+
+                var amt = amountController.text.toString();
+
+                if (amt.toString() == "") {
+                  showToastMessage("enter the amount");
+                  return;
+                } else {
+                  rechargeValue = double.parse(amt);
+                }
+
+                if (minLimit.toString() != "null" &&
+                    minLimit.toString() != "") {
+                  double minDb = double.parse(minLimit);
+                  if (rechargeValue < minDb) {
+                    showToastMessage(
+                        "Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
+                    return;
+                  }
+                }
+
+                /* if(maxLimit.toString()!="null" && maxLimit.toString()!=""){
+              double maxDb = double.parse(maxLimit);
+              if(rechargeValue>maxDb){
+                showToastMessage("Maximum recharge is $rupeeSymbol ${widget.map['maxLimit']}");
+                return;
+              }
+            }*/
+
+                if (checkedValue) {
+                  if (walletValue >= rechargeValue) {
+                    setState(() {
+                      isWallMore = true;
+                    });
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    // paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                    var number = mobileController.text.toString();
+                    generateJWTToken(
+                        number, formatNow.format(rechargeValue), 2);
+                  } else {
+                    if (isUPIOpen) {
+                      setState(() {
+                        remainAmt = rechargeValue - walletValue;
+                      });
+
+                      if (isWelcomeOffer) {
+                        remainAmt = remainAmt - welcomeCharge;
+                      }
+                      setState(() {
+                        isWallMore = false;
+                      });
+
+                      var id = DateTime.now().millisecondsSinceEpoch;
+                      //paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                      generateJWTTokenWPG(id, formatNow.format(remainAmt),
+                          formatNow.format(rechargeValue));
+                    } else {
+                      showToastMessage("Select any one payment method");
+                    }
+                  }
+                } else {
+                  if (isUPIOpen) {
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    setState(() {
+                      isWallMore = false;
+                    });
+                    if (isWelcomeOffer) {
+                      rechargeValue = rechargeValue - welcomeCharge;
+                    }
+
+                    //paymentByPGDirect(id, formatNow.format(rechargeValue));
+                    generateJWTTokenPG(id, formatNow.format(rechargeValue));
+                  } else {
+                    showToastMessage("Select any one payment method");
+                  }
+                }
+              });
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   _buildUPISection() {
     return Card(
       color: tabBg,
@@ -1343,6 +1478,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
           setState(() {
             isCardOpen = false;
             isUPIOpen = true;
+            isRequestUpi = false;
           });
 
           double walletValue = 0;
@@ -1493,6 +1629,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 setState(() {
                   isCardOpen = val;
                   isUPIOpen = false;
+                  isRequestUpi = false;
                 });
               },
               title: Row(
@@ -2109,15 +2246,38 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "orderNote": orderNote,
         "appName": packageName,
       };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$difAmt",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+      };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignatureByUPIWallet(value, rechAmt);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignatureByUPIWallet(value, rechAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignatureByUPIWallet(value, rechAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 
@@ -2481,15 +2641,38 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "orderNote": orderNote,
         "appName": packageName,
       };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$difAmt",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+      };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignature(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 
