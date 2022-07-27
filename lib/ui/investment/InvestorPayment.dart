@@ -914,7 +914,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "orderAmount": "$difAmt",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
