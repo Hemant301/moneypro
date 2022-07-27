@@ -763,7 +763,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
               ),
         displayUpiApps(),
         _buildUPIRequestSection(),
-        _buildUPISection(),
+        // _buildUPISection(),
         _buildCardSection(),
       ],
     );
@@ -1220,6 +1220,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                     packageName = app.packageName;
                     isCardOpen = false;
                     isUPIOpen = true;
+                    isRequestUpi = false;
                   });
 
                   double walletValue = 0;
@@ -2250,7 +2251,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "$difAmt",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2645,7 +2646,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "$difAmt",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

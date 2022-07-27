@@ -588,6 +588,7 @@ class _MobilePaymentState extends State<MobilePayment> {
                 printMessage(screen, "Val : $val");
                 setState(() {
                   isCardOpen = val;
+
                   isUPIOpen = false;
                   calculateCardCheckCharge(remainAmt);
                 });

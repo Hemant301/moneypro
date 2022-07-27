@@ -515,7 +515,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                                 ),
                           (isWelcomeOffer) ? _buildOfferRwo() : Container(),
                           displayUpiApps(),
-                          _buildUPISection(),
+                          // _buildUPISection(),
                           _buildUPIRequestSection(),
                           _buildCardSection(),
                         ],
@@ -775,6 +775,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
                 setState(() {
                   isCardOpen = val;
                   isUPIOpen = false;
+                  isRequestUpi = false;
                   calculateCardCheckCharge(remainAmt);
                 });
               },
@@ -1869,7 +1870,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "$difAmt",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2149,7 +2150,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "$difAmt",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
