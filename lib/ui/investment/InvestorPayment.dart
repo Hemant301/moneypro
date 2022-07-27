@@ -2,6 +2,8 @@ import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
 import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
@@ -14,6 +16,7 @@ import 'package:moneypro_new/utils/AppKeys.dart';
 
 import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/StateContainer.dart';
+import 'package:upi_india/upi_app.dart';
 
 class InvestorPayment extends StatefulWidget {
   final String amount;
@@ -26,9 +29,11 @@ class InvestorPayment extends StatefulWidget {
 
 class _InvestorPaymentState extends State<InvestorPayment> {
   var screen = "Investor Payment";
-
+  var packageName = "";
   var isCardOpen = false;
   var isUPIOpen = false;
+  bool isRequestUpi = false;
+  TextEditingController upiController = TextEditingController();
 
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
@@ -41,10 +46,18 @@ class _InvestorPaymentState extends State<InvestorPayment> {
   FocusNode nodeMM = FocusNode();
   FocusNode nodeYY = FocusNode();
   FocusNode nodeCVV = FocusNode();
+  checkUpiapp() {
+    if (apps!.isNotEmpty) {
+      packageName = apps!.first.packageName;
+    } else {
+      Fluttertoast.showToast(msg: "No Upi Found");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    checkUpiapp();
     calculateCharge();
     updateATMStatus(context);
     fetchUserAccountBalance();
@@ -136,7 +149,9 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                                   ],
                                 ),
                               ),
-                              _buildUPISection(),
+                              displayUpiApps(),
+                              _buildUPIRequestSection(),
+                              // _buildUPISection(),
                               _buildCardSection(),
                             ]),
                       ),
@@ -146,6 +161,103 @@ class _InvestorPaymentState extends State<InvestorPayment> {
               ),
               bottomNavigationBar: _buildButtonSection(),
             )));
+  }
+
+  Widget displayUpiApps() {
+    if (apps == null)
+      return Center(child: CircularProgressIndicator());
+    else if (apps!.length == 0)
+      return Center(
+        child: Text(
+          "No apps found to handle transaction.",
+        ),
+      );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps!.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    packageName = app.packageName;
+                    isUPIOpen = true;
+                    isCardOpen = false;
+                    isRequestUpi = false;
+                  });
+                  var id = DateTime.now().millisecondsSinceEpoch;
+                  paymentByPGDirect(id, "${widget.amount}");
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+  }
+
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              setState(() {
+                isUPIOpen = true;
+                isCardOpen = false;
+                isRequestUpi = true;
+              });
+              var id = DateTime.now().millisecondsSinceEpoch;
+              paymentByPGDirect(id, "${widget.amount}");
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _buildUPISection() {
@@ -160,6 +272,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
           setState(() {
             isUPIOpen = true;
             isCardOpen = false;
+            isRequestUpi = false;
           });
           var id = DateTime.now().millisecondsSinceEpoch;
           paymentByPGDirect(id, "${widget.amount}");
@@ -795,17 +908,40 @@ class _InvestorPaymentState extends State<InvestorPayment> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
+      };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
       };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignature(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

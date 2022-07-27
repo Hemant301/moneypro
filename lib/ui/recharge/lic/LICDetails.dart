@@ -2,8 +2,10 @@ import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
 import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
@@ -15,6 +17,7 @@ import 'package:moneypro_new/utils/StateContainer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
+import 'package:upi_india/upi_app.dart';
 
 class LICDetails extends StatefulWidget {
   const LICDetails({Key? key}) : super(key: key);
@@ -24,6 +27,7 @@ class LICDetails extends StatefulWidget {
 }
 
 class _LICDetailsState extends State<LICDetails> {
+  var packageName = "";
   var screen = "LIC details";
 
   double mainWallet = 0.0;
@@ -49,10 +53,10 @@ class _LICDetailsState extends State<LICDetails> {
   var maxBillAmount;
 
   var acceptPartPay;
-
+  bool isRequestUpi = false;
   var isCardOpen = false;
   var isUPIOpen = false;
-
+  TextEditingController upiController = TextEditingController();
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
   final cardMMController = TextEditingController();
@@ -76,10 +80,19 @@ class _LICDetailsState extends State<LICDetails> {
   var ad3;
 
   var mainWal;
+  checkUpiapp() {
+    if (apps!.isNotEmpty) {
+      packageName = apps!.first.packageName;
+    } else {
+      Fluttertoast.showToast(msg: "No Upi Found");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    checkUpiapp();
+
     updateATMStatus(context);
     fetchUserAccountBalance();
     updateWalletBalances();
@@ -599,11 +612,230 @@ class _LICDetailsState extends State<LICDetails> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    _buildUPISection(),
+                    displayUpiApps(),
+                    _buildUPIRequestSection(),
+                    // _buildUPISection(),
                     _buildCardSection(),
                   ],
                 )
               : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget displayUpiApps() {
+    if (apps == null)
+      return Center(child: CircularProgressIndicator());
+    else if (apps!.length == 0)
+      return Center(
+        child: Text(
+          "No apps found to handle transaction.",
+        ),
+      );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps!.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () async {
+                  var mpBalc = await getWalletBalance();
+
+                  setState(() {
+                    isCardOpen = false;
+                    isUPIOpen = true;
+                    isRequestUpi = false;
+                    packageName = app.packageName;
+                  });
+
+                  double walletValue = 0;
+                  double rechargeValue = 0;
+
+                  setState(() {
+                    if (mpBalc.toString() == "") {
+                      walletValue = 0;
+                    } else {
+                      walletValue = double.parse(mpBalc);
+                    }
+
+                    var amt;
+                    if (acceptPartPay.toString() == "true") {
+                      amt = partialAmtController.text.toString();
+                    } else {
+                      amt = billAmount;
+                    }
+
+                    if (amt.toString() == "") {
+                      showToastMessage("enter the amount");
+                      return;
+                    } else {
+                      rechargeValue = double.parse(amt);
+                    }
+
+                    if (acceptPartPay.toString() == "true" &&
+                        maxBillAmount.toString() != "") {
+                      double minDb = double.parse(maxBillAmount);
+                      if (rechargeValue > minDb) {
+                        showToastMessage(
+                            "Maximum recharge is $rupeeSymbol $maxBillAmount");
+                        return;
+                      }
+                    }
+
+                    if (checkedValue) {
+                      if (walletValue >= rechargeValue) {
+                        var id = DateTime.now().millisecondsSinceEpoch;
+                        getWalletJWTToken(id, rechargeValue);
+                      } else {
+                        if (isUPIOpen) {
+                          setState(() {
+                            remainAmt = rechargeValue - walletValue;
+                          });
+                          var id = DateTime.now().millisecondsSinceEpoch;
+                          getCardJWTToken(
+                              id, rechargeValue, remainAmt, walletValue);
+                        } else {
+                          showToastMessage("Select any one payment method");
+                        }
+                      }
+                    } else {
+                      if (isUPIOpen) {
+                        var id = DateTime.now().millisecondsSinceEpoch;
+                        getCardPaymentJWTToken(id, rechargeValue);
+                      } else {
+                        showToastMessage("Select any one payment method");
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+  }
+
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              var mpBalc = await getWalletBalance();
+
+              setState(() {
+                isCardOpen = false;
+                isUPIOpen = true;
+                isRequestUpi = true;
+              });
+
+              double walletValue = 0;
+              double rechargeValue = 0;
+
+              setState(() {
+                if (mpBalc.toString() == "") {
+                  walletValue = 0;
+                } else {
+                  walletValue = double.parse(mpBalc);
+                }
+
+                var amt;
+                if (acceptPartPay.toString() == "true") {
+                  amt = partialAmtController.text.toString();
+                } else {
+                  amt = billAmount;
+                }
+
+                if (amt.toString() == "") {
+                  showToastMessage("enter the amount");
+                  return;
+                } else {
+                  rechargeValue = double.parse(amt);
+                }
+
+                if (acceptPartPay.toString() == "true" &&
+                    maxBillAmount.toString() != "") {
+                  double minDb = double.parse(maxBillAmount);
+                  if (rechargeValue > minDb) {
+                    showToastMessage(
+                        "Maximum recharge is $rupeeSymbol $maxBillAmount");
+                    return;
+                  }
+                }
+
+                if (checkedValue) {
+                  if (walletValue >= rechargeValue) {
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    getWalletJWTToken(id, rechargeValue);
+                  } else {
+                    if (isUPIOpen) {
+                      setState(() {
+                        remainAmt = rechargeValue - walletValue;
+                      });
+                      var id = DateTime.now().millisecondsSinceEpoch;
+                      getCardJWTToken(
+                          id, rechargeValue, remainAmt, walletValue);
+                    } else {
+                      showToastMessage("Select any one payment method");
+                    }
+                  }
+                } else {
+                  if (isUPIOpen) {
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    getCardPaymentJWTToken(id, rechargeValue);
+                  } else {
+                    showToastMessage("Select any one payment method");
+                  }
+                }
+              });
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -623,6 +855,7 @@ class _LICDetailsState extends State<LICDetails> {
           setState(() {
             isCardOpen = false;
             isUPIOpen = true;
+            isRequestUpi = false;
           });
 
           double walletValue = 0;
@@ -748,6 +981,7 @@ class _LICDetailsState extends State<LICDetails> {
                 setState(() {
                   isCardOpen = val;
                   isUPIOpen = false;
+                  isRequestUpi = false;
                 });
               },
               title: Row(
@@ -1877,17 +2111,41 @@ class _LICDetailsState extends State<LICDetails> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
+      };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+        "appName": packageName,
       };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifyFullCardPayment(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifyFullCardPayment(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifyFullCardPayment(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

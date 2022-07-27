@@ -4,7 +4,9 @@ import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
 import 'package:moneypro_new/ui/recharge/mobilerechange/MobilePaymentNew.dart';
 import 'package:moneypro_new/utils/Apis.dart';
@@ -16,6 +18,7 @@ import 'package:moneypro_new/utils/StateContainer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:moneypro_new/utils/AppKeys.dart';
+import 'package:upi_india/upi_india.dart';
 
 class DTHRechargeNew extends StatefulWidget {
   final Map map;
@@ -26,6 +29,7 @@ class DTHRechargeNew extends StatefulWidget {
 }
 
 class _DTHRechargeNewState extends State<DTHRechargeNew> {
+  var packageName = "";
   var screen = "DTH Recharge New";
 
   var loading = false;
@@ -43,7 +47,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   var checkedValue = false;
 
   double remainAmt = 0;
-
+  TextEditingController upiController = TextEditingController();
   final cardController = TextEditingController();
   final cardHolderNameController = TextEditingController();
   final cardMMController = TextEditingController();
@@ -84,6 +88,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
   var timeH = "";
   var cDate = "";
   var finalString = "";
+  var isRequestUpi = false;
 
   var MonthlyRecharge;
   var Balance;
@@ -97,11 +102,18 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
 
   var jwtToken = "";
   var mainWallet;
+  checkUpiapp() {
+    if (apps!.isNotEmpty) {
+      packageName = apps!.first.packageName;
+    } else {
+      Fluttertoast.showToast(msg: "No Upi Found");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
+    checkUpiapp();
     updateATMStatus(context);
     fetchUserAccountBalance();
     updateWalletBalances();
@@ -412,60 +424,64 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
             ? Container()
             : Column(
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 30.0, right: 30, left: 30),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "Name",
-                            style: TextStyle(
-                                color: lightBlack, fontSize: font13.sp),
+                  customerName == "" || customerName == null
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 30.0, right: 30, left: 30),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "Name",
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font13.sp),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "$customerName",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font13.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "$customerName",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font13.sp,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.right,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20.0, right: 30, left: 30),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "Balance",
-                            style: TextStyle(
-                                color: lightBlack, fontSize: font13.sp),
+                  Balance == "" || Balance == null
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, right: 30, left: 30),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "Balance",
+                                  style: TextStyle(
+                                      color: lightBlack, fontSize: font13.sp),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "$rupeeSymbol $Balance",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: font13.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "$rupeeSymbol $Balance",
-                            style: TextStyle(
-                                color: black,
-                                fontSize: font13.sp,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.right,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
                   (NextRechargeDate.toString() == "")
                       ? Container()
                       : Padding(
@@ -745,7 +761,9 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                   ],
                 ),
               ),
-        _buildUPISection(),
+        displayUpiApps(),
+        _buildUPIRequestSection(),
+        // _buildUPISection(),
         _buildCardSection(),
       ],
     );
@@ -1142,12 +1160,31 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         State = data['DATA']['State'];
         pinCode = data['DATA']['PIN Code'];*/
         } else {
+          MonthlyRecharge = "";
+          Balance = "";
+          customerName = "";
+          status = "";
+          NextRechargeDate = "";
+          lastrechargeamount = "";
+          lastrechargedate = "";
+          planname = "";
+
+          amountController =
+              TextEditingController(text: "${MonthlyRecharge.toString()}");
+
           setState(() {
-            showDetails = false;
-            isError = true;
+            showDetails = true;
+            isError = false;
           });
-          showToastMessage(data['Message'].toString());
         }
+
+        // else {
+        //   setState(() {
+        //     showDetails = false;
+        //     isError = true;
+        //   });
+        //   showToastMessage(data['Message'].toString());
+        // }
       });
     } else {
       setState(() {
@@ -1157,6 +1194,275 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
       });
       showToastMessage(status500);
     }
+  }
+
+  Widget displayUpiApps() {
+    if (apps == null)
+      return Center(child: CircularProgressIndicator());
+    else if (apps!.length == 0)
+      return Center(
+        child: Text(
+          "No apps found to handle transaction.",
+        ),
+      );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps!.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () async {
+                  var mpBalc = await getWalletBalance();
+
+                  setState(() {
+                    packageName = app.packageName;
+                    isCardOpen = false;
+                    isUPIOpen = true;
+                    isRequestUpi = false;
+                  });
+
+                  double walletValue = 0;
+                  double rechargeValue = 0;
+
+                  setState(() {
+                    if (mpBalc.toString() == "") {
+                      walletValue = 0;
+                    } else {
+                      walletValue = double.parse(mpBalc);
+                    }
+
+                    var amt = amountController.text.toString();
+
+                    if (amt.toString() == "") {
+                      showToastMessage("enter the amount");
+                      return;
+                    } else {
+                      rechargeValue = double.parse(amt);
+                    }
+
+                    if (minLimit.toString() != "null" &&
+                        minLimit.toString() != "") {
+                      double minDb = double.parse(minLimit);
+                      if (rechargeValue < minDb) {
+                        showToastMessage(
+                            "Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
+                        return;
+                      }
+                    }
+
+                    /* if(maxLimit.toString()!="null" && maxLimit.toString()!=""){
+              double maxDb = double.parse(maxLimit);
+              if(rechargeValue>maxDb){
+                showToastMessage("Maximum recharge is $rupeeSymbol ${widget.map['maxLimit']}");
+                return;
+              }
+            }*/
+
+                    if (checkedValue) {
+                      if (walletValue >= rechargeValue) {
+                        setState(() {
+                          isWallMore = true;
+                        });
+                        var id = DateTime.now().millisecondsSinceEpoch;
+                        // paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                        var number = mobileController.text.toString();
+                        generateJWTToken(
+                            number, formatNow.format(rechargeValue), 2);
+                      } else {
+                        if (isUPIOpen) {
+                          setState(() {
+                            remainAmt = rechargeValue - walletValue;
+                          });
+
+                          if (isWelcomeOffer) {
+                            remainAmt = remainAmt - welcomeCharge;
+                          }
+                          setState(() {
+                            isWallMore = false;
+                          });
+
+                          var id = DateTime.now().millisecondsSinceEpoch;
+                          //paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                          generateJWTTokenWPG(id, formatNow.format(remainAmt),
+                              formatNow.format(rechargeValue));
+                        } else {
+                          showToastMessage("Select any one payment method");
+                        }
+                      }
+                    } else {
+                      if (isUPIOpen) {
+                        var id = DateTime.now().millisecondsSinceEpoch;
+                        setState(() {
+                          isWallMore = false;
+                        });
+                        if (isWelcomeOffer) {
+                          rechargeValue = rechargeValue - welcomeCharge;
+                        }
+
+                        //paymentByPGDirect(id, formatNow.format(rechargeValue));
+                        generateJWTTokenPG(id, formatNow.format(rechargeValue));
+                      } else {
+                        showToastMessage("Select any one payment method");
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+  }
+
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              var mpBalc = await getWalletBalance();
+
+              setState(() {
+                isCardOpen = false;
+                isUPIOpen = true;
+                isRequestUpi = true;
+              });
+
+              double walletValue = 0;
+              double rechargeValue = 0;
+
+              setState(() {
+                if (mpBalc.toString() == "") {
+                  walletValue = 0;
+                } else {
+                  walletValue = double.parse(mpBalc);
+                }
+
+                var amt = amountController.text.toString();
+
+                if (amt.toString() == "") {
+                  showToastMessage("enter the amount");
+                  return;
+                } else {
+                  rechargeValue = double.parse(amt);
+                }
+
+                if (minLimit.toString() != "null" &&
+                    minLimit.toString() != "") {
+                  double minDb = double.parse(minLimit);
+                  if (rechargeValue < minDb) {
+                    showToastMessage(
+                        "Minimum recharge is $rupeeSymbol ${widget.map['minLimit']}");
+                    return;
+                  }
+                }
+
+                /* if(maxLimit.toString()!="null" && maxLimit.toString()!=""){
+              double maxDb = double.parse(maxLimit);
+              if(rechargeValue>maxDb){
+                showToastMessage("Maximum recharge is $rupeeSymbol ${widget.map['maxLimit']}");
+                return;
+              }
+            }*/
+
+                if (checkedValue) {
+                  if (walletValue >= rechargeValue) {
+                    setState(() {
+                      isWallMore = true;
+                    });
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    // paymentStatusByWalletOnly(id, formatNow.format(rechargeValue));
+                    var number = mobileController.text.toString();
+                    generateJWTToken(
+                        number, formatNow.format(rechargeValue), 2);
+                  } else {
+                    if (isUPIOpen) {
+                      setState(() {
+                        remainAmt = rechargeValue - walletValue;
+                      });
+
+                      if (isWelcomeOffer) {
+                        remainAmt = remainAmt - welcomeCharge;
+                      }
+                      setState(() {
+                        isWallMore = false;
+                      });
+
+                      var id = DateTime.now().millisecondsSinceEpoch;
+                      //paymentByUPIWallet(id, formatNow.format(remainAmt), formatNow.format(rechargeValue));
+                      generateJWTTokenWPG(id, formatNow.format(remainAmt),
+                          formatNow.format(rechargeValue));
+                    } else {
+                      showToastMessage("Select any one payment method");
+                    }
+                  }
+                } else {
+                  if (isUPIOpen) {
+                    var id = DateTime.now().millisecondsSinceEpoch;
+                    setState(() {
+                      isWallMore = false;
+                    });
+                    if (isWelcomeOffer) {
+                      rechargeValue = rechargeValue - welcomeCharge;
+                    }
+
+                    //paymentByPGDirect(id, formatNow.format(rechargeValue));
+                    generateJWTTokenPG(id, formatNow.format(rechargeValue));
+                  } else {
+                    showToastMessage("Select any one payment method");
+                  }
+                }
+              });
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _buildUPISection() {
@@ -1173,6 +1479,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
           setState(() {
             isCardOpen = false;
             isUPIOpen = true;
+            isRequestUpi = false;
           });
 
           double walletValue = 0;
@@ -1323,6 +1630,7 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
                 setState(() {
                   isCardOpen = val;
                   isUPIOpen = false;
+                  isRequestUpi = false;
                 });
               },
               title: Row(
@@ -1937,17 +2245,40 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
+      };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
       };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignatureByUPIWallet(value, rechAmt);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignatureByUPIWallet(value, rechAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignatureByUPIWallet(value, rechAmt);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 
@@ -2309,17 +2640,40 @@ class _DTHRechargeNewState extends State<DTHRechargeNew> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName,
+      };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
       };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignature(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignature(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

@@ -40,6 +40,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../../main.dart';
 import 'package:translator/translator.dart';
 import '../../utils/Apicall.dart';
+import 'package:upi_india/upi_india.dart';
+
+Future<UpiResponse>? _transaction;
+UpiIndia _upiIndia = UpiIndia();
+List<UpiApp>? apps;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     new FlutterLocalNotificationsPlugin();
@@ -169,6 +174,13 @@ class _PerspectiveDetailsState extends State<PerspectiveDetails>
 
   @override
   void initState() {
+    _upiIndia.getAllUpiApps(mandatoryTransactionId: false).then((value) {
+      setState(() {
+        apps = value;
+      });
+    }).catchError((e) {
+      apps = [];
+    });
     super.initState();
 
     if (mounted) {
