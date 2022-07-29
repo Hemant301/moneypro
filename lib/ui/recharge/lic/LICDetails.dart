@@ -2117,7 +2117,7 @@ class _LICDetailsState extends State<LICDetails> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt}",
+        "orderAmount": "$difAmt",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

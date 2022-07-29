@@ -1617,7 +1617,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    // _buildUPISection(),
+                    _buildUPISection(),
                     _buildCardSection(),
                   ],
                 )
