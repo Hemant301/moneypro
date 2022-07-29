@@ -394,28 +394,32 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                     color: white,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: TextFormField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      new CustomInputFormatter()
-                    ],
-                    style: TextStyle(color: black, fontSize: inputFont.sp),
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    controller: cardController,
-                    decoration: new InputDecoration(
-                      isDense: true,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 10),
-                      counterText: "",
-                      hintText: "1234-5678-9012",
-                      label: Text(
-                        "Card No",
-                        style:
-                            TextStyle(color: lightBlack, fontSize: font14.sp),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15, top: 10, bottom: 10),
+                    child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        new CustomInputFormatter()
+                      ],
+                      style: TextStyle(color: black, fontSize: inputFont.sp),
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      controller: cardController,
+                      decoration: new InputDecoration(
+                        isDense: true,
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 10),
+                        counterText: "",
+                        hintText: "1234-5678-9012",
+                        label: Text(
+                          "Card No",
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
+                        ),
                       ),
+                      maxLength: 19,
                     ),
-                    maxLength: 16,
                   ),
                 ),
                 SizedBox(
@@ -430,25 +434,29 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                     color: white,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: TextFormField(
-                    style: TextStyle(color: black, fontSize: inputFont.sp),
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.characters,
-                    controller: cardHolderNameController,
-                    decoration: new InputDecoration(
-                      isDense: true,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 10),
-                      counterText: "",
-                      hintText: "Card holder name",
-                      label: Text(
-                        "Name",
-                        style:
-                            TextStyle(color: lightBlack, fontSize: font14.sp),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15, top: 10, bottom: 10),
+                    child: TextFormField(
+                      style: TextStyle(color: black, fontSize: inputFont.sp),
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.characters,
+                      controller: cardHolderNameController,
+                      decoration: new InputDecoration(
+                        isDense: true,
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 10),
+                        counterText: "",
+                        hintText: "Card holder name",
+                        label: Text(
+                          "Name",
+                          style:
+                              TextStyle(color: lightBlack, fontSize: font14.sp),
+                        ),
                       ),
+                      maxLength: 40,
                     ),
-                    maxLength: 40,
                   ),
                 ),
                 SizedBox(
@@ -472,32 +480,39 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                           child: Row(
                             children: [
                               Expanded(
-                                child: TextFormField(
-                                  focusNode: nodeMM,
-                                  style: TextStyle(
-                                      color: black, fontSize: inputFont.sp),
-                                  keyboardType: TextInputType.datetime,
-                                  textInputAction: TextInputAction.next,
-                                  controller: cardMMController,
-                                  decoration: new InputDecoration(
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(left: 0),
-                                    counterText: "",
-                                    label: Text(
-                                      "MM",
-                                      style: TextStyle(
-                                          color: lightBlack,
-                                          fontSize: font14.sp),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0,
+                                      right: 15,
+                                      top: 10,
+                                      bottom: 10),
+                                  child: TextFormField(
+                                    focusNode: nodeMM,
+                                    style: TextStyle(
+                                        color: black, fontSize: inputFont.sp),
+                                    keyboardType: TextInputType.datetime,
+                                    textInputAction: TextInputAction.next,
+                                    controller: cardMMController,
+                                    decoration: new InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(left: 0),
+                                      counterText: "",
+                                      label: Text(
+                                        "MM",
+                                        style: TextStyle(
+                                            color: lightBlack,
+                                            fontSize: font14.sp),
+                                      ),
                                     ),
+                                    maxLength: 2,
+                                    onChanged: (val) {
+                                      if (val.length == 2) {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeYY);
+                                      }
+                                    },
                                   ),
-                                  maxLength: 2,
-                                  onChanged: (val) {
-                                    if (val.length == 2) {
-                                      FocusScope.of(context)
-                                          .requestFocus(nodeYY);
-                                    }
-                                  },
                                 ),
                               ),
                               Expanded(
@@ -547,7 +562,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 0, bottom: 0),
+                              left: 15.0, right: 15, top: 10, bottom: 10),
                           child: TextFormField(
                             focusNode: nodeCVV,
                             style:
@@ -665,11 +680,11 @@ class _InvestorPaymentState extends State<InvestorPayment> {
           SizedBox(
             height: 5.h,
           ),
-          Text(
-            powered_by,
-            style: TextStyle(
-                color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
+          // Text(
+          //   powered_by,
+          //   style: TextStyle(
+          //       color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+          // ),
           SizedBox(
             height: 5.h,
           ),
@@ -914,7 +929,7 @@ class _InvestorPaymentState extends State<InvestorPayment> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "orderAmount": "${difAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

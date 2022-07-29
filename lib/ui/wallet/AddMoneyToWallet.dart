@@ -1,6 +1,8 @@
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:moneypro_new/ui/home/Perspective.dart';
 import 'package:moneypro_new/ui/models/Banks.dart';
 import 'package:moneypro_new/ui/models/UPIList.dart';
 import 'package:moneypro_new/utils/Apis.dart';
@@ -12,6 +14,8 @@ import 'package:moneypro_new/utils/SharedPrefs.dart';
 import 'package:moneypro_new/utils/StateContainer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:upi_india/upi_app.dart';
 
 class AddMoneyToWallet extends StatefulWidget {
   const AddMoneyToWallet({Key? key}) : super(key: key);
@@ -71,7 +75,7 @@ class _AddMoneyToWalletState extends State<AddMoneyToWallet> {
         //accName = comName.toString();
         accName = na;
       } else {
-        accName = "${fName.toString()} ${lName.toString()}";
+        accName = "$comName}";
       }
     });
   }
@@ -241,7 +245,7 @@ class _AddMoneyToWalletState extends State<AddMoneyToWallet> {
                           ),
                           Spacer(),
                           Text(
-                            "$accName",
+                            "$companyName",
                             style: TextStyle(color: black, fontSize: font14.sp),
                           )
                         ],
@@ -378,6 +382,9 @@ class _AddMoneyPopupState extends State<AddMoneyPopup> {
 
   int upiIndex = 0;
   var upiId = "";
+  var packageName = "";
+  bool isRequestUpi = false;
+  TextEditingController upiController = TextEditingController();
 
   @override
   void dispose() {
@@ -447,43 +454,51 @@ class _AddMoneyPopupState extends State<AddMoneyPopup> {
                                   color: lightBlack, fontSize: font14.sp),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              var id = DateTime.now().millisecondsSinceEpoch;
-                              var amount = amountController.text.toString();
-
-                              if (amount.length == 0) {
-                                showToastMessage("Enter the amount");
-                              } else {
-                                closeKeyBoard(context);
-                                double x = double.parse(amount);
-                                if (x < 100) {
-                                  showToastMessage(
-                                      "Minimum amount is $rupeeSymbol 100");
-                                } else {
-                                  paymentByUPI(id, amount);
-                                }
-                              }
-                            },
-                            child: Container(
-                              height: 45.h,
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.only(
-                                  top: 20, left: 25, right: 25, bottom: 20),
-                              decoration: BoxDecoration(
-                                color: lightBlue,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(25)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "ADD MONEY",
-                                  style: TextStyle(
-                                      fontSize: font16.sp, color: white),
-                                ),
-                              ),
-                            ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          displayUpiApps(),
+                          _buildUPIRequestSection(),
+                          SizedBox(
+                            height: 20,
                           )
+                          // InkWell(
+                          //   onTap: () {
+                          //     var id = DateTime.now().millisecondsSinceEpoch;
+                          //     var amount = amountController.text.toString();
+
+                          //     if (amount.length == 0) {
+                          //       showToastMessage("Enter the amount");
+                          //     } else {
+                          //       closeKeyBoard(context);
+                          //       double x = double.parse(amount);
+                          //       if (x < 100) {
+                          //         showToastMessage(
+                          //             "Minimum amount is $rupeeSymbol 100");
+                          //       } else {
+                          //         paymentByUPI(id, amount);
+                          //       }
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     height: 45.h,
+                          //     width: MediaQuery.of(context).size.width,
+                          //     margin: EdgeInsets.only(
+                          //         top: 20, left: 25, right: 25, bottom: 20),
+                          //     decoration: BoxDecoration(
+                          //       color: lightBlue,
+                          //       borderRadius:
+                          //           BorderRadius.all(Radius.circular(25)),
+                          //     ),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "ADD MONEY",
+                          //         style: TextStyle(
+                          //             fontSize: font16.sp, color: white),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     )
@@ -491,6 +506,124 @@ class _AddMoneyPopupState extends State<AddMoneyPopup> {
                 ),
               ),
             ));
+  }
+
+  _buildUPIRequestSection() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width / 2,
+              child: TextFormField(
+                controller: upiController,
+                decoration: InputDecoration(hintText: 'Enter UPI ID'),
+              )),
+          InkWell(
+            onTap: () async {
+              if (upiController.text == "") {
+                Fluttertoast.showToast(msg: "Enter UPI ID");
+                return;
+              }
+              print(isRequestUpi);
+              setState(() {
+                isRequestUpi = true;
+                ;
+              });
+              var id = DateTime.now().millisecondsSinceEpoch;
+              var amount = amountController.text.toString();
+
+              if (amount.length == 0) {
+                showToastMessage("Enter the amount");
+              } else {
+                closeKeyBoard(context);
+                double x = double.parse(amount);
+                if (x < 100) {
+                  showToastMessage("Minimum amount is $rupeeSymbol 100");
+                } else {
+                  paymentByUPI(id, amount);
+                }
+              }
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width / 4,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: lightBlue, borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  "Pay",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget displayUpiApps() {
+    if (apps == null)
+      return Center(child: CircularProgressIndicator());
+    else if (apps!.length == 0)
+      return Center(
+        child: Text(
+          "No apps found to handle transaction.",
+        ),
+      );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps!.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    packageName = app.packageName;
+                    isRequestUpi = false;
+                  });
+                  var id = DateTime.now().millisecondsSinceEpoch;
+                  var amount = amountController.text.toString();
+
+                  if (amount.length == 0) {
+                    showToastMessage("Enter the amount");
+                  } else {
+                    closeKeyBoard(context);
+                    double x = double.parse(amount);
+                    if (x < 100) {
+                      showToastMessage("Minimum amount is $rupeeSymbol 100");
+                    } else {
+                      paymentByUPI(id, amount);
+                    }
+                  }
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
   }
 
   paymentByUPI(orderId, amount) async {
@@ -586,17 +719,41 @@ class _AddMoneyPopupState extends State<AddMoneyPopup> {
         "tokenData": "$token",
         "stage": "$cashFreePGMode",
         "orderNote": orderNote,
-        "appName": upiId,
+        "appName": packageName
+      };
+      Map<String, dynamic> requestinputParams = {
+        "paymentOption": "upi",
+        "upi_vpa": upiController.text,
+        "orderId": "$orderId",
+        "orderAmount": "$amount",
+        "customerName": "$name",
+        "orderCurrency": "INR",
+        "appId": "$cashFreeAppId",
+        "customerPhone": customerPhone,
+        "customerEmail": customerEmail,
+        "tokenData": "$token",
+        "stage": "$cashFreePGMode",
+        "orderNote": orderNote,
+        // "appName": packageName
       };
 
-      printMessage(screen, "Input Params : $inputParams");
+      isRequestUpi == true
+          ? printMessage(screen, "Input Params : $requestinputParams")
+          : printMessage(screen, "Input Params : $inputParams");
 
-      CashfreePGSDK.doUPIPayment(inputParams).then((value) {
-        setState(() {
-          verifySignatureByPG(value);
-        });
-        printMessage(screen, "doUPIPayment result : $value");
-      });
+      isRequestUpi == true
+          ? CashfreePGSDK.doPayment(requestinputParams).then((value) {
+              setState(() {
+                verifySignatureByPG(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            })
+          : CashfreePGSDK.doUPIPayment(inputParams).then((value) {
+              setState(() {
+                verifySignatureByPG(value);
+              });
+              printMessage(screen, "doUPIPayment result : $value");
+            });
     }
   }
 

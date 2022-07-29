@@ -1466,7 +1466,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -1822,15 +1822,15 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            powered_by,
-            style: TextStyle(
-                color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Divider(),
+        // Padding(
+        //   padding: const EdgeInsets.all(4.0),
+        //   child: Text(
+        //     powered_by,
+        //     style: TextStyle(
+        //         color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
+        // Divider(),
         Row(
           children: [
             Expanded(
@@ -2104,7 +2104,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
 
       Map<String, dynamic> inputParams = {
         "orderId": "$orderId",
-        "orderAmount": "$remainAmt",
+        "orderAmount": "${formatNow.format(remainAmt)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2119,7 +2119,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${remainAmt.toStringAsFixed(2)}",
+        "orderAmount": "${formatNow.format(remainAmt)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2461,7 +2461,7 @@ class _RechargeFetchNoState extends State<RechargeFetchNo> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${pgAmt.toStringAsFixed(2)}",
+        "orderAmount": "${pgAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

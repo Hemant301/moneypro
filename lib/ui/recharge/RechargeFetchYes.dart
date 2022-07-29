@@ -1917,7 +1917,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -2240,6 +2240,8 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
               )),
           InkWell(
             onTap: () async {
+              // print(double.parse(actualRechargeAmount));
+              // return;
               if (upiController.text == "") {
                 Fluttertoast.showToast(msg: "Enter UPI ID");
                 return;
@@ -2296,7 +2298,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                   if (isWelcomeOffer) {
                     rechargeValue = rechargeValue - welcomeCharge;
                   }
-                  paymentByWallet(id, rechargeValue);
+                  paymentByWallet(id, formatNow.format(rechargeValue));
                 } else {
                   setState(() {
                     isWallMore = false;
@@ -2311,8 +2313,9 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                     // remainAmt = remainAmt - walletValue;
                   });
                   var id = DateTime.now().millisecondsSinceEpoch;
-
-                  createOrderForUPI(id, remainAmt);
+                  print("remaining  ${formatNow.format(remainAmt)}");
+                  // return;
+                  createOrderForUPI(id, formatNow.format(remainAmt));
                 }
               } else {
                 setState(() {
@@ -2323,6 +2326,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
                 if (isWelcomeOffer) {
                   pg = pg - welcomeCharge;
                 }
+
                 createOrderForUPIOnly(id, formatNow.format(pg));
                 //createOrderForUPIOnly(id, formatString.format(pg));
               }
@@ -2651,14 +2655,14 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            powered_by,
-            style: TextStyle(
-                color: black, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(4.0),
+        //   child: Text(
+        //     powered_by,
+        //     style: TextStyle(
+        //         color: black, fontSize: 16, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
         Divider(),
         Row(
           children: [
@@ -3006,7 +3010,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${remainAmt.toStringAsFixed(2)}",
+        "orderAmount": "${formatNow.format(remainAmt)}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -3346,7 +3350,7 @@ class _RechargeFetchYesState extends State<RechargeFetchYes> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${pgAmt.toStringAsFixed(2)}",
+        "orderAmount": "${pgAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

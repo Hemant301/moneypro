@@ -665,7 +665,7 @@ class _MobilePaymentState extends State<MobilePayment> {
                           style: TextStyle(color: lightBlack, fontSize: font14),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -970,11 +970,11 @@ class _MobilePaymentState extends State<MobilePayment> {
         SizedBox(
           height: 10,
         ),
-        Text(
-          powered_by,
-          style: TextStyle(
-              color: black, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
+        // Text(
+        //   powered_by,
+        //   style: TextStyle(
+        //       color: black, fontSize: 16, fontWeight: FontWeight.bold),
+        // ),
         SizedBox(
           height: 10,
         ),

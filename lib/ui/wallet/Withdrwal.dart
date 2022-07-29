@@ -759,7 +759,7 @@ class _WithdrwalState extends State<Withdrwal> {
                 decoration: TextDecoration.underline),
           ),
           Text(
-            "$rupeeSymbol 5/transaction upto $rupeeSymbol 25,000 and above $rupeeSymbol 25,000 $rupeeSymbol 10/transaction ",
+            "5 IMPS transaction free and post that standard charges applicable. Per transaction limit is 2 lacs",
             style: TextStyle(color: black, fontSize: font13.sp),
           ),
           SizedBox(
@@ -773,7 +773,7 @@ class _WithdrwalState extends State<Withdrwal> {
                 decoration: TextDecoration.underline),
           ),
           Text(
-            "$rupeeSymbol 3/transaction",
+            "Free",
             style: TextStyle(color: black, fontSize: font13.sp),
           ),
           SizedBox(

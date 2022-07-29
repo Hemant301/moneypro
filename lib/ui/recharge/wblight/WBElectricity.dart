@@ -1244,7 +1244,7 @@ class _WBElectricityState extends State<WBElectricity> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -1966,14 +1966,14 @@ class _WBElectricityState extends State<WBElectricity> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            powered_by,
-            style: TextStyle(
-                color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(4.0),
+        //   child: Text(
+        //     powered_by,
+        //     style: TextStyle(
+        //         color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
         Divider(),
         Row(
           children: [
@@ -2306,7 +2306,7 @@ class _WBElectricityState extends State<WBElectricity> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${remainAmt.toStringAsFixed(2)}",
+        "orderAmount": "$remainAmt",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2648,7 +2648,7 @@ class _WBElectricityState extends State<WBElectricity> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${pgAmt.toStringAsFixed(2)}",
+        "orderAmount": "$pgAmt",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

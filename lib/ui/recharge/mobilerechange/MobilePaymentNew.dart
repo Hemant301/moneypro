@@ -1280,11 +1280,11 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          powered_by,
-          style: TextStyle(
-              color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-        ),
+        // Text(
+        //   powered_by,
+        //   style: TextStyle(
+        //       color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+        // ),
         SizedBox(
           height: 10.h,
         ),
@@ -1870,7 +1870,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "orderAmount": "${difAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2150,7 +2150,7 @@ class _MobilePaymentNewState extends State<MobilePaymentNew> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "orderAmount": "${difAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

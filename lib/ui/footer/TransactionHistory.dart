@@ -93,6 +93,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
   int pageOtherNo = 1;
   int otherTotalPage = 0;
   late ScrollController scrollOtherController;
+  ScrollController matmScroller = ScrollController();
+  ScrollController aepsScroller = ScrollController();
+  ScrollController dmtScroller = ScrollController();
 
   bool isWalletReload = false;
   int pageWalletNo = 1;
@@ -113,6 +116,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
   int pageBranch = 1;
   int qrPage = 1;
   int pageSort = 1;
+  int matmPage = 1;
+  int aepsPage = 1;
+  int dmtPage = 1;
   int BranchTotalPage = 0;
   late ScrollController scrollBranchController;
   ScrollController scrollsortController = ScrollController();
@@ -120,6 +126,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
   @override
   void initState() {
     super.initState();
+    matmTransctionLists.clear();
+    aepsTransaction.clear();
+    dmtTransactions.clear();
+
     scrollOtherController = new ScrollController()
       ..addListener(_scrollListener);
     scrollWalletController = new ScrollController()
@@ -131,6 +141,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
       ..addListener(_scrollBranchListener);
     print('at scroller');
     scrollsortController.addListener(_scrollEvent);
+    matmScroller.addListener(_scrollMatm);
+    aepsScroller.addListener(_scrollAeps);
+    dmtScroller.addListener(_scrollDmt);
 
     fetchUserAccountBalance();
     _tabController = new TabController(vsync: this, length: tabs.length);
@@ -215,6 +228,39 @@ class _TransactionHistoryState extends State<TransactionHistory>
     if (scrollsortController.position.pixels ==
         scrollsortController.position.maxScrollExtent) {
       // print('scroll ho rha');
+    }
+  }
+
+  void _scrollMatm() {
+    // print('jst litening');
+    if (matmScroller.position.pixels == matmScroller.position.maxScrollExtent) {
+      // print('scroll ho rha');
+      setState(() {
+        matmPage = matmPage + 1;
+        getMATMTransactions(matmPage);
+      });
+    }
+  }
+
+  void _scrollAeps() {
+    // print('jst litening');
+    if (aepsScroller.position.pixels == aepsScroller.position.maxScrollExtent) {
+      // print('scroll ho rha aeps');
+      setState(() {
+        aepsPage = aepsPage + 1;
+        getAEPSTransactions(aepsPage);
+      });
+    }
+  }
+
+  void _scrollDmt() {
+    // print('jst litening');
+    if (dmtScroller.position.pixels == dmtScroller.position.maxScrollExtent) {
+      // print('scroll ho rha aeps');
+      setState(() {
+        dmtPage = dmtPage + 1;
+        getAEPSTransactions(dmtPage);
+      });
     }
   }
 
@@ -397,13 +443,15 @@ class _TransactionHistoryState extends State<TransactionHistory>
                       } else if (val == 2) {
                         // M ATM response here
                         if (matmTransctionLists.length == 0)
-                          getMATMTransactions(1);
+                          getMATMTransactions(matmPage);
                       } else if (val == 3) {
                         //calling AEPS response here
-                        if (aepsTransaction.length == 0) getAEPSTransactions(0);
+                        if (aepsTransaction.length == 0)
+                          getAEPSTransactions(aepsPage);
                       } else if (val == 4) {
                         //calling DMT response here
-                        if (dmtTransactions.length == 0) getDMTTransactions(0);
+                        if (dmtTransactions.length == 0)
+                          getDMTTransactions(dmtPage);
                       } else if (val == 5) {
                         // Other response here
                         if (payoutList.length == 0) getPayoutTransaction();
@@ -1188,193 +1236,308 @@ class _TransactionHistoryState extends State<TransactionHistory>
             child: circularProgressLoading(40.0),
           )
         : (matmTransctionLists.length == 0)
-            ? NoDataFound(text: "No transaction found")
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: ListView.builder(
-                  itemCount: matmTransctionLists.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          var status = matmTransctionLists[index].status;
-
-                          printMessage(screen, "MATM Status : $status");
-
-                          if (status.toString().toLowerCase() != "success" &&
-                              status.toString().toLowerCase() != "fail" &&
-                              status.toString().toLowerCase() != "failed" &&
-                              status.toString().toLowerCase() != "failure") {
-                            var txid = matmTransctionLists[index].txnid;
-                            if (txid.toString() != "null") {
-                              getATMAuthToken(txid);
-                            }
-                          } else {
-                            Map map = {
-                              "date": "${matmTransctionLists[index].date}",
-                              "transId":
-                                  "${matmTransctionLists[index].transctionId}",
-                              "refId": "${matmTransctionLists[index].refId}",
-                              "amount": "${matmTransctionLists[index].amount}",
-                              "bankName":
-                                  "${matmTransctionLists[index].bankName}",
-                              "status": "${matmTransctionLists[index].status}",
-                              "card_no": "${matmTransctionLists[index].cardNo}",
-                              "terminalId":
-                                  "${matmTransctionLists[index].terminalId}",
-                              "merchCommin":
-                                  "${matmTransctionLists[index].merchantCommission}",
-                              "mobile": "$mobileChar",
-                            };
-                            openMATMReceipt(context, map);
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              border: Border.all(color: gray)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
+            ? Column(
+                children: [
+                  SizedBox(height: 10),
+                  Expanded(child: NoDataFound(text: "No transaction found")),
+                ],
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Container(
-                                        height: 45.h,
-                                        width: 45.w,
-                                        decoration: BoxDecoration(
-                                          color: lightBlue, // border color
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(9.0),
-                                          child: Image.asset(
-                                            'assets/wallet_white.png',
-                                          ),
-                                        )),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Text(
-                                                (matmTransctionLists[index]
-                                                            .rrn
-                                                            .toString() ==
-                                                        "null")
-                                                    ? "Txn Id : NA"
-                                                    : "Txn Id : ${matmTransctionLists[index].rrn}",
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: font14.sp),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Text(
-                                                (matmTransctionLists[index]
-                                                            .bankName
-                                                            .toString() ==
-                                                        "null")
-                                                    ? "Bank : NA"
-                                                    : "Bank : ${matmTransctionLists[index].bankName}",
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: font13.sp),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 8),
-                                          child: Text(
-                                            (matmTransctionLists[index]
-                                                        .amount
-                                                        .toString() ==
-                                                    "null")
-                                                ? "NA"
-                                                : "$rupeeSymbol ${matmTransctionLists[index].amount}",
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font16.sp),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, bottom: 8),
-                                          child: Text(
-                                              "${matmTransctionLists[index].status}",
-                                              style: TextStyle(
-                                                  color: black,
-                                                  fontSize: font13.sp)),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                  ],
-                                ),
-                                (matmTransctionLists[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "success" &&
-                                        matmTransctionLists[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "fail" &&
-                                        matmTransctionLists[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "failed" &&
-                                        matmTransctionLists[index]
-                                                .status
-                                                .toString()
-                                                .toLowerCase() !=
-                                            "failure")
-                                    ? Text(
-                                        "Check transaction Status",
+                                    Text('Transaction',
                                         style: TextStyle(
-                                            color: red, fontSize: font14.sp),
-                                      )
-                                    : Container()
-                              ],
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('0', style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
                             ),
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              color: lightBlue,
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Business',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                  ]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Earning',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        controller: matmScroller,
+                        itemCount: matmTransctionLists.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: ScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, right: 20, top: 10),
+                            child: InkWell(
+                              onTap: () {
+                                var status = matmTransctionLists[index].status;
+
+                                printMessage(screen, "MATM Status : $status");
+
+                                if (status.toString().toLowerCase() !=
+                                        "success" &&
+                                    status.toString().toLowerCase() != "fail" &&
+                                    status.toString().toLowerCase() !=
+                                        "failed" &&
+                                    status.toString().toLowerCase() !=
+                                        "failure") {
+                                  var txid = matmTransctionLists[index].txnid;
+                                  if (txid.toString() != "null") {
+                                    getATMAuthToken(txid);
+                                  }
+                                } else {
+                                  Map map = {
+                                    "date":
+                                        "${matmTransctionLists[index].date}",
+                                    "transId":
+                                        "${matmTransctionLists[index].transctionId}",
+                                    "refId":
+                                        "${matmTransctionLists[index].refId}",
+                                    "amount":
+                                        "${matmTransctionLists[index].amount}",
+                                    "bankName":
+                                        "${matmTransctionLists[index].bankName}",
+                                    "status":
+                                        "${matmTransctionLists[index].status}",
+                                    "card_no":
+                                        "${matmTransctionLists[index].cardNo}",
+                                    "terminalId":
+                                        "${matmTransctionLists[index].terminalId}",
+                                    "merchCommin":
+                                        "${matmTransctionLists[index].merchantCommission}",
+                                    "mobile": "$mobileChar",
+                                  };
+                                  openMATMReceipt(context, map);
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 10),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(color: gray)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Container(
+                                              height: 45.h,
+                                              width: 45.w,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    lightBlue, // border color
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(9.0),
+                                                child: Image.asset(
+                                                  'assets/wallet_white.png',
+                                                ),
+                                              )),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Text(
+                                                      (matmTransctionLists[
+                                                                      index]
+                                                                  .rrn
+                                                                  .toString() ==
+                                                              "null")
+                                                          ? "Txn Id : NA"
+                                                          : "Txn Id : ${matmTransctionLists[index].rrn}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font14.sp),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Text(
+                                                      (matmTransctionLists[
+                                                                      index]
+                                                                  .bankName
+                                                                  .toString() ==
+                                                              "null")
+                                                          ? "Bank : NA"
+                                                          : "Bank : ${matmTransctionLists[index].bankName}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font13.sp),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  )
+                                                ],
+                                              )),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 8),
+                                                child: Text(
+                                                  (matmTransctionLists[index]
+                                                              .amount
+                                                              .toString() ==
+                                                          "null")
+                                                      ? "NA"
+                                                      : "$rupeeSymbol ${matmTransctionLists[index].amount}",
+                                                  style: TextStyle(
+                                                      color: black,
+                                                      fontSize: font16.sp),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    bottom: 8),
+                                                child: Text(
+                                                    "${matmTransctionLists[index].status}",
+                                                    style: TextStyle(
+                                                        color: black,
+                                                        fontSize: font13.sp)),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                        ],
+                                      ),
+                                      (matmTransctionLists[index]
+                                                      .status
+                                                      .toString()
+                                                      .toLowerCase() !=
+                                                  "success" &&
+                                              matmTransctionLists[index]
+                                                      .status
+                                                      .toString()
+                                                      .toLowerCase() !=
+                                                  "fail" &&
+                                              matmTransctionLists[index]
+                                                      .status
+                                                      .toString()
+                                                      .toLowerCase() !=
+                                                  "failed" &&
+                                              matmTransctionLists[index]
+                                                      .status
+                                                      .toString()
+                                                      .toLowerCase() !=
+                                                  "failure")
+                                          ? Text(
+                                              "Check transaction Status",
+                                              style: TextStyle(
+                                                  color: red,
+                                                  fontSize: font14.sp),
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               );
     ;
   }
@@ -1385,228 +1548,339 @@ class _TransactionHistoryState extends State<TransactionHistory>
             child: circularProgressLoading(40.0),
           )
         : (aepsTransaction.length == 0)
-            ? NoDataFound(text: "No transaction found")
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: ListView.builder(
-                  itemCount: aepsTransaction.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          if (aepsTransaction[index]
-                                      .status
-                                      .toString()
-                                      .toLowerCase() !=
-                                  "success" &&
-                              aepsTransaction[index]
-                                      .status
-                                      .toString()
-                                      .toLowerCase() !=
-                                  "fail" &&
-                              aepsTransaction[index]
-                                      .status
-                                      .toString()
-                                      .toLowerCase() !=
-                                  "failed" &&
-                              aepsTransaction[index]
-                                      .status
-                                      .toString()
-                                      .toLowerCase() !=
-                                  "failure") {
-                            var txnId = aepsTransaction[index].txnid.toString();
-
-                            printMessage(screen, "txnId : $txnId");
-
-                            if (txnId.toString() != "null") {
-                              getAEPSTransIdToken(txnId);
-                            }
-                          } else {
-                            Map map = {
-                              "date": "${aepsTransaction[index].date}",
-                              "transId":
-                                  "${aepsTransaction[index].transctionId}",
-                              "refId": "${aepsTransaction[index].refId}",
-                              "amount": "${aepsTransaction[index].amount}",
-                              "mode": "${aepsTransaction[index].mode}",
-                              "status": "${aepsTransaction[index].status}",
-                              "adhar": "${aepsTransaction[index].adhar}",
-                              "mobile": "${aepsTransaction[index].mobile}",
-                              "merComm":
-                                  "${aepsTransaction[index].merchantCommission}",
-                              'bankmsg': "${aepsTransaction[index].bank_msg}",
-                            };
-                            openAEPSReceipt(context, map, false);
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              border: Border.all(color: gray)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
+            ? Column(
+                children: [
+                  Expanded(child: NoDataFound(text: "No transaction found")),
+                ],
+              )
+            : Column(
+                children: [
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Container(
-                                        height: 45.h,
-                                        width: 45.w,
-                                        decoration: BoxDecoration(
-                                          color: lightBlue, // border color
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(9.0),
-                                          child: Image.asset(
-                                            'assets/wallet_white.png',
-                                          ),
-                                        )),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Text(
-                                                (aepsTransaction[index]
-                                                            .status
-                                                            .toString() ==
-                                                        "Pending")
-                                                    ? "Txn Id : NA"
-                                                    : (aepsTransaction[index]
-                                                                .transctionId
-                                                                .toString() ==
-                                                            "null")
-                                                        ? "Txn Id : ${aepsTransaction[index].txnid}"
-                                                        : "Txn Id : ${aepsTransaction[index].transctionId}",
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: font14.sp),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Text(
-                                                (aepsTransaction[index]
-                                                            .mobile
-                                                            .toString() ==
-                                                        "null")
-                                                    ? "Mobile :"
-                                                    : "Mobile : ${aepsTransaction[index].mobile}",
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: font13.sp),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: Text(
-                                                (aepsTransaction[index]
-                                                            .mode
-                                                            .toString() ==
-                                                        "null")
-                                                    ? "Trans Type :"
-                                                    : "Trans Type : ${aepsTransaction[index].mode}",
-                                                style: TextStyle(
-                                                    color: black,
-                                                    fontSize: font13.sp),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, top: 8),
-                                          child: Text(
-                                            (aepsTransaction[index]
-                                                        .amount
-                                                        .toString() ==
-                                                    "null")
-                                                ? ""
-                                                : "$rupeeSymbol ${aepsTransaction[index].amount}",
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font16.sp),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8, bottom: 8),
-                                          child: Text(
-                                              "${aepsTransaction[index].status}",
-                                              style: TextStyle(
-                                                  color: black,
-                                                  fontSize: font13.sp)),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                  ],
-                                ),
-                                // (aepsTransaction[
-                                //                     index]
-                                //                 .status
-                                //                 .toString()
-                                //                 .toLowerCase() !=
-                                //             "success" &&
-                                //         aepsTransaction[index]
-                                //                 .status
-                                //                 .toString()
-                                //                 .toLowerCase() !=
-                                //             "fail" &&
-                                //         aepsTransaction[index]
-                                //                 .status
-                                //                 .toString()
-                                //                 .toLowerCase() !=
-                                //             "failed" &&
-                                //         aepsTransaction[index]
-                                //                 .status
-                                //                 .toString()
-                                //                 .toLowerCase() !=
-                                //             "failure")
-                                //     ? Text(
-                                //         "Check transaction Status",
-                                //         style: TextStyle(
-                                //             color: red, fontSize: font14.sp),
-                                //       )
-                                //     : Container(),
-                              ],
+                                    Text('Transaction',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('0', style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
                             ),
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              color: lightBlue,
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Business',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                  ]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Earning',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        itemCount: aepsTransaction.length,
+                        controller: aepsScroller,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: ScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, right: 20, top: 10),
+                            child: InkWell(
+                              onTap: () {
+                                if (aepsTransaction[index]
+                                            .status
+                                            .toString()
+                                            .toLowerCase() !=
+                                        "success" &&
+                                    aepsTransaction[index]
+                                            .status
+                                            .toString()
+                                            .toLowerCase() !=
+                                        "fail" &&
+                                    aepsTransaction[index]
+                                            .status
+                                            .toString()
+                                            .toLowerCase() !=
+                                        "failed" &&
+                                    aepsTransaction[index]
+                                            .status
+                                            .toString()
+                                            .toLowerCase() !=
+                                        "failure") {
+                                  var txnId =
+                                      aepsTransaction[index].txnid.toString();
+
+                                  printMessage(screen, "txnId : $txnId");
+
+                                  if (txnId.toString() != "null") {
+                                    getAEPSTransIdToken(txnId);
+                                  }
+                                } else {
+                                  Map map = {
+                                    "date": "${aepsTransaction[index].date}",
+                                    "transId":
+                                        "${aepsTransaction[index].transctionId}",
+                                    "refId": "${aepsTransaction[index].refId}",
+                                    "amount":
+                                        "${aepsTransaction[index].amount}",
+                                    "mode": "${aepsTransaction[index].mode}",
+                                    "status":
+                                        "${aepsTransaction[index].status}",
+                                    "adhar": "${aepsTransaction[index].adhar}",
+                                    "mobile":
+                                        "${aepsTransaction[index].mobile}",
+                                    "merComm":
+                                        "${aepsTransaction[index].merchantCommission}",
+                                    'bankmsg':
+                                        "${aepsTransaction[index].bank_msg}",
+                                  };
+                                  openAEPSReceipt(context, map, false);
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 10),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(color: gray)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Container(
+                                              height: 45.h,
+                                              width: 45.w,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    lightBlue, // border color
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(9.0),
+                                                child: Image.asset(
+                                                  'assets/wallet_white.png',
+                                                ),
+                                              )),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Text(
+                                                      (aepsTransaction[index]
+                                                                  .status
+                                                                  .toString() ==
+                                                              "Pending")
+                                                          ? "Txn Id : NA"
+                                                          : (aepsTransaction[
+                                                                          index]
+                                                                      .transctionId
+                                                                      .toString() ==
+                                                                  "null")
+                                                              ? "Txn Id : ${aepsTransaction[index].txnid}"
+                                                              : "Txn Id : ${aepsTransaction[index].transctionId}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font14.sp),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Text(
+                                                      (aepsTransaction[index]
+                                                                  .mobile
+                                                                  .toString() ==
+                                                              "null")
+                                                          ? "Mobile :"
+                                                          : "Mobile : ${aepsTransaction[index].mobile}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font13.sp),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10.0),
+                                                    child: Text(
+                                                      (aepsTransaction[index]
+                                                                  .mode
+                                                                  .toString() ==
+                                                              "null")
+                                                          ? "Trans Type :"
+                                                          : "Trans Type : ${aepsTransaction[index].mode}",
+                                                      style: TextStyle(
+                                                          color: black,
+                                                          fontSize: font13.sp),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  )
+                                                ],
+                                              )),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 8),
+                                                child: Text(
+                                                  (aepsTransaction[index]
+                                                              .amount
+                                                              .toString() ==
+                                                          "null")
+                                                      ? ""
+                                                      : "$rupeeSymbol ${aepsTransaction[index].amount}",
+                                                  style: TextStyle(
+                                                      color: black,
+                                                      fontSize: font16.sp),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    bottom: 8),
+                                                child: Text(
+                                                    "${aepsTransaction[index].status}",
+                                                    style: TextStyle(
+                                                        color: black,
+                                                        fontSize: font13.sp)),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                        ],
+                                      ),
+                                      // (aepsTransaction[
+                                      //                     index]
+                                      //                 .status
+                                      //                 .toString()
+                                      //                 .toLowerCase() !=
+                                      //             "success" &&
+                                      //         aepsTransaction[index]
+                                      //                 .status
+                                      //                 .toString()
+                                      //                 .toLowerCase() !=
+                                      //             "fail" &&
+                                      //         aepsTransaction[index]
+                                      //                 .status
+                                      //                 .toString()
+                                      //                 .toLowerCase() !=
+                                      //             "failed" &&
+                                      //         aepsTransaction[index]
+                                      //                 .status
+                                      //                 .toString()
+                                      //                 .toLowerCase() !=
+                                      //             "failure")
+                                      //     ? Text(
+                                      //         "Check transaction Status",
+                                      //         style: TextStyle(
+                                      //             color: red, fontSize: font14.sp),
+                                      //       )
+                                      //     : Container(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               );
   }
 
@@ -1617,130 +1891,224 @@ class _TransactionHistoryState extends State<TransactionHistory>
           )
         : (dmtTransactions.length == 0)
             ? NoDataFound(text: "No transaction found")
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: ListView.builder(
-                  itemCount: dmtTransactions.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                      child: InkWell(
-                        onTap: () {
-                          Map map = {
-                            "date": "${dmtTransactions[index].date}",
-                            "transId": "${dmtTransactions[index].transctionId}",
-                            "amount": "${dmtTransactions[index].amount}",
-                            "mode": "${dmtTransactions[index].mode}",
-                            "status": "${dmtTransactions[index].status}",
-                            "mobile": "${dmtTransactions[index].mobile}",
-                            "acc_no": "${dmtTransactions[index].accNo}",
-                            "customer_charge":
-                                "${dmtTransactions[index].customerCharge}",
-                            "total_payable_amnt":
-                                "${dmtTransactions[index].totalPayableAmnt}",
-                            "merchant_commission":
-                                "${dmtTransactions[index].merchantCommission}",
-                          };
-                          openDMTRecipt(context, map);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              border: Border.all(color: gray)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                Container(
-                                    height: 45.h,
-                                    width: 45.w,
-                                    decoration: BoxDecoration(
-                                      color: lightBlue, // border color
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(9.0),
-                                      child: Image.asset(
-                                        'assets/wallet_white.png',
-                                      ),
-                                    )),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: Text(
-                                            "$transId : ${dmtTransactions[index].transctionId}",
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font14.sp),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: Text(
-                                            "Date: ${dmtTransactions[index].date}",
-                                            style: TextStyle(
-                                                color: black,
-                                                fontSize: font13.sp),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        )
-                                      ],
-                                    )),
-                                Column(
+            : Column(
+                children: [
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8, top: 8),
-                                      child: Text(
-                                        "$rupeeSymbol ${dmtTransactions[index].amount}",
+                                    Text('Transaction',
                                         style: TextStyle(
-                                            color: black, fontSize: font16.sp),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8, bottom: 8),
-                                      child: Text("Debited",
-                                          style: TextStyle(
-                                              color: black,
-                                              fontSize: font13.sp)),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                              ],
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('0', style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
                             ),
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              color: lightBlue,
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Business',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.white)),
+                                  ]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Earning',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 16)),
+                                    SizedBox(height: 5),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(height: 15),
+                                    Text('$rupeeSymbol 0',
+                                        style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 5),
+                                    Text("Today's Total",
+                                        style: TextStyle(fontSize: 14)),
+                                  ]),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        controller: dmtScroller,
+                        itemCount: dmtTransactions.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: ScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, right: 20, top: 10),
+                            child: InkWell(
+                              onTap: () {
+                                Map map = {
+                                  "date": "${dmtTransactions[index].date}",
+                                  "transId":
+                                      "${dmtTransactions[index].transctionId}",
+                                  "amount": "${dmtTransactions[index].amount}",
+                                  "mode": "${dmtTransactions[index].mode}",
+                                  "status": "${dmtTransactions[index].status}",
+                                  "mobile": "${dmtTransactions[index].mobile}",
+                                  "acc_no": "${dmtTransactions[index].accNo}",
+                                  "customer_charge":
+                                      "${dmtTransactions[index].customerCharge}",
+                                  "total_payable_amnt":
+                                      "${dmtTransactions[index].totalPayableAmnt}",
+                                  "merchant_commission":
+                                      "${dmtTransactions[index].merchantCommission}",
+                                };
+                                openDMTRecipt(context, map);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 10),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(color: gray)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Container(
+                                          height: 45.h,
+                                          width: 45.w,
+                                          decoration: BoxDecoration(
+                                            color: lightBlue, // border color
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(9.0),
+                                            child: Image.asset(
+                                              'assets/wallet_white.png',
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: Text(
+                                                  "$transId : ${dmtTransactions[index].transctionId}",
+                                                  style: TextStyle(
+                                                      color: black,
+                                                      fontSize: font14.sp),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: Text(
+                                                  "Date: ${dmtTransactions[index].date}",
+                                                  style: TextStyle(
+                                                      color: black,
+                                                      fontSize: font13.sp),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                      Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8, top: 8),
+                                            child: Text(
+                                              "$rupeeSymbol ${dmtTransactions[index].amount}",
+                                              style: TextStyle(
+                                                  color: black,
+                                                  fontSize: font16.sp),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0, right: 8, bottom: 8),
+                                            child: Text("Debited",
+                                                style: TextStyle(
+                                                    color: black,
+                                                    fontSize: font13.sp)),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               );
   }
 
@@ -3262,9 +3630,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   Future getDMTTransactions(page) async {
-    setState(() {
-      loading5 = true;
-    });
+    // setState(() {
+    //   loading5 = true;
+    // });
 
     var mechantId = await getMerchantID();
 
@@ -3287,10 +3655,11 @@ class _TransactionHistoryState extends State<TransactionHistory>
     setState(() {
       loading5 = false;
       if (data['status'].toString() == "1") {
-        dmtTransactions.clear();
+        // dmtTransactions.clear();
         var result = DmtTransactions.fromJson(
             jsonDecode(utf8.decode(response.bodyBytes)));
-        dmtTransactions = result.transctionList;
+        dmtTransactions.addAll(result.transctionList);
+        // dmtTransactions = result.transctionList;
       } else {
         showToastMessage(data['message'].toString());
       }
@@ -3298,9 +3667,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   Future getAEPSTransactions(page) async {
-    setState(() {
-      loading4 = true;
-    });
+    // setState(() {
+    //   loading4 = true;
+    // });
 
     var mechantId = await getMerchantID();
     var token = await getToken();
@@ -3343,10 +3712,11 @@ class _TransactionHistoryState extends State<TransactionHistory>
       setState(() {
         loading4 = false;
         if (data['status'].toString() == "1") {
-          aepsTransaction.clear();
+          // aepsTransaction.clear();
           var result =
               Aeps.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-          aepsTransaction = result.transctionList;
+          aepsTransaction.addAll(result.transctionList);
+          // aepsTransaction = result.transctionList;
           var totalPage = result.totalPages;
         } else {
           showToastMessage(data['message'].toString());
@@ -3361,9 +3731,9 @@ class _TransactionHistoryState extends State<TransactionHistory>
   }
 
   Future getMATMTransactions(page) async {
-    setState(() {
-      loading3 = true;
-    });
+    // setState(() {
+    //   loading3 = true;
+    // });
 
     var mechantId = await getMerchantID();
     var token = await getToken();
@@ -3395,10 +3765,10 @@ class _TransactionHistoryState extends State<TransactionHistory>
       setState(() {
         loading3 = false;
         if (data['status'].toString() == "1") {
-          matmTransctionLists.clear();
           var result = MatmTransactions.fromJson(
               jsonDecode(utf8.decode(response.bodyBytes)));
-          matmTransctionLists = result.transctionList;
+          matmTransctionLists.addAll(result.transctionList);
+          // matmTransctionLists = result.transctionList;
         }
       });
     } else {

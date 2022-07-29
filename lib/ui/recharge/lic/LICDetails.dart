@@ -1060,7 +1060,7 @@ class _LICDetailsState extends State<LICDetails> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -1404,11 +1404,11 @@ class _LICDetailsState extends State<LICDetails> {
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          powered_by,
-          style: TextStyle(
-              color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-        ),
+        // Text(
+        //   powered_by,
+        //   style: TextStyle(
+        //       color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+        // ),
         SizedBox(
           height: 10.h,
         ),
@@ -2117,7 +2117,7 @@ class _LICDetailsState extends State<LICDetails> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${difAmt.toStringAsFixed(2)}",
+        "orderAmount": "${difAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",

@@ -1633,7 +1633,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
                               TextStyle(color: lightBlack, fontSize: font14.sp),
                         ),
                       ),
-                      maxLength: 16,
+                      maxLength: 19,
                     ),
                   ),
                 ),
@@ -1996,11 +1996,11 @@ class _FastagRechargeState extends State<FastagRecharge> {
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          powered_by,
-          style: TextStyle(
-              color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
-        ),
+        // Text(
+        //   powered_by,
+        //   style: TextStyle(
+        //       color: black, fontSize: 16.sp, fontWeight: FontWeight.bold),
+        // ),
         SizedBox(
           height: 10.h,
         ),
@@ -2346,7 +2346,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${remainAmt.toStringAsFixed(2)}",
+        "orderAmount": "${remainAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
@@ -2692,7 +2692,7 @@ class _FastagRechargeState extends State<FastagRecharge> {
         "paymentOption": "upi",
         "upi_vpa": upiController.text,
         "orderId": "$orderId",
-        "orderAmount": "${pgAmt.toStringAsFixed(2)}",
+        "orderAmount": "${pgAmt}",
         "customerName": "$name",
         "orderCurrency": "INR",
         "appId": "$cashFreeAppId",
